@@ -14,6 +14,7 @@ import com.simple.manage.system.config.AlipayConfig;
 import com.simple.manage.system.config.FtpConfig;
 import com.simple.manage.system.ftp.FtpOperation;
 import com.simple.manage.system.service.AlipayService;
+import com.simple.manage.system.util.DateUtil;
 import com.simple.manage.system.util.LogUtil;
 import com.simple.manage.system.util.RandomNumUtil;
 import com.simple.manage.system.util.ZxingUtils;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.UUID;
 
@@ -187,7 +189,7 @@ public class AlipayServiceImpl implements AlipayService {
     private String upload(String filePath) {
         String newFileName = null;
         LocalDate today = LocalDate.now();
-        String todayStr = "" + today.getYear() + today.getMonthValue() + today.getDayOfMonth();
+        String todayStr = today.format(DateTimeFormatter.ofPattern(DateUtil.YY_MM_DD_0));
         try {
             File file = new File(filePath);
             newFileName = IMG_FOLDER + "/" + todayStr + "/" + UUID.randomUUID().toString().replace("-", "") + ".png";
