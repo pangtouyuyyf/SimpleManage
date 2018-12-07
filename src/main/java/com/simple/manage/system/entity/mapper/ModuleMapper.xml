@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.ModuleDao">
+    <sql id="baseColumnList">
+        module_id,
+        module_name,
+        module_type,
+        module_icon,
+        module_order,
+        module_note,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdModule" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="module_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_modulemst where is_delete = '0' AND valid_sta ='0' AND module_id = #{module_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_modulemst
+            <set>
+                <if test="module_icon != null and module_icon != ''">
+                    module_icon = #{module_icon},
+                </if>
+                <if test="module_name != null and module_name != ''">
+                    module_name = #{module_name},
+                </if>
+                <if test="module_type != null and module_type != ''">
+                    module_type = #{module_type},
+                </if>
+                <if test="module_order != null">
+                    module_order = #{module_order},
+                </if>
+                <if test="module_note != null and module_note != ''">
+                    module_note = #{module_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta = #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb = #{extb},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where module_id = #{module_id}
+        </if>
+        <if test="count == 0">
+            insert into t_modulemst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="module_name != null and module_name != ''">
+                    module_name,
+                </if>
+                <if test="module_type != null and module_type != ''">
+                    module_type,
+                </if>
+                <if test="module_icon != null and module_icon != ''">
+                    module_icon,
+                </if>
+                <if test="module_order != null">
+                    module_order,
+                </if>
+                <if test="module_note != null and module_note != ''">
+                    module_note,
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta,
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="module_name != null and module_name != ''">
+                    #{module_name},
+                </if>
+                <if test="module_type != null and module_type != ''">
+                    #{module_type},
+                </if>
+                <if test="module_icon != null and module_icon != ''">
+                    #{module_icon},
+                </if>
+                <if test="module_order != null">
+                    #{module_order},
+                </if>
+                <if test="module_note != null and module_note != ''">
+                    #{module_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    #{extb},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryModule" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            module_id AS id,
+            module_name AS "name",
+            module_type AS "type",
+            module_icon AS "icon",
+            module_order AS "order",
+            module_note AS note
+        FROM t_modulemst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND module_id = #{moduleId}
+    </select>
+
+    <select id="queryModuleList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            module_id AS id,
+            module_name AS "name",
+            module_type AS "type",
+            module_icon AS "icon",
+            module_order AS "order",
+            module_note AS note
+        FROM t_modulemst
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        <if test="module_name != null and module_name != ''">
+            AND module_name LIKE CONCAT('%', #{module_name}, '%')
+        </if>
+        <if test="module_type != null and module_type != ''">
+            AND module_type = #{module_type}
+        </if>
+        <if test="module_note != null and module_note !=''">
+            AND module_note LIKE CONCAT('%', #{module_note}, '%')
+        </if>
+        ORDER BY module_type ASC,module_order ASC
+    </select>
+
+    <select id="queryModuleDataDictByType" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            module_id AS "value",
+            module_name AS "label"
+        FROM t_modulemst
+        WHERE 1 = 1
+        AND module_type = #{type}
+        ORDER BY module_order ASC
+    </select>
+
+    <select id="queryModuleTreeByType" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            module_id AS "key",
+            module_name AS "title"
+        FROM t_modulemst
+        WHERE 1 = 1
+            AND is_delete = '0'
+            AND valid_sta ='0'
+            AND module_type = #{type}
+        ORDER BY module_order ASC
+    </select>
+
+    <delete id="delModule" parameterType="java.util.Map">
+        UPDATE t_modulemst
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND module_id = #{module_id}
+    </delete>
+
+    <delete id="delModuleForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+        t_modulemst
+        WHERE module_id = #{moduleId}
+    </delete>
+
+    <select id="queryAvlMenuModuleList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            tmo.module_id AS id,
+            tmo.module_name AS "name",
+            tmo.module_icon AS "icon"
+        FROM
+            t_modulemst tmo
+        WHERE
+            1 = 1
+            AND tmo.is_delete = '0'
+            AND tmo.valid_sta = '0'
+            AND EXISTS (
+                SELECT tme.menu_id
+                FROM t_menumst tme,t_rolemenulin tr
+                WHERE
+                    1 = 1
+                    AND tr.menu_id = tme.menu_id
+                    AND tme.module_id = tmo.module_id
+                    AND tr.role_id = #{roleId}
+            )
+        ORDER BY
+            tmo.module_order ASC
+    </select>
+</mapper>

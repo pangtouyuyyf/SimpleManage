@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.AccessDao">
+    <sql id="baseColumnList">
+        access_id,
+        module_id,
+        access_name,
+        access_url,
+        access_order,
+        access_note,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdAccess" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="access_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_accessmst where is_delete = '0' AND valid_sta ='0' AND access_id = #{access_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_accessmst
+            <set>
+                <if test="module_id != null">
+                    module_id = #{module_id},
+                </if>
+                <if test="access_name != null and access_name != ''">
+                    access_name = #{access_name},
+                </if>
+                <if test="access_url != null and access_url != ''">
+                    access_url = #{access_url},
+                </if>
+                <if test="access_order != null">
+                    access_order = #{access_order},
+                </if>
+                <if test="access_note != null and access_note != ''">
+                    access_note = #{access_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta = #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb = #{extb},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where access_id = #{access_id}
+        </if>
+        <if test="count == 0">
+            insert into t_accessmst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    module_id,
+                </if>
+                <if test="access_name != null and access_name != ''">
+                    access_name,
+                </if>
+                <if test="access_url != null and access_url != ''">
+                    access_url,
+                </if>
+                <if test="access_order != null">
+                    access_order,
+                </if>
+                <if test="access_note != null and access_note != ''">
+                    access_note,
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta,
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    #{module_id},
+                </if>
+                <if test="access_name != null and access_name != ''">
+                    #{access_name},
+                </if>
+                <if test="access_url != null and access_url != ''">
+                    #{access_url},
+                </if>
+                <if test="access_order != null">
+                    #{access_order},
+                </if>
+                <if test="access_note != null and access_note != ''">
+                    #{access_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    #{extb},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryAccess" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            access_id AS id,
+            module_id AS "moduleId",
+            access_name AS "name",
+            access_url AS url,
+            access_order AS "order",
+            access_note AS note
+        FROM t_accessmst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND access_id = #{accessId}
+    </select>
+
+    <select id="queryAccessList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            access_id AS id,
+            module_id AS "moduleId",
+            access_name AS "name",
+            access_url AS url,
+            access_order AS "order",
+            access_note AS note,
+            (select module_name FROM t_modulemst t2 WHERE is_delete = '0' AND valid_sta ='0' AND t2.module_id = t1.module_id) AS exta
+        FROM t_accessmst t1
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        <if test="access_id != null">
+            AND access_id = #{access_id}
+        </if>
+        <if test="module_id != null">
+            AND module_id = #{module_id}
+        </if>
+        <if test="access_name != null and access_name != ''">
+            AND access_name LIKE CONCAT('%', #{access_name}, '%')
+        </if>
+        <if test="access_note != null and access_note != ''">
+            AND access_note LIKE CONCAT('%', #{access_note}, '%')
+        </if>
+        ORDER BY access_order ASC
+    </select>
+
+    <delete id="delAccess" parameterType="java.util.Map">
+        UPDATE t_accessmst
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND access_id = #{access_id}
+    </delete>
+
+    <delete id="delAccessForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+        t_accessmst
+        WHERE access_id = #{accessId}
+    </delete>
+</mapper>

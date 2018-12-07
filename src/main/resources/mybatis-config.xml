@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <setting name="callSettersOnNulls" value="true"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="com.simple.manage.system.entity.User" alias="User"/>
+    </typeAliases>
+
+    <!-- 配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        </plugin>
+    </plugins>
+
+    <!-- 数据库查询映射 -->
+    <mappers>
+        <mapper resource="com/simple/manage/system/entity/mapper/DataDictMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/UserMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/RoleMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/UserRoleMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/ModuleMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/MenuMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/RoleMenuMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/AccessMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/RoleAccessMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/RouteMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/RoleRouteMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/Attachment.xml"></mapper>
+    </mappers>
+</configuration>

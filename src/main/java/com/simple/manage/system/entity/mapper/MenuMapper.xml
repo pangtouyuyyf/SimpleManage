@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.MenuDao">
+    <sql id="baseColumnList">
+        menu_id,
+        module_id,
+        menu_name,
+        menu_url,
+        menu_order,
+        menu_note,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdMenu" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="menu_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_menumst where is_delete = '0' AND valid_sta ='0' AND menu_id = #{menu_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_menumst
+            <set>
+                <if test="module_id != null">
+                    module_id = #{module_id},
+                </if>
+                <if test="menu_name != null and menu_name != ''">
+                    menu_name = #{menu_name},
+                </if>
+                <if test="menu_url != null and menu_url != ''">
+                    menu_url = #{menu_url},
+                </if>
+                <if test="menu_order != null">
+                    menu_order = #{menu_order},
+                </if>
+                <if test="menu_note != null and menu_note != ''">
+                    menu_note = #{menu_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta = #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb = #{extb},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where menu_id = #{menu_id}
+        </if>
+        <if test="count == 0">
+            insert into t_menumst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    module_id,
+                </if>
+                <if test="menu_name != null and menu_name != ''">
+                    menu_name,
+                </if>
+                <if test="menu_url != null and menu_url != ''">
+                    menu_url,
+                </if>
+                <if test="menu_order != null">
+                    menu_order,
+                </if>
+                <if test="menu_note != null and menu_note != ''">
+                    menu_note,
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta,
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    #{module_id},
+                </if>
+                <if test="menu_name != null and menu_name != ''">
+                    #{menu_name},
+                </if>
+                <if test="menu_url != null and menu_url != ''">
+                    #{menu_url},
+                </if>
+                <if test="menu_order != null">
+                    #{menu_order},
+                </if>
+                <if test="menu_note != null and menu_note != ''">
+                    #{menu_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    #{extb},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryMenu" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            menu_id AS id,
+            module_id AS "moduleId",
+            menu_name AS "name",
+            menu_url AS url,
+            menu_order AS "order",
+            menu_note AS note
+        FROM t_menumst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND menu_id = #{menuId}
+    </select>
+
+    <select id="queryMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            t1.menu_id AS id,
+            t1.module_id AS "moduleId",
+            t1.menu_name AS "name",
+            t1.menu_url AS url,
+            t1.menu_order AS "order",
+            t1.menu_note AS note,
+            t2.module_name AS exta
+        FROM t_menumst t1,t_modulemst t2
+        WHERE 1 = 1
+        AND t1.module_id = t2.module_id
+        AND t1.is_delete = '0'
+        AND t1.valid_sta ='0'
+        AND t2.is_delete = '0'
+        AND t2.valid_sta ='0'
+        <if test="menu_id != null">
+            AND t1.menu_id = #{menu_id}
+        </if>
+        <if test="module_id != null">
+            AND t1.module_id = #{module_id}
+        </if>
+        <if test="menu_name != null and menu_name != ''">
+            AND t1.menu_name LIKE CONCAT('%', #{menu_name}, '%')
+        </if>
+        <if test="menu_note != null and menu_note != ''">
+            AND t1.menu_note LIKE CONCAT('%', #{menu_note}, '%')
+        </if>
+        ORDER BY t2.module_order ASC,t1.menu_order ASC
+    </select>
+
+    <delete id="delMenu" parameterType="java.util.Map">
+        UPDATE t_menumst
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND menu_id = #{menu_id}
+    </delete>
+
+    <delete id="delMenuForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+        t_menumst
+        WHERE menu_id = #{menuId}
+    </delete>
+</mapper>

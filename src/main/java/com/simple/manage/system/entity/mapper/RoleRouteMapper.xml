@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.RoleRouteDao">
+    <sql id="baseColumnList">
+        id,
+        role_id,
+        route_id,
+        create_id,
+        create_time
+    </sql>
+
+    <insert id="addRoleRoute" parameterType="java.util.List">
+        INSERT INTO t_roleroutelin
+        (role_id,route_id,create_id,create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.role_id},#{item.route_id},#{item.create_id},#{item.create_time})
+        </foreach>
+    </insert>
+
+    <select id="queryAll" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            role_id,
+            route_id
+        FROM t_roleroutelin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="route_id != null">
+            AND route_id = #{route_id}
+        </if>
+    </select>
+
+    <delete id="delRoleRouteBatch" parameterType="java.util.List">
+        DELETE FROM
+        t_roleroutelin
+        WHERE 1 = 1 AND (role_id,route_id) IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            (#{item.role_id},#{item.route_id})
+        </foreach>
+    </delete>
+
+    <delete id="delRoleRoute" parameterType="java.util.Map">
+        DELETE
+        FROM
+        t_roleroutelin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="route_id != null">
+            AND route_id = #{route_id}
+        </if>
+    </delete>
+
+    <select id="queryRoleRouteList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            m.route_id AS "key",
+            m.route_name AS "title",
+            CASE WHEN rm.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
+        FROM
+        (SELECT
+            ro.route_id,
+            ro.route_name,
+            ro.route_order,
+            mo.module_order
+        FROM t_routemst ro,t_modulemst mo
+        WHERE
+            1 = 1
+            AND ro.module_id = mo.module_id
+            AND mo.module_type = '1'
+            AND ro.is_delete = '0'
+            AND ro.is_delete = '0'
+            AND mo.is_delete = '0'
+            AND mo.valid_sta = '0'
+            <if test="moduleIds != null">
+                <foreach collection="moduleIds" item="item" open=" AND ro.module_id IN (" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+        ) m LEFT JOIN
+        (SELECT
+            id,
+            route_id
+         FROM t_roleroutelin
+         WHERE
+             role_id = #{roleId}) rm ON m.route_id = rm.route_id
+         ORDER BY m.module_order ASC,route_order ASC
+    </select>
+
+    <select id="countRoleRoute" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(t1.id)
+        FROM t_roleroutelin t1,t_routemst t2
+        WHERE
+            1 = 1
+            AND t1.route_id = t2.route_id
+            AND t2.is_delete = '0'
+            AND t2.valid_sta = '0'
+            AND t1.role_id = #{roleId}
+            AND t2.route_url = #{url}
+    </select>
+</mapper>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.RoleMenuDao">
+    <sql id="baseColumnList">
+        id,
+        role_id,
+        menu_id,
+        operate_code,
+        create_id,
+        create_time
+    </sql>
+
+    <insert id="addRoleMenu" parameterType="java.util.List">
+        INSERT INTO t_rolemenulin
+        (role_id,menu_id,operate_code,create_id,create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.role_id},#{item.menu_id},#{item.operate_code},#{item.create_id},#{item.create_time})
+        </foreach>
+    </insert>
+
+    <select id="queryAll" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            role_id,
+            menu_id
+        FROM t_rolemenulin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="menu_id != null">
+            AND menu_id = #{menu_id}
+        </if>
+    </select>
+
+    <delete id="delRoleMenuBatch" parameterType="java.util.List">
+        DELETE FROM
+        t_rolemenulin
+        WHERE 1 = 1 AND (role_id,menu_id) IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            (#{item.role_id},#{item.menu_id})
+        </foreach>
+    </delete>
+
+    <delete id="delRoleMenu" parameterType="java.util.Map">
+        DELETE FROM
+        t_rolemenulin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="menu_id != null">
+            AND menu_id = #{menu_id}
+        </if>
+    </delete>
+
+    <select id="queryRoleMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            m.menu_id AS "key",
+            m.menu_name AS "title",
+            CASE WHEN rm.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
+        FROM
+        (SELECT
+            me.menu_id,
+            me.menu_name,
+            me.menu_order,
+            mo.module_order
+        FROM t_menumst me,t_modulemst mo
+        WHERE
+            1 = 1
+            AND me.module_id = mo.module_id
+            AND mo.module_type = '0'
+            AND me.is_delete = '0'
+            AND me.is_delete = '0'
+            AND mo.is_delete = '0'
+            AND mo.valid_sta = '0'
+            <if test="moduleIds != null">
+                <foreach collection="moduleIds" item="item" open=" AND me.module_id IN (" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+        ) m LEFT JOIN
+        (SELECT
+            id,
+            menu_id
+         FROM t_rolemenulin
+         WHERE
+             role_id = #{roleId}) rm ON m.menu_id = rm.menu_id
+         ORDER BY m.module_order ASC,menu_order ASC
+    </select>
+
+    <select id="queryAvlRoleMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            tm.menu_name AS "name",
+            tm.menu_url AS url
+        FROM
+            t_rolemenulin tr,
+            t_menumst tm
+        WHERE 1 = 1
+            AND tr.menu_id = tm.menu_id
+            AND tm.module_id = #{module_id}
+            AND tr.role_id = #{role_id}
+        ORDER BY
+            tm.menu_order ASC
+    </select>
+
+    <select id="queryRoleMenuOperate" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            tr.id AS id,
+            mo.module_name AS "module",
+            tm.menu_name AS menu,
+            tr.operate_code AS code
+        FROM
+            t_modulemst mo,
+            t_menumst tm,
+            t_rolemenulin tr
+        WHERE 1 = 1
+            AND mo.module_id = tm.module_id
+            AND tm.menu_id = tr.menu_id
+            AND tr.role_id = #{roleId}
+        ORDER BY mo.module_order ASC,tm.menu_order ASC
+    </select>
+
+    <select id="queryAllOperate" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id,
+            operate_code
+        FROM t_rolemenulin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="menu_id != null">
+            AND menu_id = #{menu_id}
+        </if>
+    </select>
+
+    <update id="updRoleMenuOperate" parameterType="java.util.List">
+        <foreach collection="list" item="item" open="" close=""  separator=";">
+            UPDATE t_rolemenulin
+            <set>
+                operate_code = #{item.operate_code},
+                update_id = #{item.update_id},
+                update_time = #{item.update_time}
+            </set>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="queryMenuOperateCode" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT tr.operate_code
+        FROM
+            t_menumst tm,t_rolemenulin tr
+        WHERE 1 = 1
+            AND tm.menu_id = tr.menu_id
+            AND tm.is_delete = '0'
+            AND tm.valid_sta = '0'
+            AND #{url} LIKE'%' || tm.menu_url || '%'
+            AND tr.role_id = #{roleId}
+    </select>
+</mapper>

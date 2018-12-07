@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.DataDictDao">
+    <sql id="baseColumnList">
+        dict_id,
+        dict_name,
+        dict_note,
+        dict_order,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdDataDict" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="dict_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_datadictmst where is_delete = '0' AND valid_sta ='0' AND dict_id = #{dict_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_datadictmst
+            <set>
+                <if test="dict_name != null and dict_name != ''">
+                    dict_name = #{dict_name},
+                </if>
+                <if test="dict_note != null and dict_note != ''">
+                    dict_note = #{dict_note},
+                </if>
+                <if test="dict_order != null">
+                    dict_order = #{dict_order},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where dict_id = #{dict_id}
+        </if>
+        <if test="count == 0">
+            insert into t_datadictmst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="dict_name != null and dict_name != ''">
+                    dict_name,
+                </if>
+                <if test="dict_note != null and dict_note != ''">
+                    dict_note,
+                </if>
+                <if test="dict_order != null">
+                    dict_order,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="dict_name != null and dict_name != ''">
+                    #{dict_name},
+                </if>
+                <if test="dict_note != null and dict_note != ''">
+                    #{dict_note},
+                </if>
+                <if test="dict_order != null">
+                    #{dict_order},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryDataDict" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            dict_id AS id,
+            dict_name AS "name",
+            dict_note AS note,
+            dict_order AS "order"
+        FROM t_datadictmst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND dict_id = #{dictId}
+    </select>
+
+    <select id="queryDataDictList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            dict_id AS id,
+            dict_name AS "name",
+            dict_note AS note,
+            dict_order AS "order"
+        FROM t_datadictmst
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        <if test="dict_id != null">
+            AND dict_id = #{dict_id}
+        </if>
+        <if test="dict_name != null and dict_name != ''">
+            AND dict_name LIKE CONCAT('%', #{dict_name}, '%')
+        </if>
+        <if test="dict_note != null and dict_note != ''">
+            AND dict_note LIKE CONCAT('%', #{dict_note}, '%')
+        </if>
+        ORDER BY dict_order ASC
+    </select>
+
+    <select id="querySameDataDict" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            COUNT(dict_id)
+        FROM t_datadictmst
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        AND dict_name = #{name}
+    </select>
+
+    <delete id="delDataDict" parameterType="java.util.Map">
+        UPDATE t_datadictmst
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND dict_id = #{dict_id}
+    </delete>
+
+    <delete id="delDataDictForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+        t_datadictmst
+        WHERE dict_id = #{dictId}
+    </delete>
+
+    <sql id="baseLinColumnList">
+        lin_id,
+        dict_id,
+        lin_key,
+        lin_value,
+        lin_order,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdDataDictLin" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="lin_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_datadictlin where is_delete = '0' AND valid_sta ='0' AND lin_id = #{lin_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_datadictlin
+            <set>
+                <if test="lin_key != null and lin_key != ''">
+                    lin_key = #{lin_key},
+                </if>
+                <if test="lin_value != null and lin_value != ''">
+                    lin_value = #{lin_value},
+                </if>
+                <if test="lin_order != null">
+                    lin_order = #{lin_order},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where lin_id = #{lin_id}
+        </if>
+        <if test="count == 0">
+            insert into t_datadictlin
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="dict_id != null">
+                    dict_id,
+                </if>
+                <if test="lin_key != null and lin_key != ''">
+                    lin_key,
+                </if>
+                <if test="lin_value != null and lin_value != ''">
+                    lin_value,
+                </if>
+                <if test="lin_order != null">
+                    lin_order,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="dict_id != null">
+                    #{dict_id},
+                </if>
+                <if test="lin_key != null and lin_key != ''">
+                    #{lin_key},
+                </if>
+                <if test="lin_value != null and lin_value != ''">
+                    #{lin_value},
+                </if>
+                <if test="lin_order != null">
+                    #{lin_order},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryDataDictLinList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            lin_id AS "linId",
+            dict_id AS "dictId",
+            lin_key AS "key",
+            lin_value AS "value",
+            lin_order AS "order"
+        FROM t_datadictlin
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND dict_id = #{dictId}
+        ORDER BY lin_order ASC
+    </select>
+
+    <select id="querySameDataDictLin" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            COUNT(dict_id)
+        FROM t_datadictlin
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        <if test="dict_id != null">
+            AND dict_id = #{dict_id}
+        </if>
+        <if test="lin_key != null and lin_key != ''">
+            AND lin_key = #{lin_key}
+        </if>
+    </select>
+
+    <delete id="delDataDictLin" parameterType="java.util.Map">
+        UPDATE t_datadictlin
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        <if test="dict_id != null">
+            AND dict_id = #{dict_id}
+        </if>
+        <if test="lin_id != null">
+            AND lin_id = #{lin_id}
+        </if>
+    </delete>
+
+    <delete id="delDataDictLinForReal" parameterType="java.util.Map">
+        DELETE
+        FROM
+        t_datadictlin
+        WHERE 1 = 1
+        <if test="dict_id != null">
+            AND dict_id = #{dict_id}
+        </if>
+        <if test="lin_id != null">
+            AND lin_id = #{lin_id}
+        </if>
+    </delete>
+
+    <select id="queryDataDictLinByName" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT TRIM(lin_key) AS value, lin_value AS label
+        FROM (
+            SELECT t1.lin_id, t1.lin_key, t1.lin_value
+            FROM t_datadictlin t1
+            LEFT JOIN t_datadictmst t2 ON t1.dict_id = t2.dict_id
+            WHERE t1.is_delete = '0'
+            AND t1.valid_sta = '0'
+            AND t2.is_delete = '0'
+            AND t2.valid_sta = '0'
+            AND t2.dict_name = #{dictName}
+            ORDER BY t1.lin_order
+        ) t
+    </select>
+</mapper>

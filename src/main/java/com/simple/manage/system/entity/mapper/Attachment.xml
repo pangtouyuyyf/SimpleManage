@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.AttachmentDao">
+    <sql id="baseColumnList">
+        attach_id,
+        attach_name,
+        attach_type,
+        attach_size,
+        attach_size_show,
+        attach_url,
+        attach_note,
+        is_display,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addAttachment" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="attach_id">
+        INSERT INTO t_attachmentmst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attach_name != null and attach_name != ''">
+                attach_name,
+            </if>
+            <if test="attach_type != null and attach_type != ''">
+                attach_type,
+            </if>
+            <if test="attach_size != null">
+                attach_size,
+            </if>
+            <if test="attach_size_show != null and attach_size_show != ''">
+                attach_size_show,
+            </if>
+            <if test="attach_url != null and attach_url != ''">
+                attach_url,
+            </if>
+            <if test="attach_note != null and attach_note != ''">
+                attach_note,
+            </if>
+            <if test="is_display != null and is_display != ''">
+                is_display,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attach_name != null and attach_name != ''">
+                #{attach_name},
+            </if>
+            <if test="attach_type != null and attach_type != ''">
+                #{attach_type},
+            </if>
+            <if test="attach_size != null">
+                #{attach_size},
+            </if>
+            <if test="attach_size_show != null and attach_size_show != ''">
+                #{attach_size_show},
+            </if>
+            <if test="attach_url != null and attach_url != ''">
+                #{attach_url},
+            </if>
+            <if test="attach_note != null and attach_note != ''">
+                #{attach_note},
+            </if>
+            <if test="is_display != null and is_display != ''">
+                #{is_display},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryAttachment" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            attach_id AS id,
+            attach_name AS name,
+            attach_type AS type,
+            attach_size AS size,
+            attach_size_show AS "sizeShow",
+            attach_url AS url,
+            is_display AS status,
+            attach_note AS note
+        FROM t_attachmentmst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND attach_id = #{attachId}
+    </select>
+
+    <delete id="delAttachment" parameterType="java.lang.Integer">
+        UPDATE t_attachmentmst
+        SET is_delete = '1'
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND attach_id = #{attachId}
+    </delete>
+
+    <delete id="delAttachments" parameterType="java.util.List">
+        UPDATE t_attachmentmst
+        SET is_delete = '1'
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND attach_id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{attachIds}
+        </foreach>
+    </delete>
+
+    <update id="displayAttachment" parameterType="java.util.Map">
+        UPDATE t_attachmentmst
+        SET is_display = (CASE WHEN is_display = '0' THEN '1' ELSE '0' END), update_id = #{update_id}, update_time = #{update_time}
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND attach_id = #{attach_id}
+    </update>
+</mapper>

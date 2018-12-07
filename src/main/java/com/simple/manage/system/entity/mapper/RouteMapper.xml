@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.RouteDao">
+    <sql id="baseColumnList">
+        route_id,
+        module_id,
+        route_name,
+        route_url,
+        route_order,
+        route_note,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+
+    <insert id="addOrUpdRoute" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="route_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_routemst where is_delete = '0' AND valid_sta ='0' AND route_id = #{route_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_routemst
+            <set>
+                <if test="module_id != null">
+                    module_id = #{module_id},
+                </if>
+                <if test="route_name != null and route_name != ''">
+                    route_name = #{route_name},
+                </if>
+                <if test="route_url != null and route_url != ''">
+                    route_url = #{route_url},
+                </if>
+                <if test="route_order != null">
+                    route_order = #{route_order},
+                </if>
+                <if test="route_note != null and route_note != ''">
+                    route_note = #{route_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta = #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb = #{extb},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where route_id = #{route_id}
+        </if>
+        <if test="count == 0">
+            insert into t_routemst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    module_id,
+                </if>
+                <if test="route_name != null and route_name != ''">
+                    route_name,
+                </if>
+                <if test="route_url != null and route_url != ''">
+                    route_url,
+                </if>
+                <if test="route_order != null">
+                    route_order,
+                </if>
+                <if test="route_note != null and route_note != ''">
+                    route_note,
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta,
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="module_id != null">
+                    #{module_id},
+                </if>
+                <if test="route_name != null and route_name != ''">
+                    #{route_name},
+                </if>
+                <if test="route_url != null and route_url != ''">
+                    #{route_url},
+                </if>
+                <if test="route_order != null">
+                    #{route_order},
+                </if>
+                <if test="route_note != null and route_note != ''">
+                    #{route_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    #{extb},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <select id="queryRoute" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            route_id AS id,
+            module_id AS "moduleId",
+            route_name AS "name",
+            route_url AS url,
+            route_order AS "order",
+            route_note AS note
+        FROM t_routemst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND route_id = #{routeId}
+    </select>
+
+    <select id="queryRouteList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            t1.route_id AS id,
+            t1.module_id AS "moduleId",
+            t1.route_name AS "name",
+            t1.route_url AS url,
+            t1.route_order AS "order",
+            t1.route_note AS note,
+            t2.module_name AS exta
+        FROM t_routemst t1,t_modulemst t2
+        WHERE 1 = 1
+        AND t1.module_id = t2.module_id
+        AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        AND t2.is_delete = '0' AND t2.valid_sta ='0'
+        <if test="route_id != null">
+            AND t1.route_id = #{route_id}
+        </if>
+        <if test="module_id != null">
+            AND t1.module_id = #{module_id}
+        </if>
+        <if test="route_name != null and route_name != ''">
+            AND t1.route_name LIKE CONCAT('%', #{route_name}, '%')
+        </if>
+        <if test="route_note != null and route_note != ''">
+            AND t1.route_note LIKE CONCAT('%', #{route_note}, '%')
+        </if>
+        ORDER BY t2.module_order ASC,t1.route_order ASC
+    </select>
+
+    <delete id="delRoute" parameterType="java.util.Map">
+        UPDATE t_routemst
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = #{is_delete},
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND valid_sta = '0'
+        AND route_id = #{route_id}
+    </delete>
+
+    <delete id="delRouteForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+        t_routemst
+        WHERE route_id = #{routeId}
+    </delete>
+</mapper>

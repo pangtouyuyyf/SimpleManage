@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.RoleAccessDao">
+    <sql id="baseColumnList">
+        id,
+        role_id,
+        access_id,
+        create_id,
+        create_time
+    </sql>
+
+    <insert id="addRoleAccess" parameterType="java.util.List">
+        INSERT INTO t_roleaccesslin
+        (role_id,access_id,create_id,create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.role_id},#{item.access_id},#{item.create_id},#{item.create_time})
+        </foreach>
+    </insert>
+
+    <select id="queryAll" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            role_id,
+            access_id
+        FROM t_roleaccesslin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="access_id != null">
+            AND access_id = #{access_id}
+        </if>
+    </select>
+
+    <delete id="delRoleAccessBatch" parameterType="java.util.List">
+        DELETE FROM
+        t_roleaccesslin
+        WHERE 1 = 1 AND (role_id,access_id) IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            (#{item.role_id},#{item.access_id})
+        </foreach>
+    </delete>
+
+    <delete id="delRoleAccess" parameterType="java.util.Map">
+        DELETE
+        FROM
+        t_roleaccesslin
+        WHERE 1 = 1
+        <if test="role_id != null">
+            AND role_id = #{role_id}
+        </if>
+        <if test="access_id != null">
+            AND access_id = #{access_id}
+        </if>
+    </delete>
+
+    <select id="queryRoleAccessList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            m.access_id AS "key",
+            m.access_name AS "title",
+            CASE WHEN rm.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
+        FROM
+        (SELECT
+            ac.access_id,
+            ac.access_name,
+            ac.access_order,
+            mo.module_order
+        FROM t_accessmst ac,t_modulemst mo
+        WHERE
+            1 = 1
+            AND ac.module_id = mo.module_id
+            AND mo.module_type = '2'
+            AND ac.is_delete = '0'
+            AND ac.is_delete = '0'
+            AND mo.is_delete = '0'
+            AND mo.valid_sta = '0'
+            <if test="moduleIds != null">
+                <foreach collection="moduleIds" item="item" open=" AND ac.module_id IN (" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+        ) m LEFT JOIN
+        (SELECT
+            id,
+            access_id
+         FROM t_roleaccesslin
+         WHERE
+             role_id = #{roleId}) rm ON m.access_id = rm.access_id
+         ORDER BY m.module_order ASC,access_order ASC
+    </select>
+
+    <select id="countRoleAccess" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_roleaccesslin tra
+        WHERE 1 = 1
+        AND tra.role_id = #{role_id}
+        AND EXISTS(SELECT ta.access_id FROM t_accessmst ta WHERE ta.is_delete = '0' AND ta.valid_sta = '0' AND ta.access_id = tra.access_id AND ta.access_url = #{access_url})
+    </select>
+</mapper>
