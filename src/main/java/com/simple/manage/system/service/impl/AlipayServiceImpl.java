@@ -184,7 +184,7 @@ public class AlipayServiceImpl implements AlipayService {
      * @param filePath 二维码文件路径
      * @return
      */
-    private String upload(String filePath) throws RuntimeException {
+    private String upload(String filePath) {
         String newFileName = null;
         LocalDate today = LocalDate.now();
         String todayStr = "" + today.getYear() + today.getMonthValue() + today.getDayOfMonth();
