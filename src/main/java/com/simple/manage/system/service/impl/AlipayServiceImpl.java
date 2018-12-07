@@ -63,7 +63,7 @@ public class AlipayServiceImpl implements AlipayService {
     public String generateOrders(int userId, String detail, String totalAmount) throws AlipayApiException {
         String orderStr = null;
         //实例化客户端
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServeUrl(), alipayConfig.getAppId(), alipayConfig.getAppPrivateKey(), alipayConfig.getDataFormat(), alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
+        AlipayClient alipayClient = initClient();
 
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
@@ -90,7 +90,7 @@ public class AlipayServiceImpl implements AlipayService {
     public JSONObject generateQRCode(int userId, String detail, String totalAmount) throws Exception {
         JSONObject obj = new JSONObject();
         //实例化客户端
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServeUrl(), alipayConfig.getAppId(), alipayConfig.getAppPrivateKey(), alipayConfig.getDataFormat(), alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
+        AlipayClient alipayClient = initClient();
 
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
@@ -131,9 +131,19 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     /**
+     * 初始化alipay客户端
+     *
+     * @return
+     */
+    private AlipayClient initClient() {
+        return new DefaultAlipayClient(alipayConfig.getServeUrl(), alipayConfig.getAppId(), alipayConfig.getAppPrivateKey(), alipayConfig.getDataFormat(), alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
+
+    }
+
+    /**
      * 获取交易码
      *
-     * @param userId
+     * @param userId 当前用户id
      * @return
      */
     private String getOutTradeNo(int userId) {
@@ -171,7 +181,7 @@ public class AlipayServiceImpl implements AlipayService {
     /**
      * 上传文件
      *
-     * @param filePath
+     * @param filePath 二维码文件路径
      * @return
      */
     private String upload(String filePath) throws RuntimeException {
