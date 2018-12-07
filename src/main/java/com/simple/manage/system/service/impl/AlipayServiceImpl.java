@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,23 +62,12 @@ public class AlipayServiceImpl implements AlipayService {
      */
     public String generateOrders(int userId, String detail, String totalAmount) throws AlipayApiException {
         String orderStr = null;
-        Date now = new Date();
         //实例化客户端
         AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServeUrl(), alipayConfig.getAppId(), alipayConfig.getAppPrivateKey(), alipayConfig.getDataFormat(), alipayConfig.getCharset(), alipayConfig.getAlipayPublicKey(), alipayConfig.getSignType());
 
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
-
-        //SDK已经封装掉了公共参数(即alipayClient)，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
-        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody(detail);
-        model.setSubject("0");  //缴纳方式 0：支付宝 1：微信 2：其他
-        model.setOutTradeNo(getOutTradeNo(userId));  //交易号码
-        model.setTimeoutExpress(MODEL_TIMEOUT_EXPRESS);
-        model.setTotalAmount(totalAmount);  //金额
-        model.setProductCode(MODEL_PRODUCT_CODE);
-
-        request.setBizModel(model);
+        request.setBizModel(getPayModel(false, getOutTradeNo(userId), detail, totalAmount));
         request.setNotifyUrl(alipayConfig.getNotifyUrl());
 
         //这里和普通的接口调用不同，使用的是sdkExecute
@@ -106,21 +94,10 @@ public class AlipayServiceImpl implements AlipayService {
 
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
-
-        //SDK已经封装掉了公共参数(即alipayClient)，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
-        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody(detail);
-        model.setSubject("0");  //缴纳方式 0：支付宝 1：微信 2：其他
         String outTradeNo = getOutTradeNo(userId);
-        model.setOutTradeNo(outTradeNo);  //交易号码
-        model.setTimeoutExpress(MODEL_TIMEOUT_EXPRESS);
-        model.setTotalAmount(totalAmount);  //金额
-        model.setStoreId(alipayConfig.getStoreId());
-
-        request.setBizModel(model);
+        request.setBizModel(getPayModel(true, outTradeNo, detail, totalAmount));
         request.setNotifyUrl(alipayConfig.getNotifyUrl());
 
-        //这里和普通的接口调用不同，使用的是execute
         AlipayTradePrecreateResponse response = alipayClient.execute(request);
 
         if (response != null && "10000".equals(response.getCode())) {
@@ -138,6 +115,57 @@ public class AlipayServiceImpl implements AlipayService {
         }
 
         return obj;
+    }
+
+    /**
+     * 校验异步返回信息
+     *
+     * @param params 支付宝服务器返回参数
+     * @return
+     * @throws AlipayApiException
+     */
+    public boolean receiveNotify(Map<String, String> params) throws AlipayApiException {
+        //切记alipaypublickey是支付宝的公钥,不是应用公钥，请去open.alipay.com对应应用下查看。
+        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+        return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), alipayConfig.getCharset(), alipayConfig.getSignType());
+    }
+
+    /**
+     * 获取交易码
+     *
+     * @param userId
+     * @return
+     */
+    private String getOutTradeNo(int userId) {
+        return Integer.toString(userId) + "_" + System.currentTimeMillis() + "_" + RandomNumUtil.getRandNum(6);
+    }
+
+    /**
+     * 获取支付参数
+     *
+     * @param isF2F       是否是当面付
+     * @param outTradeNo  支付码
+     * @param detail      明细
+     * @param totalAmount 支付总额
+     * @return
+     */
+    private AlipayTradeAppPayModel getPayModel(boolean isF2F, String outTradeNo, String detail, String totalAmount) {
+        //SDK已经封装掉了公共参数(即alipayClient)，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下request取biz_content)。
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody(detail);  //明细
+        model.setSubject("0");  //缴纳方式 0：支付宝 1：微信 2：其他
+        model.setOutTradeNo(outTradeNo);  //交易号码
+        model.setTimeoutExpress(MODEL_TIMEOUT_EXPRESS);
+        model.setTotalAmount(totalAmount);  //金额
+        if (isF2F) {
+            //当面付
+            model.setStoreId(alipayConfig.getStoreId());
+        } else {
+            //app转支付宝支付
+            model.setProductCode(MODEL_PRODUCT_CODE);
+        }
+
+        return model;
     }
 
     /**
@@ -165,28 +193,5 @@ public class AlipayServiceImpl implements AlipayService {
         }
 
         return newFileName;
-    }
-
-    /**
-     * 校验异步返回信息
-     *
-     * @param params 支付宝服务器返回参数
-     * @return
-     * @throws AlipayApiException
-     */
-    public boolean receiveNotify(Map<String, String> params) throws AlipayApiException {
-        //切记alipaypublickey是支付宝的公钥,不是应用公钥，请去open.alipay.com对应应用下查看。
-        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
-        return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), alipayConfig.getCharset(), alipayConfig.getSignType());
-    }
-
-    /**
-     * 获取交易码
-     *
-     * @param userId
-     * @return
-     */
-    private String getOutTradeNo(int userId) {
-        return Integer.toString(userId) + "_" + System.currentTimeMillis() + "_" + RandomNumUtil.getRandNum(6);
     }
 }
