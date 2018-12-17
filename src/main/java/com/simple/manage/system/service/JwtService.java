@@ -26,4 +26,12 @@ public interface JwtService {
      * @return
      */
     DecodedJWT parseJWT(String token);
+
+    /**
+     * 判断令牌
+     *
+     * @param token
+     * @return
+     */
+    boolean judgeJWT(String token);
 }
