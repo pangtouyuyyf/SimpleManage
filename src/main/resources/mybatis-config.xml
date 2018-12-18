@@ -21,6 +21,7 @@
         <mapper resource="com/simple/manage/system/entity/mapper/UserMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RoleMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/UserRoleMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/DeptMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/ModuleMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/MenuMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RoleMenuMapper.xml"></mapper>
@@ -28,6 +29,6 @@
         <mapper resource="com/simple/manage/system/entity/mapper/RoleAccessMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RouteMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RoleRouteMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/Attachment.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/AttachmentMapper.xml"></mapper>
     </mappers>
 </configuration>
