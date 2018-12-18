@@ -81,7 +81,7 @@ public class AccessController extends BaseController implements TokenController 
         access.put("access_id", id);
         access.put("module_id", moduleId);
         access.put("access_name", name);
-        access.put("access_url", url);
+        access.put("access_url", url.trim());
         access.put("access_order", order);
         access.put("access_note", note);
         access.put("create_id", getLoginInfo().getUser().getId());

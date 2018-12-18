@@ -81,7 +81,7 @@ public class RouteController extends BaseController implements TokenController {
         Route.put("route_id", id);
         Route.put("module_id", moduleId);
         Route.put("route_name", name);
-        Route.put("route_url", url);
+        Route.put("route_url", url.trim());
         Route.put("route_order", order);
         Route.put("route_note", note);
         Route.put("create_id", getLoginInfo().getUser().getId());

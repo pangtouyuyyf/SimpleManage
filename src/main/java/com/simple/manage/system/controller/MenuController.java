@@ -81,7 +81,7 @@ public class MenuController extends BaseController implements TokenController {
         menu.put("menu_id", id);
         menu.put("module_id", moduleId);
         menu.put("menu_name", name);
-        menu.put("menu_url", url);
+        menu.put("menu_url", url.trim());
         menu.put("menu_order", order);
         menu.put("menu_note", note);
         menu.put("create_id", getLoginInfo().getUser().getId());
