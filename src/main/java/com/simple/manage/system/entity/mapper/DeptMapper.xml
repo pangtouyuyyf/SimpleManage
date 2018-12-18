@@ -122,10 +122,10 @@
     </insert>
 
     <resultMap id="getSelf" type="com.simple.manage.system.entity.Tree">
-        <id property="id" column="dept_id"></id>
-        <result property="name" column="dept_name"></result>
-        <collection property="children" select="getDeptRecursion" column="dept_id"></collection>
+        <id property="key" column="dept_id"></id>
+        <result property="title" column="dept_name"></result>
         <!--查到的id作为下次的pid-->
+        <collection property="children" select="getDeptRecursion" column="dept_id"></collection>
     </resultMap>
 
     <select id="getDeptRecursion" resultMap="getSelf">
