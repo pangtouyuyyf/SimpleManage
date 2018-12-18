@@ -11,9 +11,9 @@ import java.util.List;
  **/
 @Data
 public class Tree {
-    private int id;
+    private int key;
 
-    private String name;
+    private String title;
 
     private List<Tree> children;
 }
