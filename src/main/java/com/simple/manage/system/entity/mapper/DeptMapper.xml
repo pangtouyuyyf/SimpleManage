@@ -2,14 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simple.manage.system.dao.DeptDao">
     <sql id="baseColumnList">
-        attach_id,
-        attach_name,
-        attach_type,
-        attach_size,
-        attach_size_show,
-        attach_url,
-        attach_note,
-        is_display,
+        dept_id,
+        dept_name,
+        parent_dept_id,
+        leader_id,
+        dept_order,
+        dept_note,
         exta,
         extb,
         create_id,
@@ -19,4 +17,126 @@
         is_delete,
         valid_sta
     </sql>
+
+    <insert id="addOrUpdDept" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="dept_id">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from t_deptmst where is_delete = '0' AND valid_sta ='0' AND dept_id = #{dept_id}
+        </selectKey>
+        <if test="count > 0">
+            update t_deptmst
+            <set>
+                <if test="dept_name != null and dept_name != ''">
+                    dept_name = #{dept_name},
+                </if>
+                <if test="parent_dept_id != null">
+                    parent_dept_id = #{parent_dept_id},
+                </if>
+                <if test="leader_id != null">
+                    leader_id = #{leader_id},
+                </if>
+                <if test="dept_order != null">
+                    dept_order = #{dept_order},
+                </if>
+                <if test="dept_note != null and dept_note != ''">
+                    dept_note = #{dept_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta = #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb = #{extb},
+                </if>
+                <if test="update_id != null">
+                    update_id = #{update_id},
+                </if>
+                <if test="update_time != null">
+                    update_time = #{update_time},
+                </if>
+                <if test="valid_sta != null and valid_sta != ''">
+                    valid_sta = #{valid_sta},
+                </if>
+            </set>
+            where dept_id = #{dept_id}
+        </if>
+        <if test="count == 0">
+            insert into t_deptmst
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="dept_name != null and dept_name != ''">
+                    dept_name,
+                </if>
+                <if test="parent_dept_id != null">
+                    parent_dept_id,
+                </if>
+                <if test="leader_id != null">
+                    leader_id,
+                </if>
+                <if test="dept_order != null">
+                    dept_order,
+                </if>
+                <if test="dept_note != null and dept_note != ''">
+                    dept_note,
+                </if>
+                <if test="exta != null and exta != ''">
+                    exta,
+                </if>
+                <if test="extb != null and extb != ''">
+                    extb,
+                </if>
+                <if test="create_id != null">
+                    create_id,
+                </if>
+                <if test="create_time != null">
+                    create_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="dept_name != null and dept_name != ''">
+                    #{dept_name},
+                </if>
+                <if test="parent_dept_id != null">
+                    #{parent_dept_id},
+                </if>
+                <if test="leader_id != null">
+                    #{leader_id},
+                </if>
+                <if test="dept_order != null">
+                    #{dept_order},
+                </if>
+                <if test="dept_note != null and dept_note != ''">
+                    #{dept_note},
+                </if>
+                <if test="exta != null and exta != ''">
+                    #{exta},
+                </if>
+                <if test="extb != null and extb != ''">
+                    #{extb},
+                </if>
+                <if test="create_id != null">
+                    #{create_id},
+                </if>
+                <if test="create_time != null">
+                    #{create_time},
+                </if>
+            </trim>
+        </if>
+    </insert>
+
+    <resultMap id="getSelf" type="com.simple.manage.system.entity.Tree">
+        <id property="id" column="dept_id"></id>
+        <result property="name" column="dept_name"></result>
+        <collection property="children" select="getDeptRecursion" column="dept_id"></collection>
+        <!--查到的id作为下次的pid-->
+    </resultMap>
+
+    <select id="getDeptRecursion" resultMap="getSelf">
+        SELECT
+            dept_id,
+            dept_name
+        FROM t_deptmst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND parent_dept_id = #{dept_id}
+        ORDER BY dept_order ASC
+    </select>
 </mapper>
