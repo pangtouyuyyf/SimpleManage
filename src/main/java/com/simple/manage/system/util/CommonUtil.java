@@ -60,6 +60,9 @@ public class CommonUtil {
     //默认角色操作编码
     public static final int OPERATE_CODE_DEFAULT = 0;
 
+    //默认树根节点父节点id
+    public static final int TREE_ROOT_PARENT_ID = -1;
+
     /**
      * url处理(去掉url参数)
      *
