@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.system.dao.DeptDao">
+    <sql id="baseColumnList">
+        attach_id,
+        attach_name,
+        attach_type,
+        attach_size,
+        attach_size_show,
+        attach_url,
+        attach_note,
+        is_display,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete,
+        valid_sta
+    </sql>
+</mapper>
