@@ -93,12 +93,11 @@
     <select id="countRoleRoute" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(t1.id)
         FROM t_roleroutelin t1,t_routemst t2
-        WHERE
-            1 = 1
-            AND t1.route_id = t2.route_id
-            AND t2.is_delete = '0'
-            AND t2.valid_sta = '0'
-            AND t1.role_id = #{roleId}
-            AND t2.route_url = #{url}
+        WHERE 1 = 1
+        AND t1.route_id = t2.route_id
+        AND t2.is_delete = '0'
+        AND t2.valid_sta = '0'
+        AND t1.role_id = #{roleId}
+        AND t2.route_url = #{url}
     </select>
 </mapper>
