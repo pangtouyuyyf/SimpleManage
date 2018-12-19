@@ -15,5 +15,7 @@ public class Tree {
 
     private String title;
 
+    private boolean isLeaf;
+
     private List<Tree> children;
 }
