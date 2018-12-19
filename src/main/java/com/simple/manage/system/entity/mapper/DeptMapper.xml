@@ -121,14 +121,34 @@
         </if>
     </insert>
 
+    <select id="queryDepts" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            dept_id,
+            dept_name,
+            parent_dept_id,
+            leader_id,
+            dept_order,
+            dept_note,
+            exta,
+            extb
+        FROM t_deptmst
+        WHERE 1 = 1 AND is_delete = '0' AND valid_sta ='0'
+        <if test="dept_name != null and dept_name != ''">
+            AND dept_name LIKE CONCAT('%', #{dept_name}, '%')
+        </if>
+        <if test="parent_dept_id != null">
+            AND parent_dept_id = #{parent_dept_id}
+        </if>
+    </select>
+
     <resultMap id="getSelf" type="com.simple.manage.system.entity.Tree">
         <id property="key" column="dept_id"></id>
         <result property="title" column="dept_name"></result>
         <!--查到的id作为下次的pid-->
-        <collection property="children" select="getDeptRecursion" column="dept_id"></collection>
+        <collection property="children" select="queryDeptRecursion" column="dept_id"></collection>
     </resultMap>
 
-    <select id="getDeptRecursion" resultMap="getSelf">
+    <select id="queryDeptRecursion" parameterType="java.lang.Integer" resultMap="getSelf">
         SELECT
             dept_id,
             dept_name
@@ -136,7 +156,7 @@
         WHERE 1 = 1
         AND is_delete = '0'
         AND valid_sta ='0'
-        AND parent_dept_id = #{dept_id}
+        AND parent_dept_id = #{deptId}
         ORDER BY dept_order ASC
     </select>
 </mapper>
