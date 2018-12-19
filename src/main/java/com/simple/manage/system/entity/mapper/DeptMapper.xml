@@ -121,14 +121,29 @@
         </if>
     </insert>
 
-    <select id="queryDepts" parameterType="java.util.Map" resultType="java.util.Map">
+    <select id="queryDept" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
-            dept_id,
-            dept_name,
-            parent_dept_id,
-            leader_id,
-            dept_order,
-            dept_note,
+            dept_id AS id,
+            dept_name AS "name",
+            parent_dept_id AS "parentId",
+            leader_id AS leader,
+            dept_order AS "order",
+            dept_note AS note,
+            exta,
+            extb
+        FROM t_deptmst
+        WHERE 1 = 1 AND is_delete = '0' AND valid_sta ='0'
+        AND dept_id = #{deptId}
+    </select>
+
+    <select id="queryDeptList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            dept_id AS id,
+            dept_name AS "name",
+            parent_dept_id AS "parentId",
+            leader_id AS leader,
+            dept_order AS "order",
+            dept_note AS note,
             exta,
             extb
         FROM t_deptmst

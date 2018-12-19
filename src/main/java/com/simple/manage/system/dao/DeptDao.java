@@ -22,12 +22,20 @@ public interface DeptDao {
     int addOrUpdDept(Map<String, Object> dept);
 
     /**
+     * 查询部门信息
+     *
+     * @param deptId
+     * @return
+     */
+    Map<String, Object> queryDept(int deptId);
+
+    /**
      * 查询部门列表
      *
      * @param param
      * @return
      */
-    List<Map<String, Object>> queryDepts(Map<String, Object> param);
+    List<Map<String, Object>> queryDeptList(Map<String, Object> param);
 
     /**
      * 查询链接

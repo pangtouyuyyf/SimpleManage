@@ -63,6 +63,18 @@ public class DeptController extends BaseController implements TokenController {
     }
 
     /**
+     * 查询菜单
+     *
+     * @param id 主键
+     * @return
+     */
+    @AuthorizationAnnotation
+    @GetMapping(value = "/queryOne")
+    public Result queryDept(@RequestParam("id") Integer id) throws Exception {
+        return this.success(this.deptService.queryDept(id));
+    }
+
+    /**
      * 查询菜单列表
      *
      * @param parentId 父节点id
@@ -80,7 +92,7 @@ public class DeptController extends BaseController implements TokenController {
         Map<String, Object> params = new HashMap<>();
         params.put("dept_name", name);
         params.put("parent_dept_id", parentId);
-        PageInfo pageInfo = this.deptService.queryDepts(params, page, size);
+        PageInfo pageInfo = this.deptService.queryDeptList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
         return this.success(pageResult);

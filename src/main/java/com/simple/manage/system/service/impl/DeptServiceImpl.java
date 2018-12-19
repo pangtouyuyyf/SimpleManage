@@ -31,6 +31,17 @@ public class DeptServiceImpl implements DeptService {
         return this.deptDao.addOrUpdDept(dept);
     }
 
+
+    /**
+     * 查询部门信息
+     *
+     * @param deptId
+     * @return
+     */
+    public Map<String, Object> queryDept(int deptId) {
+        return this.deptDao.queryDept(deptId);
+    }
+
     /**
      * 查询部门列表
      *
@@ -39,8 +50,8 @@ public class DeptServiceImpl implements DeptService {
      * @param size
      * @return
      */
-    public PageInfo queryDepts(Map<String, Object> param, int page, int size) {
-        return PageHelper.startPage(page, size).doSelectPageInfo(() -> deptDao.queryDepts(param));
+    public PageInfo queryDeptList(Map<String, Object> param, int page, int size) {
+        return PageHelper.startPage(page, size).doSelectPageInfo(() -> deptDao.queryDeptList(param));
     }
 
     /**

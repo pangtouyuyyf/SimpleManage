@@ -22,6 +22,14 @@ public interface DeptService {
     int addOrUpdDept(Map<String, Object> dept);
 
     /**
+     * 查询部门信息
+     *
+     * @param deptId
+     * @return
+     */
+    Map<String, Object> queryDept(int deptId);
+
+    /**
      * 查询部门列表
      *
      * @param param
@@ -29,7 +37,7 @@ public interface DeptService {
      * @param size
      * @return
      */
-    PageInfo queryDepts(Map<String, Object> param, int page, int size);
+    PageInfo queryDeptList(Map<String, Object> param, int page, int size);
 
     /**
      * 查询链接
