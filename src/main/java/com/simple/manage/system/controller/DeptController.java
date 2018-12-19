@@ -91,6 +91,9 @@ public class DeptController extends BaseController implements TokenController {
                                 @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("dept_name", name);
+        if (parentId == null) {
+            parentId = CommonUtil.TREE_ROOT_PARENT_ID;
+        }
         params.put("parent_dept_id", parentId);
         PageInfo pageInfo = this.deptService.queryDeptList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
@@ -113,5 +116,17 @@ public class DeptController extends BaseController implements TokenController {
         }
         List<Tree> tree = this.deptService.queryDeptRecursion(parentId);
         return this.success(tree);
+    }
+
+    /**
+     * 删除部门
+     *
+     * @param id 主键
+     * @return
+     */
+    @AuthorizationAnnotation
+    @DeleteMapping(value = "/del")
+    public Result delDept(@RequestParam("id") Integer id) throws Exception {
+        return success();
     }
 }
