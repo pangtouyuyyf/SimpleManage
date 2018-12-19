@@ -61,6 +61,29 @@ public class DeptServiceImpl implements DeptService {
      * @return
      */
     public List<Tree> queryDeptRecursion(int deptId) {
-        return this.deptDao.queryDeptRecursion(deptId);
+        List<Tree> tree = this.deptDao.queryDeptRecursion(deptId);
+        if (tree != null && !tree.isEmpty()) {
+            for (Tree node : tree) {
+                setLeaf(node);
+            }
+        }
+
+        return tree;
+    }
+
+    /**
+     * 递归设置是否叶子节点
+     *
+     * @param treeNode 树节点
+     */
+    private void setLeaf(Tree treeNode) {
+        if (treeNode.getChildren() == null || treeNode.getChildren().isEmpty()) {
+            treeNode.setIsLeaf(true);
+        } else {
+            treeNode.setIsLeaf(false);
+            for (Tree temp : treeNode.getChildren()) {
+                setLeaf(temp);
+            }
+        }
     }
 }
