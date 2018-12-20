@@ -154,6 +154,7 @@
         <if test="parent_dept_id != null">
             AND parent_dept_id = #{parent_dept_id}
         </if>
+        ORDER BY dept_order ASC
     </select>
 
     <resultMap id="getSelf" type="com.simple.manage.system.entity.Tree">
