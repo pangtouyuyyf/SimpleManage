@@ -41,18 +41,18 @@ public class WebSocketController extends BaseController {
      *
      * @return
      */
-//    @SubscribeMapping(SENDING_URL)
-//    public String onSubscribe() {
-//        System.out.println("SUBSCRIBED : " + message);
-//        return "SUBSCRIBED : " + message;
-//    }
+    @SubscribeMapping(SENDING_URL)
+    public String onSubscribe() {
+        System.out.println("SUBSCRIBED : " + message);
+        return "SUBSCRIBED : " + message;
+    }
 
     /**
      * 定时推送
      */
     @Scheduled(fixedRate = 3000)
     public void sendMessage() {
-//        template.convertAndSend(SENDING_URL, buildNextMessage());
+        template.convertAndSend(SENDING_URL, buildNextMessage());
     }
 
     private String buildNextMessage() {
