@@ -7,6 +7,7 @@
         role_name,
         role_order,
         role_note,
+        dept_id,
         exta,
         extb,
         create_id,
@@ -42,6 +43,9 @@
                 <if test="role_note != null and role_note != ''">
                     role_note = #{role_note},
                 </if>
+                <if test="dept_id != null">
+                    dept_id = #{dept_id},
+                </if>
                 <if test="exta != null and exta != ''">
                     exta = #{exta},
                 </if>
@@ -75,6 +79,9 @@
                 <if test="role_note != null and role_note != ''">
                     role_note,
                 </if>
+                <if test="dept_id != null">
+                    dept_id,
+                </if>
                 <if test="exta != null and exta != ''">
                     exta,
                 </if>
@@ -101,6 +108,9 @@
                 <if test="role_note != null and role_note != ''">
                     #{role_note},
                 </if>
+                <if test="dept_id != null">
+                     #{dept_id},
+                </if>
                 <if test="exta != null and exta != ''">
                     #{exta},
                 </if>
@@ -123,7 +133,8 @@
             role_code AS "code",
             role_name AS "name",
             role_order AS "order",
-            role_note AS note
+            role_note AS note,
+            dept_id AS "deptId"
         FROM t_rolemst
         WHERE 1 = 1
         AND is_delete = '0' AND valid_sta ='0'
@@ -158,7 +169,8 @@
             role_code AS "code",
             role_name AS "name",
             role_order AS "order",
-            role_note AS note
+            role_note AS note,
+            dept_id AS "deptId"
         FROM t_rolemst
         WHERE 1 = 1
         AND is_delete = '0' AND valid_sta ='0'
