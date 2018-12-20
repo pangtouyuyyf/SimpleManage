@@ -1,10 +1,9 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.config.SysConfig;
-import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.domain.LoginInfo;
+import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.UserService;
@@ -41,7 +40,6 @@ public class UserController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result queryUser(@RequestParam("id") Integer id) throws Exception {
         return this.success(this.userService.queryUser(id));
@@ -58,7 +56,6 @@ public class UserController extends BaseController implements TokenController {
      * @param size      页数
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryList")
     public Result queryUserList(@RequestParam(value = "name", required = false) String name,
                                 @RequestParam(value = "loginName", required = false) String loginName,
@@ -87,7 +84,6 @@ public class UserController extends BaseController implements TokenController {
      * @param email     邮箱
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdUser(@RequestParam(value = "id", required = false) Integer id,
                                @RequestParam(value = "name", required = false) String name,
@@ -134,7 +130,6 @@ public class UserController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/del")
     public Result delUser(@RequestParam("id") Integer id) throws Exception {
         this.userService.delUser(id, getLoginInfo().getUser().getId());

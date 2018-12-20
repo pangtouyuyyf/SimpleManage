@@ -1,7 +1,6 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class RoleController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result queryRole(@RequestParam("id") Integer id) throws Exception {
         return this.success(this.roleService.queryRole(id));
@@ -43,7 +41,6 @@ public class RoleController extends BaseController implements TokenController {
      * @param size 页数
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryList")
     public Result queryRoleList(@RequestParam(value = "code", required = false) String code,
                                 @RequestParam(value = "name", required = false) String name,
@@ -68,7 +65,6 @@ public class RoleController extends BaseController implements TokenController {
      * @param note  备注
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdRole(@RequestParam(value = "id", required = false) Integer id,
                                @RequestParam("code") String code,
@@ -96,7 +92,6 @@ public class RoleController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/del")
     public Result delRole(@RequestParam("id") Integer id) throws Exception {
         this.roleService.delRole(id, getLoginInfo().getUser().getId());

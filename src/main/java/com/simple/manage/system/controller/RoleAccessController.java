@@ -1,13 +1,14 @@
 package com.simple.manage.system.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.RoleAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,6 @@ public class RoleAccessController extends BaseController implements TokenControl
      * @param body 参数
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/queryList")
     public Result queryRoleAccessList(@RequestBody JSONObject body) throws Exception {
         int roleId = body.getInteger("roleId");
@@ -50,7 +50,6 @@ public class RoleAccessController extends BaseController implements TokenControl
      * @param body
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/add")
     public Result addRoleAccess(@RequestBody JSONObject body) throws Exception {
         int currentUserId = getLoginInfo().getUser().getId();

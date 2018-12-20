@@ -3,7 +3,6 @@ package com.simple.manage.system.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      * @param body 参数
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/queryList")
     public Result queryRoleMenuList(@RequestBody JSONObject body) throws Exception {
         int roleId = body.getInteger("roleId");
@@ -50,7 +48,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      * @param body
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/add")
     public Result addRoleMenu(@RequestBody JSONObject body) throws Exception {
         int currentUserId = getLoginInfo().getUser().getId();
@@ -62,7 +59,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      *
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryAvlList")
     public Result queryAvlRoleMenuList() throws Exception {
         int roleId = getLoginInfo().getRole().getId();
@@ -74,7 +70,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      *
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOperateList")
     public Result queryRoleMenuOperate(@RequestParam("roleId") Integer roleId,
                                        @RequestParam("page") Integer page,
@@ -91,7 +86,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      * @param body
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOperate")
     public Result addRoleMenuOperate(@RequestBody JSONObject body) throws Exception {
         int currentUserId = getLoginInfo().getUser().getId();
@@ -105,7 +99,6 @@ public class RoleMenuController extends BaseController implements TokenControlle
      * @return
      * @throws Exception
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/code")
     public Result queryOperateByUrl(@RequestParam("url") String url) throws Exception {
         int currentRoleId = getLoginInfo().getRole().getId();

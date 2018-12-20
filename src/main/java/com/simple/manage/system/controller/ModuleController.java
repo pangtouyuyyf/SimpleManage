@@ -1,7 +1,6 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result queryModule(@RequestParam("id") Integer id) throws Exception {
         return this.success(this.moduleService.queryModule(id));
@@ -43,7 +41,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param size 页数
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryList")
     public Result queryModuleList(@RequestParam(value = "name", required = false) String name,
                                   @RequestParam(value = "type", required = false) String type,
@@ -69,7 +66,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param note  备注
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdModule(@RequestParam(value = "id", required = false) Integer id,
                                  @RequestParam("name") String name,
@@ -98,7 +94,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/del")
     public Result delModule(@RequestParam("id") Integer id) throws Exception {
         this.moduleService.delModule(id, getLoginInfo().getUser().getId());
@@ -111,7 +106,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param type 类型
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryDictByType")
     public Result queryModuleDataDictByType(@RequestParam("type") String type) throws Exception {
         return success(this.moduleService.queryModuleDataDictByType(type));
@@ -123,7 +117,6 @@ public class ModuleController extends BaseController implements TokenController 
      * @param type 类型
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryTreeByType")
     public Result queryModuleTreeByType(@RequestParam("type") String type) throws Exception {
         return success(this.moduleService.queryModuleTreeByType(type));

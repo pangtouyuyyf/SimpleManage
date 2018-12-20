@@ -1,7 +1,6 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.AccessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class AccessController extends BaseController implements TokenController 
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result queryAccess(@RequestParam("id") Integer id) throws Exception {
         return this.success(this.accessService.queryAccess(id));
@@ -43,7 +41,6 @@ public class AccessController extends BaseController implements TokenController 
      * @param size     页数
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryList")
     public Result queryAccessList(@RequestParam(value = "name", required = false) String name,
                                   @RequestParam(value = "moduleId", required = false) Integer moduleId,
@@ -69,7 +66,6 @@ public class AccessController extends BaseController implements TokenController 
      * @param note     备注
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdAccess(@RequestParam(value = "id", required = false) Integer id,
                                  @RequestParam("moduleId") Integer moduleId,
@@ -98,7 +94,6 @@ public class AccessController extends BaseController implements TokenController 
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/del")
     public Result delAccess(@RequestParam("id") Integer id) throws Exception {
         this.accessService.delAccess(id, getLoginInfo().getUser().getId());

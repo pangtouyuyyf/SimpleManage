@@ -2,7 +2,6 @@ package com.simple.manage.system.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.RoleRouteService;
 import com.simple.manage.system.util.CommonUtil;
@@ -30,7 +29,6 @@ public class RoleRouteController extends BaseController implements TokenControll
      * @param body 参数
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/queryList")
     public Result queryRoleRouteList(@RequestBody JSONObject body) throws Exception {
         int roleId = body.getInteger("roleId");
@@ -50,7 +48,6 @@ public class RoleRouteController extends BaseController implements TokenControll
      * @param body
      * @return
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/add")
     public Result addRoleRoute(@RequestBody JSONObject body) throws Exception {
         int currentUserId = getLoginInfo().getUser().getId();
@@ -64,7 +61,6 @@ public class RoleRouteController extends BaseController implements TokenControll
      * @return
      * @throws Exception
      */
-    @AuthorizationAnnotation
     @PostMapping(value = "/check")
     public Result checkRoleRoute(@RequestParam("url") String url) throws Exception {
         Result result = success();
@@ -78,6 +74,4 @@ public class RoleRouteController extends BaseController implements TokenControll
         }
         return result;
     }
-
-
 }

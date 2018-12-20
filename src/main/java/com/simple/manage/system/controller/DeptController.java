@@ -1,7 +1,6 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.Tree;
 import com.simple.manage.system.service.DeptService;
@@ -68,7 +67,6 @@ public class DeptController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result queryDept(@RequestParam("id") Integer id) throws Exception {
         return this.success(this.deptService.queryDept(id));
@@ -83,7 +81,6 @@ public class DeptController extends BaseController implements TokenController {
      * @param size     页数
      * @return
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryList")
     public Result queryDeptList(@RequestParam(value = "parentId", required = false) Integer parentId,
                                 @RequestParam(value = "name", required = false) String name,
@@ -108,7 +105,6 @@ public class DeptController extends BaseController implements TokenController {
      * @return
      * @throws Exception
      */
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryTree")
     public Result queryDeptTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
         if (parentId == null) {
@@ -124,7 +120,6 @@ public class DeptController extends BaseController implements TokenController {
      * @param id 主键
      * @return
      */
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/del")
     public Result delDept(@RequestParam("id") Integer id) throws Exception {
         return success();

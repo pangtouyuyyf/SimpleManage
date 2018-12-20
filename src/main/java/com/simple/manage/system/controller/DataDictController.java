@@ -1,7 +1,6 @@
 package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.simple.manage.system.annotation.AuthorizationAnnotation;
 import com.simple.manage.system.annotation.TokenAnnotation;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.DataDictService;
@@ -46,7 +45,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryMainList")
     public Result queryModuleList(@RequestParam(value = "name", required = false) String name,
                                   @RequestParam(value = "note", required = false) String note,
@@ -71,7 +69,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpdDataDict")
     public Result<Object> addDataDict(@RequestParam(value = "id", required = false) Integer id,
                                       @RequestParam("name") String name,
@@ -109,7 +106,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryOne")
     public Result<Object> queryDataDict(@RequestParam("id") Integer id) throws Exception {
         return success(this.dataDictService.queryDataDict(id));
@@ -122,7 +118,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/delMain")
     public Result<Object> deleteDataDict(@RequestParam("id") Integer id) throws Exception {
         this.dataDictService.delDataDict(id, getLoginInfo().getUser().getId());
@@ -140,7 +135,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @PostMapping(value = "/addOrUpdDataDictLin")
     public Result<Object> addDataDictLin(@RequestParam(value = "id", required = false) Integer id,
                                          @RequestParam("dictId") Integer dictId,
@@ -184,7 +178,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @GetMapping(value = "/queryLinList")
     public Result<Object> queryDataDictLinList(@RequestParam("dictId") Integer dictId,
                                                @RequestParam("page") Integer page,
@@ -203,7 +196,6 @@ public class DataDictController extends BaseController {
      * @return
      */
     @TokenAnnotation
-    @AuthorizationAnnotation
     @DeleteMapping(value = "/delLin")
     public Result<Object> deleteDataDictLin(@RequestParam("linId") Integer linId) throws Exception {
         this.dataDictService.delDataDictLin(linId, getLoginInfo().getUser().getId());
