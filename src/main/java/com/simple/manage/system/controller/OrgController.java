@@ -44,15 +44,15 @@ public class OrgController extends BaseController implements TokenController {
                                @RequestParam("order") Integer order,
                                @RequestParam(value = "note", required = false) String note) throws Exception {
         Map<String, Object> org = new HashMap<>();
-        org.put("Org_id", id);
-        org.put("Org_name", name);
+        org.put("org_id", id);
+        org.put("org_name", name);
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        org.put("parent_Org_id", parentId);
+        org.put("parent_id", parentId);
         org.put("leader_id", leader);
-        org.put("Org_order", order);
-        org.put("Org_note", note);
+        org.put("org_order", order);
+        org.put("org_note", note);
         org.put("create_id", getLoginInfo().getUser().getId());
         org.put("create_time", LocalDateTime.now());
         org.put("update_id", getLoginInfo().getUser().getId());
@@ -87,11 +87,11 @@ public class OrgController extends BaseController implements TokenController {
                                 @RequestParam("page") Integer page,
                                 @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("Org_name", name);
+        params.put("org_name", name);
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        params.put("parent_Org_id", parentId);
+        params.put("parent_id", parentId);
         PageInfo pageInfo = this.orgService.queryOrgList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
