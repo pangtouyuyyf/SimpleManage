@@ -123,31 +123,31 @@
 
     <select id="queryOrg" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
-            org_id AS id,
-            org_name AS "name",
-            parent_id AS "parentId",
-            leader_id AS leader,
-            org_order AS "order",
-            org_note AS note,
-            exta,
-            extb
-        FROM t_orgmst
-        WHERE 1 = 1 AND is_delete = '0' AND valid_sta ='0'
-        AND org_id = #{orgId}
+            t1.org_id AS id,
+            t1.org_name AS "name",
+            t1.parent_id AS "parentId",
+            t1.leader_id AS leader,
+            t1.org_order AS "order",
+            t1.org_note AS note,
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta,
+            (SELECT t3.user_name FROM t_usermst t3 WHERE t3.is_delete = '0' AND t3.valid_sta ='0' AND t3.user_id = t1.leader_id) AS extb
+        FROM t_orgmst t1
+        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        AND t1.org_id = #{orgId}
     </select>
 
     <select id="queryOrgList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-            org_id AS id,
-            org_name AS "name",
-            parent_id AS "parentId",
-            leader_id AS leader,
-            org_order AS "order",
-            org_note AS note,
-            exta,
-            extb
-        FROM t_orgmst
-        WHERE 1 = 1 AND is_delete = '0' AND valid_sta ='0'
+            t1.org_id AS id,
+            t1.org_name AS "name",
+            t1.parent_id AS "parentId",
+            t1.leader_id AS leader,
+            t1.org_order AS "order",
+            t1.org_note AS note,
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta,
+            (SELECT t3.user_name FROM t_usermst t3 WHERE t3.is_delete = '0' AND t3.valid_sta ='0' AND t3.user_id = t1.leader_id) AS extb
+        FROM t_orgmst t1
+        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
         <if test="org_name != null and org_name != ''">
             AND org_name LIKE CONCAT('%', #{org_name}, '%')
         </if>
