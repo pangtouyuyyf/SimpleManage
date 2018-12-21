@@ -62,7 +62,7 @@ public class OrgController extends BaseController implements TokenController {
     }
 
     /**
-     * 查询菜单
+     * 查询组织
      *
      * @param id 主键
      * @return
@@ -73,7 +73,7 @@ public class OrgController extends BaseController implements TokenController {
     }
 
     /**
-     * 查询菜单列表
+     * 查询组织列表
      *
      * @param parentId 父节点id
      * @param name     名称
