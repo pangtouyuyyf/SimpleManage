@@ -3,7 +3,7 @@ package com.simple.manage.system.controller;
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.Tree;
-import com.simple.manage.system.service.DeptService;
+import com.simple.manage.system.service.OrgService;
 import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,50 +14,50 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Description 部门信息controller
+ * Description 组织信息controller
  * Author chen
  * CreateTime 2018-12-19 9:18
  **/
 @RestController
-@RequestMapping(value = "/sys/dept")
-public class DeptController extends BaseController implements TokenController {
+@RequestMapping(value = "/sys/org")
+public class OrgController extends BaseController implements TokenController {
     @Autowired
-    private DeptService deptService;
+    private OrgService orgService;
 
     /**
-     * 新增或更新部门信息
+     * 新增或更新组织信息
      *
      * @param id       主键
-     * @param name     部门名称
+     * @param name     组织名称
      * @param parentId 父节点id
-     * @param leader   部门领导id
+     * @param leader   组织领导id
      * @param order    排序
      * @param note     备注
      * @return
      * @throws Exception
      */
     @PostMapping(value = "/addOrUpd")
-    public Result addOrUpdDept(@RequestParam(value = "id", required = false) Integer id,
+    public Result addOrUpdOrg(@RequestParam(value = "id", required = false) Integer id,
                                @RequestParam("name") String name,
                                @RequestParam(value = "parentId", required = false) Integer parentId,
                                @RequestParam(value = "leader", required = false) Integer leader,
                                @RequestParam("order") Integer order,
                                @RequestParam(value = "note", required = false) String note) throws Exception {
-        Map<String, Object> dept = new HashMap<>();
-        dept.put("dept_id", id);
-        dept.put("dept_name", name);
+        Map<String, Object> org = new HashMap<>();
+        org.put("Org_id", id);
+        org.put("Org_name", name);
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        dept.put("parent_dept_id", parentId);
-        dept.put("leader_id", leader);
-        dept.put("dept_order", order);
-        dept.put("dept_note", note);
-        dept.put("create_id", getLoginInfo().getUser().getId());
-        dept.put("create_time", LocalDateTime.now());
-        dept.put("update_id", getLoginInfo().getUser().getId());
-        dept.put("update_time", LocalDateTime.now());
-        this.deptService.addOrUpdDept(dept);
+        org.put("parent_Org_id", parentId);
+        org.put("leader_id", leader);
+        org.put("Org_order", order);
+        org.put("Org_note", note);
+        org.put("create_id", getLoginInfo().getUser().getId());
+        org.put("create_time", LocalDateTime.now());
+        org.put("update_id", getLoginInfo().getUser().getId());
+        org.put("update_time", LocalDateTime.now());
+        this.orgService.addOrUpdOrg(org);
         return success();
     }
 
@@ -68,8 +68,8 @@ public class DeptController extends BaseController implements TokenController {
      * @return
      */
     @GetMapping(value = "/queryOne")
-    public Result queryDept(@RequestParam("id") Integer id) throws Exception {
-        return this.success(this.deptService.queryDept(id));
+    public Result queryOrg(@RequestParam("id") Integer id) throws Exception {
+        return this.success(this.orgService.queryOrg(id));
     }
 
     /**
@@ -82,46 +82,46 @@ public class DeptController extends BaseController implements TokenController {
      * @return
      */
     @GetMapping(value = "/queryList")
-    public Result queryDeptList(@RequestParam(value = "parentId", required = false) Integer parentId,
+    public Result queryOrgList(@RequestParam(value = "parentId", required = false) Integer parentId,
                                 @RequestParam(value = "name", required = false) String name,
                                 @RequestParam("page") Integer page,
                                 @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("dept_name", name);
+        params.put("Org_name", name);
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        params.put("parent_dept_id", parentId);
-        PageInfo pageInfo = this.deptService.queryDeptList(params, page, size);
+        params.put("parent_Org_id", parentId);
+        PageInfo pageInfo = this.orgService.queryOrgList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
         return this.success(pageResult);
     }
 
     /**
-     * 查询部门树
+     * 查询组织树
      *
      * @param parentId 父节点id
      * @return
      * @throws Exception
      */
     @GetMapping(value = "/queryTree")
-    public Result queryDeptTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
+    public Result queryOrgTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        List<Tree> tree = this.deptService.queryDeptRecursion(parentId);
+        List<Tree> tree = this.orgService.queryOrgRecursion(parentId);
         return this.success(tree);
     }
 
     /**
-     * 删除部门
+     * 删除组织
      *
      * @param id 主键
      * @return
      */
     @DeleteMapping(value = "/del")
-    public Result delDept(@RequestParam("id") Integer id) throws Exception {
+    public Result delOrg(@RequestParam("id") Integer id) throws Exception {
         return success();
     }
 }

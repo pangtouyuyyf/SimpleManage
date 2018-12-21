@@ -7,43 +7,43 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Description 部门数据服务接口
+ * Description 组织数据服务接口
  * Author chen
  * CreateTime 2018-12-18 11:07
  **/
 
-public interface DeptService {
+public interface OrgService {
     /**
-     * 添加或更新部门
+     * 添加或更新组织
      *
-     * @param dept
+     * @param org
      * @return
      */
-    int addOrUpdDept(Map<String, Object> dept);
+    int addOrUpdOrg(Map<String, Object> org);
 
     /**
-     * 查询部门信息
+     * 查询组织信息
      *
-     * @param deptId
+     * @param orgId
      * @return
      */
-    Map<String, Object> queryDept(int deptId);
+    Map<String, Object> queryOrg(int orgId);
 
     /**
-     * 查询部门列表
+     * 查询组织列表
      *
      * @param param
      * @param page
      * @param size
      * @return
      */
-    PageInfo queryDeptList(Map<String, Object> param, int page, int size);
+    PageInfo queryOrgList(Map<String, Object> param, int page, int size);
 
     /**
      * 查询链接
      *
-     * @param deptId
+     * @param orgId
      * @return
      */
-    List<Tree> queryDeptRecursion(int deptId);
+    List<Tree> queryOrgRecursion(int orgId);
 }
