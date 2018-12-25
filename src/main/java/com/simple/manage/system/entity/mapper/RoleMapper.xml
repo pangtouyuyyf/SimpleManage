@@ -7,7 +7,7 @@
         role_name,
         role_order,
         role_note,
-        dept_id,
+        org_id,
         exta,
         extb,
         create_id,
@@ -43,8 +43,8 @@
                 <if test="role_note != null and role_note != ''">
                     role_note = #{role_note},
                 </if>
-                <if test="dept_id != null">
-                    dept_id = #{dept_id},
+                <if test="org_id != null">
+                    org_id = #{org_id},
                 </if>
                 <if test="exta != null and exta != ''">
                     exta = #{exta},
@@ -79,8 +79,8 @@
                 <if test="role_note != null and role_note != ''">
                     role_note,
                 </if>
-                <if test="dept_id != null">
-                    dept_id,
+                <if test="org_id != null">
+                    org_id,
                 </if>
                 <if test="exta != null and exta != ''">
                     exta,
@@ -108,8 +108,8 @@
                 <if test="role_note != null and role_note != ''">
                     #{role_note},
                 </if>
-                <if test="dept_id != null">
-                     #{dept_id},
+                <if test="org_id != null">
+                     #{org_id},
                 </if>
                 <if test="exta != null and exta != ''">
                     #{exta},
@@ -129,16 +129,17 @@
 
     <select id="queryRole" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
-            role_id AS id,
-            role_code AS "code",
-            role_name AS "name",
-            role_order AS "order",
-            role_note AS note,
-            dept_id AS "deptId"
-        FROM t_rolemst
+            t1.role_id AS id,
+            t1.role_code AS "code",
+            t1.role_name AS "name",
+            t1.role_order AS "order",
+            t1.role_note AS note,
+            org_id AS "orgId",
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.org_id) as exta
+        FROM t_rolemst t1
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
-        AND role_id = #{roleId}
+        AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        AND t1.role_id = #{roleId}
     </select>
 
     <select id="queryRoleEntity" parameterType="java.lang.Integer" resultMap="roleMap">
@@ -165,25 +166,26 @@
 
     <select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-            role_id AS id,
-            role_code AS "code",
-            role_name AS "name",
-            role_order AS "order",
-            role_note AS note,
-            dept_id AS "deptId"
-        FROM t_rolemst
+            t1.role_id AS id,
+            t1.role_code AS "code",
+            t1.role_name AS "name",
+            t1.role_order AS "order",
+            t1.role_note AS note,
+            t1.org_id AS "orgId",
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.org_id) as exta
+        FROM t_rolemst t1
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND t1.is_delete = '0' AND t1.valid_sta ='0'
         <if test="role_id != null">
-            AND role_id = #{role_id}
+            AND t1.role_id = #{role_id}
         </if>
         <if test="role_code != null and role_code != ''">
-            AND role_code LIKE CONCAT('%', #{role_code}, '%')
+            AND t1.role_code LIKE CONCAT('%', #{role_code}, '%')
         </if>
         <if test="role_name != null and role_name != ''">
-            AND role_name LIKE CONCAT('%', #{role_name}, '%')
+            AND t1.role_name LIKE CONCAT('%', #{role_name}, '%')
         </if>
-        ORDER BY role_order ASC
+        ORDER BY t1.role_order ASC
     </select>
 
     <delete id="delRole" parameterType="java.util.Map">
