@@ -63,6 +63,7 @@ public class RoleController extends BaseController implements TokenController {
      * @param name  名称
      * @param order 排序
      * @param note  备注
+     * @param orgId 组织主键
      * @return
      */
     @PostMapping(value = "/addOrUpd")
@@ -70,13 +71,15 @@ public class RoleController extends BaseController implements TokenController {
                                @RequestParam("code") String code,
                                @RequestParam("name") String name,
                                @RequestParam("order") Integer order,
-                               @RequestParam(value = "note", required = false) String note) throws Exception {
+                               @RequestParam(value = "note", required = false) String note,
+                               @RequestParam(value = "orgId", required = false) Integer orgId) throws Exception {
         Map<String, Object> role = new HashMap<>();
         role.put("role_id", id);
         role.put("role_code", code);
         role.put("role_name", name);
         role.put("role_order", order);
         role.put("role_note", note);
+        role.put("org_id", orgId);
         role.put("create_id", getLoginInfo().getUser().getId());
         role.put("create_time", LocalDateTime.now());
         role.put("update_id", getLoginInfo().getUser().getId());
