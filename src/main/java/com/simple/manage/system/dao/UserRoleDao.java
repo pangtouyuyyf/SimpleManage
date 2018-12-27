@@ -18,10 +18,10 @@ public interface UserRoleDao {
     /**
      * 查询用户角色列表
      *
-     * @param userId
+     * @param params
      * @return
      */
-    List<Map<String, Object>> queryUserRoleList(int userId);
+    List<Map<String, Object>> queryUserRoleList(Map<String, Object> params);
 
     /**
      * 删除用户角色
