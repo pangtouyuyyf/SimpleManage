@@ -27,11 +27,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     /**
      * 查询用户角色列表
      *
-     * @param userId
+     * @param params
      * @return
      */
-    public List<Map<String, Object>> queryUserRoleList(int userId) {
-        return this.userRoleDao.queryUserRoleList(userId);
+    public List<Map<String, Object>> queryUserRoleList(Map<String, Object> params) {
+        return this.userRoleDao.queryUserRoleList(params);
     }
 
     /**

@@ -43,7 +43,7 @@ public class WebSocketController extends BaseController {
      */
     @SubscribeMapping(SENDING_URL)
     public String onSubscribe() {
-        System.out.println("SUBSCRIBED : " + message);
+//        System.out.println("SUBSCRIBED : " + message);
         return "SUBSCRIBED : " + message;
     }
 
@@ -57,7 +57,7 @@ public class WebSocketController extends BaseController {
 
     private String buildNextMessage() {
         message = "Test" + counter.getAndIncrement();
-        System.out.println("Send message " + message);
+//        System.out.println("Send message " + message);
         return Integer.toString(RandomNumUtil.randomInt(100, 200));
     }
 }

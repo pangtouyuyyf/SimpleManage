@@ -31,7 +31,7 @@
         </if>
     </delete>
 
-    <select id="queryUserRoleList" parameterType="java.lang.Integer" resultType="java.util.Map">
+    <select id="queryUserRoleList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
             r.role_id AS "key",
             r.role_name AS "title",
@@ -41,6 +41,12 @@
             1 = 1
             AND r.is_delete = '0'
             AND r.valid_sta = '0'
+            <if test="orgIds != null">
+                <foreach collection="orgIds" item="item" open=" AND r.org_id IN (" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
         ORDER BY r.role_order ASC
     </select>
 </mapper>

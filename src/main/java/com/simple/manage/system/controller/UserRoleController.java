@@ -1,10 +1,15 @@
 package com.simple.manage.system.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description 用户角色业务controller
@@ -20,12 +25,20 @@ public class UserRoleController extends BaseController implements TokenControlle
     /**
      * 查询用户角色
      *
-     * @param userId 用户主键
+     * @param body 参数
      * @return
      */
-    @GetMapping(value = "/queryList")
-    public Result queryUserRoleList(@RequestParam("userId") Integer userId) throws Exception {
-        return this.success(this.userRoleService.queryUserRoleList(userId));
+    @PostMapping(value = "/queryList")
+    public Result queryUserRoleList(@RequestBody JSONObject body) throws Exception {
+        int userId = body.getInteger("userId");
+        JSONArray orgIdArr = body.getJSONArray("orgIds");
+        List<Integer> orgIdList = JSONArray.parseArray(JSONObject.toJSONString(orgIdArr), Integer.class);
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("orgIds", orgIdList);
+
+        return this.success(this.userRoleService.queryUserRoleList(param));
     }
 
     /**
