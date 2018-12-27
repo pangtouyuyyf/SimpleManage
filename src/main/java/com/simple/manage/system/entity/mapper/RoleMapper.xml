@@ -22,6 +22,7 @@
         <id property="id" column="role_id" javaType="java.lang.Integer"/>
         <result property="code" column="role_code" javaType="java.lang.String"/>
         <result property="name" column="role_name" javaType="java.lang.String"/>
+        <result property="orgId" column="org_id" javaType="java.lang.Integer"/>
     </resultMap>
 
     <insert id="addOrUpdRole" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="role_id">
@@ -146,7 +147,8 @@
         SELECT
             role_id,
             role_code,
-            role_name
+            role_name,
+            org_id
         FROM t_rolemst
         WHERE 1 = 1
         AND is_delete = '0' AND valid_sta ='0'
@@ -157,7 +159,8 @@
         SELECT
             r.role_id,
             r.role_code,
-            r.role_name
+            r.role_name,
+            org_id
         FROM
         t_userrolelin ur LEFT JOIN t_rolemst r ON ur.role_id = r.role_id
         WHERE 1 = 1
