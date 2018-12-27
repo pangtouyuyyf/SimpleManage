@@ -9,6 +9,7 @@ import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.JwtService;
+import com.simple.manage.system.service.OrgService;
 import com.simple.manage.system.service.RoleService;
 import com.simple.manage.system.service.UserService;
 import com.simple.manage.system.util.CommonUtil;
@@ -51,6 +52,9 @@ public class LoginController extends BaseController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private OrgService orgService;
+
     /**
      * 系统登录
      *
@@ -63,7 +67,6 @@ public class LoginController extends BaseController {
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("password") String password,
                         @RequestParam("channel") String channel) throws Exception {
-
         if (!CommonUtil.CHANNEL_WEB.equals(channel) && !CommonUtil.CHANNEL_APP.equals(channel)) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 登录参数有误");
             return this.fail("登录参数有误");
@@ -116,6 +119,17 @@ public class LoginController extends BaseController {
         }
 
         return success();
+    }
+
+    /**
+     * 获取登录用户所在组织
+     *
+     * @param loginName 登录名
+     * @return
+     */
+    @GetMapping(value = "/logOrg")
+    public Result logOrg(@RequestParam("loginName") String loginName) throws Exception {
+        return success(this.orgService.queryOrgListByLoginName(loginName));
     }
 
     /**
