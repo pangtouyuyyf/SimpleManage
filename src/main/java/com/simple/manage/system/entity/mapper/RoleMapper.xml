@@ -153,7 +153,7 @@
         AND role_id = #{roleId}
     </select>
 
-    <select id="queryCurUserRole" parameterType="java.lang.Integer" resultMap="roleMap">
+    <select id="queryCurUserRole" parameterType="java.util.Map" resultMap="roleMap">
         SELECT
             r.role_id,
             r.role_code,
@@ -161,7 +161,8 @@
         FROM
         t_userrolelin ur LEFT JOIN t_rolemst r ON ur.role_id = r.role_id
         WHERE 1 = 1
-        AND user_id = #{userId}
+        AND user_id = #{user_id}
+        and org_id = #{org_id}
     </select>
 
     <select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
