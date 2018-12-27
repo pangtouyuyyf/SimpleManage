@@ -35,6 +35,7 @@
         SELECT
             r.role_id AS "key",
             r.role_name AS "title",
+            r.org_id as "orgId",
             CASE WHEN ur.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
         FROM t_rolemst r LEFT JOIN (select id,role_id from t_userrolelin where user_id = #{userId}) ur ON r.role_id = ur.role_id
         WHERE

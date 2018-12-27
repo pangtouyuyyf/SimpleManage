@@ -40,6 +40,14 @@ public interface OrgService {
     PageInfo queryOrgList(Map<String, Object> param, int page, int size);
 
     /**
+     * 根据登录用户查询组织列表
+     *
+     * @param loginName
+     * @return
+     */
+    List<Map<String, Object>> queryOrgListByLoginName(String loginName);
+
+    /**
      * 查询链接
      *
      * @param orgId
