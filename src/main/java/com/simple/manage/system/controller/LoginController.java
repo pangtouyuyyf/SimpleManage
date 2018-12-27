@@ -60,12 +60,14 @@ public class LoginController extends BaseController {
      *
      * @param loginName 登录名
      * @param password  密码
+     * @param orgId     组织主键
      * @param channel   客户端渠道(app/web)
      * @return
      */
     @GetMapping(value = "/login")
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("password") String password,
+                        @RequestParam("orgId") Integer orgId,
                         @RequestParam("channel") String channel) throws Exception {
         if (!CommonUtil.CHANNEL_WEB.equals(channel) && !CommonUtil.CHANNEL_APP.equals(channel)) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 登录参数有误");
@@ -84,7 +86,10 @@ public class LoginController extends BaseController {
         }
 
         //查询当前登录用户角色
-        Role role = this.roleService.queryCurUserRole(user.getId());
+        params.clear();
+        params.put("user_id", user.getId());
+        params.put("org_id", orgId);
+        Role role = this.roleService.queryCurUserRole(params);
         if (role == null) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户:" + user.getId() + " 角色查询失败");
             return this.fail("该用户没有角色");

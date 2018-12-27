@@ -64,8 +64,8 @@ public interface RoleDao {
     /**
      * 查询当前用户登录角色
      *
-     * @param userId
+     * @param param
      * @return
      */
-    Role queryCurUserRole(int userId);
+    Role queryCurUserRole(Map<String, Object> param);
 }

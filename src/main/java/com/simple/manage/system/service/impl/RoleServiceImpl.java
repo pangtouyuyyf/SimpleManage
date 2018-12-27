@@ -125,10 +125,10 @@ public class RoleServiceImpl implements RoleService {
     /**
      * 查询当前用户登录角色
      *
-     * @param userId
+     * @param param
      * @return
      */
-    public Role queryCurUserRole(int userId) {
-        return this.roleDao.queryCurUserRole(userId);
+    public Role queryCurUserRole(Map<String, Object> param) {
+        return this.roleDao.queryCurUserRole(param);
     }
 }
