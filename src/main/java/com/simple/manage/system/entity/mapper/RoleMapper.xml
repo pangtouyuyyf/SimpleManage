@@ -162,10 +162,12 @@
             r.role_name,
             org_id
         FROM
-        t_userrolelin ur LEFT JOIN t_rolemst r ON ur.role_id = r.role_id
+        t_userrolelin ur,t_rolemst r
         WHERE 1 = 1
+        AND r.is_delete = '0' AND r.valid_sta ='0'
+        AND ur.role_id = r.role_id
         AND user_id = #{user_id}
-        and org_id = #{org_id}
+        AND org_id = #{org_id}
     </select>
 
     <select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
