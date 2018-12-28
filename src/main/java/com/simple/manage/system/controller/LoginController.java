@@ -8,10 +8,7 @@ import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
-import com.simple.manage.system.service.JwtService;
-import com.simple.manage.system.service.OrgService;
-import com.simple.manage.system.service.RoleService;
-import com.simple.manage.system.service.UserService;
+import com.simple.manage.system.service.*;
 import com.simple.manage.system.util.CommonUtil;
 import com.simple.manage.system.util.LogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +51,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private OrgService orgService;
+
+    @Autowired
+    private CommonService commonService;
 
     /**
      * 系统登录
@@ -162,12 +162,7 @@ public class LoginController extends BaseController {
         }
 
         //保存当前登录信息
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setChannel(channel);
-        loginInfo.setUser(user);
-        loginInfo.setRole(role);
-        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()));
-        this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), loginInfo);
+        this.commonService.saveLoginInfo(user, role, channel);
 
         return token;
     }

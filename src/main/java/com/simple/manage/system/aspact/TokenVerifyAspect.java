@@ -3,13 +3,10 @@ package com.simple.manage.system.aspact;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.domain.LoginInfo;
-import com.simple.manage.system.entity.Role;
-import com.simple.manage.system.entity.User;
 import com.simple.manage.system.enums.SysExpEnum;
 import com.simple.manage.system.redis.RedisOperation;
+import com.simple.manage.system.service.CommonService;
 import com.simple.manage.system.service.JwtService;
-import com.simple.manage.system.service.RoleService;
-import com.simple.manage.system.service.UserService;
 import com.simple.manage.system.util.CommonUtil;
 import com.simple.manage.system.util.LogUtil;
 import com.simple.manage.system.util.ResultUtil;
@@ -27,7 +24,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Description token验证
@@ -48,10 +47,7 @@ public class TokenVerifyAspect {
     private RedisOperation redisOperation;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RoleService roleService;
+    private CommonService commonService;
 
     /**
      * 业务controller类层面的Token验证(对所有TokenController实现类进行token验证),地毯式验证
@@ -145,16 +141,7 @@ public class TokenVerifyAspect {
         /** 将登录数据写入threadlocal **/
         List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, userId, roleId);
         LoginInfo loginInfo = Optional.of((LoginInfo) this.redisOperation.getObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts))).orElseGet(() -> {
-            Map<String, Object> params = new HashMap<>();
-            params.put("user_id", Integer.valueOf(userId));
-            User user = this.userService.queryUserEntity(params);
-            Role role = this.roleService.queryRoleEntity(Integer.valueOf(roleId));
-            LoginInfo temp = new LoginInfo();
-            temp.setChannel(channel);
-            temp.setUser(user);
-            temp.setRole(role);
-            this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), temp);
-            return temp;
+            return this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
         });
         RequestLoginContextHolder.setRequestLoginInfo(loginInfo);
 
