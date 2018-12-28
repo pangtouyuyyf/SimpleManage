@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.service.RoleMenuService;
+import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,7 +104,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
     public Result queryOperateByUrl(@RequestParam("url") String url) throws Exception {
         int currentRoleId = getLoginInfo().getRole().getId();
         Map<String, Object> params = new HashMap<>();
-        params.put("url", url);
+        params.put("url", CommonUtil.urlHandler(url));
         params.put("roleId", currentRoleId);
         return success(this.roleMenuService.queryMenuOperateCode(params));
     }
