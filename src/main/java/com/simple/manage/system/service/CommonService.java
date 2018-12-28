@@ -39,4 +39,11 @@ public interface CommonService {
      * @param channel
      */
     LoginInfo saveLoginInfo(User user, Role role, Org org, String channel);
+
+    /**
+     * 删除登录信息
+     *
+     * @param regex
+     */
+    void deleteLoginInfo(String regex);
 }

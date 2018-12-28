@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -184,5 +185,15 @@ public class RedisOperation {
     public void deleteObj(String key) {
         String realKey = getRealKey(key);
         redisTemplate.delete(realKey);
+    }
+
+    /**
+     * 批量清除redis obj缓存
+     *
+     * @param regex
+     */
+    public void deleteBatch(String regex) {
+        Set<String> keys = redisTemplate.keys(regex);
+        redisTemplate.delete(keys);
     }
 }

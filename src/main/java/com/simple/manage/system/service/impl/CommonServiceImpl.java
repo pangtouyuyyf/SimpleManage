@@ -83,4 +83,13 @@ public class CommonServiceImpl implements CommonService {
         this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), loginInfo);
         return loginInfo;
     }
+
+    /**
+     * 删除登录信息
+     *
+     * @param regex
+     */
+    public void deleteLoginInfo(String regex) {
+        this.redisOperation.deleteBatch(regex);
+    }
 }
