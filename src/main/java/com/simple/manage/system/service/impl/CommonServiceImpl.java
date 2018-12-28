@@ -79,7 +79,7 @@ public class CommonServiceImpl implements CommonService {
         loginInfo.setUser(user);
         loginInfo.setRole(role);
         loginInfo.setOrg(org);
-        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()));
+        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, channel, Integer.toString(user.getId()), Integer.toString(role.getId()));
         this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), loginInfo);
         return loginInfo;
     }
