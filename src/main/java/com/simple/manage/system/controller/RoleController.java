@@ -35,20 +35,23 @@ public class RoleController extends BaseController implements TokenController {
     /**
      * 查询角色列表
      *
-     * @param code 编码
-     * @param name 名称
-     * @param page 页码
-     * @param size 页数
+     * @param code  编码
+     * @param name  名称
+     * @param page  页码
+     * @param size  页数
+     * @param orgId 组织编号
      * @return
      */
     @GetMapping(value = "/queryList")
     public Result queryRoleList(@RequestParam(value = "code", required = false) String code,
                                 @RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "orgId", required = false) Integer orgId,
                                 @RequestParam("page") Integer page,
                                 @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("role_code", code);
         params.put("role_name", name);
+        params.put("org_id", orgId);
         PageInfo pageInfo = this.roleService.queryRoleList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
