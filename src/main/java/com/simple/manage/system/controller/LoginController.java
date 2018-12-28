@@ -81,7 +81,7 @@ public class LoginController extends BaseController {
         User user = this.userService.queryUserEntity(params);
         if (user == null) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户查询失败");
-            return this.fail("没有该用户");
+            return this.fail("用户名密码错误");
         }
 
         //查询当前登录用户角色
