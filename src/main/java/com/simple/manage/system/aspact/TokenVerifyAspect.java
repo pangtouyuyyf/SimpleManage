@@ -100,7 +100,7 @@ public class TokenVerifyAspect {
         }
 
         /** 获取服务器缓存令牌 **/
-        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, channel, userId, roleId);
+        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, roleId, channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
         String tokenRedis = this.redisOperation.getStr(tokenRedisKey);
 
@@ -139,7 +139,7 @@ public class TokenVerifyAspect {
         }
 
         /** 将登录数据写入threadlocal **/
-        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, channel, userId, roleId);
+        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, userId, roleId, channel);
         LoginInfo loginInfo = Optional.of((LoginInfo) this.redisOperation.getObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts))).orElseGet(() -> {
             return this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
         });

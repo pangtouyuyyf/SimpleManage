@@ -193,7 +193,8 @@ public class RedisOperation {
      * @param regex
      */
     public void deleteBatch(String regex) {
-        Set<String> keys = redisTemplate.keys(regex);
+        String realKey = getRealKey(regex);
+        Set<String> keys = redisTemplate.keys(realKey);
         redisTemplate.delete(keys);
     }
 }

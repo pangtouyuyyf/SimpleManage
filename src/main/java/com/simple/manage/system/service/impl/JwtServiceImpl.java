@@ -6,12 +6,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.manage.system.aspact.TokenVerifyAspect;
 import com.simple.manage.system.config.JwtConfig;
-import com.simple.manage.system.enums.SysExpEnum;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.JwtService;
 import com.simple.manage.system.util.CommonUtil;
 import com.simple.manage.system.util.LogUtil;
-import com.simple.manage.system.util.ResultUtil;
 import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,7 +114,7 @@ public class JwtServiceImpl implements JwtService {
         }
 
         /** 获取服务器缓存令牌 **/
-        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, channel, userId, roleId);
+        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, roleId, channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
         String tokenRedis = this.redisOperation.getStr(tokenRedisKey);
 

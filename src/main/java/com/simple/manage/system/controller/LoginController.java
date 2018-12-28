@@ -3,7 +3,6 @@ package com.simple.manage.system.controller;
 import com.simple.manage.system.annotation.TokenAnnotation;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.config.SysConfig;
-import com.simple.manage.system.domain.LoginInfo;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
@@ -151,7 +150,7 @@ public class LoginController extends BaseController {
 
         //生成令牌缓存主键
         List<String> tokenKeyParts = Arrays.asList(
-                CommonUtil.TOKEN_PREFIX, channel, Integer.toString(user.getId()), Integer.toString(role.getId()));
+                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
 
         //保存令牌
