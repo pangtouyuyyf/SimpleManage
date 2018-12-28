@@ -139,10 +139,7 @@ public class TokenVerifyAspect {
         }
 
         /** 将登录数据写入threadlocal **/
-        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, userId, roleId, channel);
-        LoginInfo loginInfo = Optional.of((LoginInfo) this.redisOperation.getObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts))).orElseGet(() -> {
-            return this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
-        });
+        LoginInfo loginInfo = this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
         RequestLoginContextHolder.setRequestLoginInfo(loginInfo);
 
         /** 执行目标 **/

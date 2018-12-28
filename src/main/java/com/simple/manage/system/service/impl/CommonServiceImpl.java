@@ -13,10 +13,7 @@ import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Description 公共服务接口实现
@@ -73,14 +70,20 @@ public class CommonServiceImpl implements CommonService {
      * @param channel
      */
     public LoginInfo saveLoginInfo(User user, Role role, Org org, String channel) {
-        //保存当前登录信息
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setChannel(channel);
-        loginInfo.setUser(user);
-        loginInfo.setRole(role);
-        loginInfo.setOrg(org);
         List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
-        this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), loginInfo);
+        String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
+
+        LoginInfo loginInfo = Optional.ofNullable((LoginInfo) this.redisOperation.getObj(loginInfoKey)).orElseGet(() -> {
+            //保存当前登录信息
+            LoginInfo temp = new LoginInfo();
+            temp.setChannel(channel);
+            temp.setUser(user);
+            temp.setRole(role);
+            temp.setOrg(org);
+            this.redisOperation.setObj(loginInfoKey, temp);
+            return temp;
+        });
+
         return loginInfo;
     }
 
