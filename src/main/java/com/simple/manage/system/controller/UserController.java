@@ -2,10 +2,8 @@ package com.simple.manage.system.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.config.SysConfig;
-import com.simple.manage.system.domain.LoginInfo;
 import com.simple.manage.system.domain.Result;
-import com.simple.manage.system.entity.User;
-import com.simple.manage.system.redis.RedisOperation;
+import com.simple.manage.system.service.CommonService;
 import com.simple.manage.system.service.UserService;
 import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +27,10 @@ public class UserController extends BaseController implements TokenController {
     private SysConfig sysConfig;
 
     @Autowired
-    private RedisOperation redisOperation;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private CommonService commonService;
 
     /**
      * 查询用户
@@ -108,17 +106,9 @@ public class UserController extends BaseController implements TokenController {
         int count = this.userService.addOrUpdUser(user);
 
         if (id != null && count > 0) {
-            //修改用户信息更新缓存
-            Map<String, Object> params = new HashMap<>();
-            params.put("user_id", id);
-            User userEntity = this.userService.queryUserEntity(params);
-
-            //更新缓存信息
-            LoginInfo loginInfo = new LoginInfo();
-            loginInfo.setUser(userEntity);
-            loginInfo.setRole(getLoginInfo().getRole());
-            List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(userEntity.getId()), Integer.toString(getLoginInfo().getRole().getId()));
-            this.redisOperation.setObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts), loginInfo);
+            //清除此人所有登录缓存信息
+            List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(id), CommonUtil.ASTERISK);
+            this.commonService.deleteLoginInfo(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts));
         }
 
         return success();

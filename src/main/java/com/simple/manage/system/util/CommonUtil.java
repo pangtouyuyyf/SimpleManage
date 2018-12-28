@@ -9,6 +9,9 @@ import io.netty.util.internal.StringUtil;
  **/
 
 public class CommonUtil {
+    //星号
+    public static final String ASTERISK = "*";
+
     //是
     public static final String SIGN_YES = "0";
 
