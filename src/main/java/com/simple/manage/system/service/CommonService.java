@@ -41,7 +41,7 @@ public interface CommonService {
     LoginInfo saveLoginInfo(User user, Role role, Org org, String channel);
 
     /**
-     * 删除登录信息
+     * 批量删除登录信息
      *
      * @param regex
      */

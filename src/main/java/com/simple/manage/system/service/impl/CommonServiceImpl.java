@@ -85,7 +85,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     /**
-     * 删除登录信息
+     * 批量删除登录信息
      *
      * @param regex
      */
