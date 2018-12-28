@@ -1,5 +1,6 @@
 package com.simple.manage.system.dao;
 
+import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Tree;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -28,6 +29,14 @@ public interface OrgDao {
      * @return
      */
     Map<String, Object> queryOrg(int orgId);
+
+    /**
+     * 查询组织对象
+     *
+     * @param orgId
+     * @return
+     */
+    Org queryOrgEntity(int orgId);
 
     /**
      * 查询组织列表

@@ -18,6 +18,12 @@
         valid_sta
     </sql>
 
+    <resultMap id="orgMap" type="com.simple.manage.system.entity.Org">
+        <id property="id" column="org_id" javaType="java.lang.Integer"/>
+        <result property="name" column="org_name" javaType="java.lang.String"/>
+        <result property="parentId" column="parent_id" javaType="java.lang.Integer"/>
+    </resultMap>
+
     <insert id="addOrUpdOrg" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="org_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
             select count(*) from t_orgmst where is_delete = '0' AND valid_sta ='0' AND org_id = #{org_id}
@@ -134,6 +140,17 @@
         FROM t_orgmst t1
         WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
         AND t1.org_id = #{orgId}
+    </select>
+
+    <select id="queryOrgEntity" parameterType="java.lang.Integer" resultMap="orgMap">
+        SELECT
+            org_id,
+            org_name,
+            parent_id
+        FROM t_orgmst
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        AND org_id = #{org_id}
     </select>
 
     <select id="queryOrgList" parameterType="java.util.Map" resultType="java.util.Map">
