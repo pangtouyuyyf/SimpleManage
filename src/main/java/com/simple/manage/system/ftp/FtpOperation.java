@@ -162,17 +162,17 @@ public class FtpOperation {
      * @param ftpClient
      */
     private void disconnect(FTPClient ftpClient) {
-        try {
-            if (ftpClient != null && ftpClient.isConnected()) {
-                ftpClient.logout();
-            }
-        } catch (IOException e) {
-            LogUtil.error(FtpOperation.class, e.toString());
-        } finally {
+        if (ftpClient != null && ftpClient.isConnected()) {
             try {
-                ftpClient.disconnect();
+                ftpClient.logout();
             } catch (IOException e) {
                 LogUtil.error(FtpOperation.class, e.toString());
+            } finally {
+                try {
+                    ftpClient.disconnect();
+                } catch (IOException e) {
+                    LogUtil.error(FtpOperation.class, e.toString());
+                }
             }
         }
     }
