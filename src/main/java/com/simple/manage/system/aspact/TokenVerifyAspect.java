@@ -2,7 +2,7 @@ package com.simple.manage.system.aspact;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.manage.system.config.JwtConfig;
-import com.simple.manage.system.domain.LoginInfo;
+import com.simple.manage.system.domain.LoginInfoResult;
 import com.simple.manage.system.enums.SysExpEnum;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.CommonService;
@@ -138,8 +138,13 @@ public class TokenVerifyAspect {
         }
 
         /** 将登录数据写入threadlocal **/
-        LoginInfo loginInfo = this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
-        RequestLoginContextHolder.setRequestLoginInfo(loginInfo);
+        LoginInfoResult loginInfoResult = this.commonService.saveLoginInfo(Integer.valueOf(userId), Integer.valueOf(roleId), channel);
+        if (!loginInfoResult.isChecked()) {
+            LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 没有登录信息缓存");
+            return ResultUtil.error(SysExpEnum.NO_LOGIN_INFO);
+        }
+
+        RequestLoginContextHolder.setRequestLoginInfo(loginInfoResult.getLoginInfo());
 
         /** 执行目标 **/
         return joinPoint.proceed();
