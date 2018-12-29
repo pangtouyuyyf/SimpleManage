@@ -4,6 +4,7 @@ import com.simple.manage.system.dao.OrgDao;
 import com.simple.manage.system.dao.RoleDao;
 import com.simple.manage.system.dao.UserDao;
 import com.simple.manage.system.domain.LoginInfo;
+import com.simple.manage.system.domain.LoginInfoResult;
 import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
@@ -41,7 +42,7 @@ public class CommonServiceImpl implements CommonService {
      * @param roleId
      * @param channel
      */
-    public LoginInfo saveLoginInfo(int userId, int roleId, String channel) {
+    public LoginInfoResult saveLoginInfo(int userId, int roleId, String channel) {
         Map<String, Object> param = new HashMap<>();
         param.put("user_id", userId);
         User user = this.userDao.queryUserEntity(param);
@@ -56,7 +57,7 @@ public class CommonServiceImpl implements CommonService {
      * @param role
      * @param channel
      */
-    public LoginInfo saveLoginInfo(User user, Role role, String channel) {
+    public LoginInfoResult saveLoginInfo(User user, Role role, String channel) {
         Org org = this.orgDao.queryOrgEntity(role.getOrgId());
         return this.saveLoginInfo(user, role, org, channel);
     }
@@ -69,7 +70,15 @@ public class CommonServiceImpl implements CommonService {
      * @param org
      * @param channel
      */
-    public LoginInfo saveLoginInfo(User user, Role role, Org org, String channel) {
+    public LoginInfoResult saveLoginInfo(User user, Role role, Org org, String channel) {
+        LoginInfoResult loginInfoResult = new LoginInfoResult();
+        //防止用户信息变更仍可以用原来缓存信息登录系统
+        if (user == null || role == null || org == null) {
+            loginInfoResult.setChecked(false);
+            loginInfoResult.setLoginInfo(null);
+            return loginInfoResult;
+        }
+
         List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
@@ -84,7 +93,9 @@ public class CommonServiceImpl implements CommonService {
             return temp;
         });
 
-        return loginInfo;
+        loginInfoResult.setChecked(true);
+        loginInfoResult.setLoginInfo(loginInfo);
+        return loginInfoResult;
     }
 
     /**

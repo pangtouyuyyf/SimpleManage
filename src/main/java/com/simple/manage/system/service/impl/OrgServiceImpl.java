@@ -3,6 +3,7 @@ package com.simple.manage.system.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.dao.OrgDao;
+import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Tree;
 import com.simple.manage.system.service.OrgService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,16 @@ public class OrgServiceImpl implements OrgService {
      */
     public Map<String, Object> queryOrg(int orgId) {
         return this.orgDao.queryOrg(orgId);
+    }
+
+    /**
+     * 查询组织对象
+     *
+     * @param orgId
+     * @return
+     */
+    public Org queryOrgEntity(int orgId) {
+        return this.orgDao.queryOrgEntity(orgId);
     }
 
     /**

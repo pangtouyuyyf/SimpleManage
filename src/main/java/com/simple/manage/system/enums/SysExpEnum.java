@@ -19,6 +19,8 @@ public enum SysExpEnum {
 
     REMOTE_LOGIN(2, "您的账号已异地登录"),  //需要登录
 
+    NO_LOGIN_INFO(2, "个人信息不完整"),  //需要登录
+
     REJECT(3, "没有权限操作");    //没有权限
 
     private int code;

@@ -1,6 +1,7 @@
 package com.simple.manage.system.service;
 
 import com.github.pagehelper.PageInfo;
+import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Tree;
 
 import java.util.List;
@@ -28,6 +29,14 @@ public interface OrgService {
      * @return
      */
     Map<String, Object> queryOrg(int orgId);
+
+    /**
+     * 查询组织对象
+     *
+     * @param orgId
+     * @return
+     */
+    Org queryOrgEntity(int orgId);
 
     /**
      * 查询组织列表
