@@ -6,7 +6,6 @@ import com.simple.manage.system.service.CorporationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/sys/corp")
 public class CorporationController extends BaseController implements TokenController {
+
     @Autowired
     private CorporationService corporationService;
 
@@ -26,22 +26,16 @@ public class CorporationController extends BaseController implements TokenContro
      *
      * @param id   主键
      * @param name 名称
+     * @param code 编码
      * @param note 备注
      * @return
      */
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdCorp(@RequestParam(value = "id", required = false) Integer id,
                                @RequestParam("name") String name,
+                               @RequestParam("code") String code,
                                @RequestParam(value = "note", required = false) String note) throws Exception {
-        Map<String, Object> corp = new HashMap<>();
-        corp.put("corp_id", id);
-        corp.put("corp_name", name);
-        corp.put("corp_note", note);
-        corp.put("create_id", getLoginInfo().getUser().getId());
-        corp.put("create_time", LocalDateTime.now());
-        corp.put("update_id", getLoginInfo().getUser().getId());
-        corp.put("update_time", LocalDateTime.now());
-        this.corporationService.addOrUpdCorp(corp);
+        this.corporationService.addOrUpdCorp(id, name, code, note, getLoginInfo().getUser().getId());
         return success();
     }
 
