@@ -15,10 +15,14 @@ public interface CorporationService {
     /**
      * 添加或更新公司信息
      *
-     * @param corp
+     * @param id
+     * @param name
+     * @param code
+     * @param note
+     * @param userId
      * @return
      */
-    int addOrUpdCorp(Map<String, Object> corp);
+    int addOrUpdCorp(Integer id, String name, String code, String note, int userId);
 
     /**
      * 查询公司信息
