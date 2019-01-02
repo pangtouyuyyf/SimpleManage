@@ -4,6 +4,7 @@
     <sql id="baseColumnList">
         corp_id,
         corp_name,
+        corp_code,
         corp_note,
         exta,
         extb,
@@ -24,6 +25,9 @@
             <set>
                 <if test="corp_name != null and corp_name != ''">
                     corp_name = #{corp_name},
+                </if>
+                <if test="corp_code != null and corp_code != ''">
+                    corp_code = #{corp_code},
                 </if>
                 <if test="corp_note != null and corp_note != ''">
                     corp_note = #{corp_note},
@@ -52,6 +56,9 @@
                 <if test="corp_name != null and corp_name != ''">
                     corp_name,
                 </if>
+                <if test="corp_code != null and corp_code != ''">
+                    corp_code,
+                </if>
                 <if test="corp_note != null and corp_note != ''">
                     corp_note,
                 </if>
@@ -71,6 +78,9 @@
             <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="corp_name != null and corp_name != ''">
                     #{corp_name},
+                </if>
+                <if test="corp_code != null and corp_code != ''">
+                    #{corp_code},
                 </if>
                 <if test="Corp_url != null and Corp_url != ''">
                     #{Corp_url},
@@ -98,6 +108,7 @@
         SELECT
             corp_id AS id,
             corp_name AS "name",
+            corp_code AS code,
             corp_note AS note
         FROM t_corporationmst
         WHERE 1 = 1
@@ -110,6 +121,7 @@
         SELECT
             corp_id AS id,
             corp_name AS "name",
+            corp_code AS code,
             corp_note AS note
         FROM t_corporationmst
         WHERE 1 = 1
@@ -119,6 +131,9 @@
         </if>
         <if test="corp_name != null and corp_name != ''">
             AND corp_name LIKE CONCAT('%', #{corp_name}, '%')
+        </if>
+        <if test="corp_code != null and corp_code != ''">
+            AND corp_code LIKE CONCAT('%', #{corp_code}, '%')
         </if>
         <if test="corp_note != null and corp_note != ''">
             AND corp_note LIKE CONCAT('%', #{corp_note}, '%')
