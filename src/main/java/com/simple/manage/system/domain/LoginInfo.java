@@ -1,6 +1,5 @@
 package com.simple.manage.system.domain;
 
-import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import lombok.Data;
