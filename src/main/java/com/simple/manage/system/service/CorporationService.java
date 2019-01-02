@@ -1,5 +1,7 @@
 package com.simple.manage.system.service;
 
+import com.github.pagehelper.PageInfo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +32,11 @@ public interface CorporationService {
      * 查询公司信息列表
      *
      * @param params
+     * @param page
+     * @param size
      * @return
      */
-    List<Map<String, Object>> queryCorpList(Map<String, Object> params);
+    PageInfo queryCorpList(Map<String, Object> params, int page, int size);
 
     /**
      * 逻辑删除公司信息

@@ -1,5 +1,7 @@
 package com.simple.manage.system.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.dao.CorporationDao;
 import com.simple.manage.system.service.CorporationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +44,12 @@ public class CorporationServiceImpl implements CorporationService {
      * 查询公司信息列表
      *
      * @param params
+     * @param page
+     * @param size
      * @return
      */
-    public List<Map<String, Object>> queryCorpList(Map<String, Object> params) {
-        return this.corporationDao.queryCorpList(params);
+    public PageInfo queryCorpList(Map<String, Object> params, int page, int size) {
+        return PageHelper.startPage(page, size).doSelectPageInfo(() -> corporationDao.queryCorpList(params));
     }
 
     /**
