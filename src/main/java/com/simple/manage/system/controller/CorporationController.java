@@ -17,22 +17,22 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping(value = "/sys/corp")
-public class CorporationController extends BaseController implements TokenController{
+public class CorporationController extends BaseController implements TokenController {
     @Autowired
     private CorporationService corporationService;
 
     /**
      * 添加更新公司信息
      *
-     * @param id       主键
-     * @param name     名称
-     * @param note     备注
+     * @param id   主键
+     * @param name 名称
+     * @param note 备注
      * @return
      */
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdCorp(@RequestParam(value = "id", required = false) Integer id,
-                                 @RequestParam("name") String name,
-                                 @RequestParam(value = "note", required = false) String note) throws Exception {
+                               @RequestParam("name") String name,
+                               @RequestParam(value = "note", required = false) String note) throws Exception {
         Map<String, Object> corp = new HashMap<>();
         corp.put("corp_id", id);
         corp.put("corp_name", name);
@@ -59,15 +59,15 @@ public class CorporationController extends BaseController implements TokenContro
     /**
      * 查询公司信息列表
      *
-     * @param name     名称
-     * @param page     页码
-     * @param size     页数
+     * @param name 名称
+     * @param page 页码
+     * @param size 页数
      * @return
      */
     @GetMapping(value = "/queryList")
     public Result queryCorpList(@RequestParam(value = "name", required = false) String name,
-                                  @RequestParam("page") Integer page,
-                                  @RequestParam("size") Integer size) throws Exception {
+                                @RequestParam("page") Integer page,
+                                @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("corp_name", name);
         PageInfo pageInfo = this.corporationService.queryCorpList(params, page, size);
