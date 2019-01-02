@@ -16,7 +16,7 @@
 
     <insert id="addOrUpdDataDict" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="dict_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_datadictmst where is_delete = '0' AND valid_sta ='0' AND dict_id = #{dict_id}
+            select count(dict_id) from t_datadictmst where is_delete = '0' AND valid_sta ='0' AND dict_id = #{dict_id}
         </selectKey>
         <if test="count > 0">
             update t_datadictmst
@@ -167,7 +167,7 @@
 
     <insert id="addOrUpdDataDictLin" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="lin_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_datadictlin where is_delete = '0' AND valid_sta ='0' AND lin_id = #{lin_id}
+            select count(lin_id) from t_datadictlin where is_delete = '0' AND valid_sta ='0' AND lin_id = #{lin_id}
         </selectKey>
         <if test="count > 0">
             update t_datadictlin

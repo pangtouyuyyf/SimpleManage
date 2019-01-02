@@ -91,7 +91,7 @@
     </select>
 
     <select id="countRoleAccess" parameterType="java.util.Map" resultType="java.lang.Integer">
-        SELECT COUNT(*)
+        SELECT COUNT(id)
         FROM t_roleaccesslin tra
         WHERE 1 = 1
         AND tra.role_id = #{role_id}

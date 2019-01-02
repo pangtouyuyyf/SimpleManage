@@ -20,7 +20,7 @@
 
     <insert id="addOrUpdMenu" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="menu_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_menumst where is_delete = '0' AND valid_sta ='0' AND menu_id = #{menu_id}
+            select count(menu_id) from t_menumst where is_delete = '0' AND valid_sta ='0' AND menu_id = #{menu_id}
         </selectKey>
         <if test="count > 0">
             update t_menumst

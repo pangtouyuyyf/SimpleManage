@@ -26,7 +26,7 @@
 
     <insert id="addOrUpdOrg" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="org_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_orgmst where is_delete = '0' AND valid_sta ='0' AND org_id = #{org_id}
+            select count(org_id) from t_orgmst where is_delete = '0' AND valid_sta ='0' AND org_id = #{org_id}
         </selectKey>
         <if test="count > 0">
             update t_orgmst

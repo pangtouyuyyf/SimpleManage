@@ -20,7 +20,7 @@
 
     <insert id="addOrUpdAccess" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="access_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_accessmst where is_delete = '0' AND valid_sta ='0' AND access_id = #{access_id}
+            select count(access_id) from t_accessmst where is_delete = '0' AND valid_sta ='0' AND access_id = #{access_id}
         </selectKey>
         <if test="count > 0">
             update t_accessmst

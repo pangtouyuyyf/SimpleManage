@@ -29,7 +29,7 @@
 
     <insert id="addOrUpdUser" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="user_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_usermst where is_delete = '0' AND valid_sta ='0' AND user_id = #{user_id}
+            select count(user_id) from t_usermst where is_delete = '0' AND valid_sta ='0' AND user_id = #{user_id}
         </selectKey>
         <if test="count > 0">
             update t_usermst

@@ -27,7 +27,7 @@
 
     <insert id="addOrUpdRole" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="role_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_rolemst where is_delete = '0' AND valid_sta ='0' AND role_id = #{role_id}
+            select count(role_id) from t_rolemst where is_delete = '0' AND valid_sta ='0' AND role_id = #{role_id}
         </selectKey>
         <if test="count > 0">
             update t_rolemst

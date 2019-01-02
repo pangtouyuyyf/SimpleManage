@@ -20,7 +20,7 @@
 
     <insert id="addOrUpdModule" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="module_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_modulemst where is_delete = '0' AND valid_sta ='0' AND module_id = #{module_id}
+            select count(module_id) from t_modulemst where is_delete = '0' AND valid_sta ='0' AND module_id = #{module_id}
         </selectKey>
         <if test="count > 0">
             update t_modulemst

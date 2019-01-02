@@ -20,7 +20,7 @@
 
     <insert id="addOrUpdRoute" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="route_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(*) from t_routemst where is_delete = '0' AND valid_sta ='0' AND route_id = #{route_id}
+            select count(route_id) from t_routemst where is_delete = '0' AND valid_sta ='0' AND route_id = #{route_id}
         </selectKey>
         <if test="count > 0">
             update t_routemst
