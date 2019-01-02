@@ -5,7 +5,6 @@ import com.simple.manage.system.dao.RoleDao;
 import com.simple.manage.system.dao.UserDao;
 import com.simple.manage.system.domain.LoginInfo;
 import com.simple.manage.system.domain.LoginInfoResult;
-import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
@@ -58,22 +57,9 @@ public class CommonServiceImpl implements CommonService {
      * @param channel
      */
     public LoginInfoResult saveLoginInfo(User user, Role role, String channel) {
-        Org org = this.orgDao.queryOrgEntity(role.getOrgId());
-        return this.saveLoginInfo(user, role, org, channel);
-    }
-
-    /**
-     * 保存更新登录信息
-     *
-     * @param user
-     * @param role
-     * @param org
-     * @param channel
-     */
-    public LoginInfoResult saveLoginInfo(User user, Role role, Org org, String channel) {
         LoginInfoResult loginInfoResult = new LoginInfoResult();
         //防止用户信息变更仍可以用原来缓存信息登录系统
-        if (user == null || role == null || org == null) {
+        if (user == null || role == null) {
             loginInfoResult.setChecked(false);
             loginInfoResult.setLoginInfo(null);
             return loginInfoResult;
@@ -88,7 +74,6 @@ public class CommonServiceImpl implements CommonService {
             temp.setChannel(channel);
             temp.setUser(user);
             temp.setRole(role);
-            temp.setOrg(org);
             this.redisOperation.setObj(loginInfoKey, temp);
             return temp;
         });

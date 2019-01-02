@@ -17,6 +17,4 @@ public class LoginInfo {
     private User user;
 
     private Role role;
-
-    private Org org;
 }

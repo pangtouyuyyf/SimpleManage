@@ -1,8 +1,6 @@
 package com.simple.manage.system.service;
 
-import com.simple.manage.system.domain.LoginInfo;
 import com.simple.manage.system.domain.LoginInfoResult;
-import com.simple.manage.system.entity.Org;
 import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 
@@ -30,16 +28,6 @@ public interface CommonService {
      * @param channel
      */
     LoginInfoResult saveLoginInfo(User user, Role role, String channel);
-
-    /**
-     * 保存更新登录信息
-     *
-     * @param user
-     * @param role
-     * @param org
-     * @param channel
-     */
-    LoginInfoResult saveLoginInfo(User user, Role role, Org org, String channel);
 
     /**
      * 批量删除登录信息
