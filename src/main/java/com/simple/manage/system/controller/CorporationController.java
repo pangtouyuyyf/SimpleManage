@@ -35,7 +35,7 @@ public class CorporationController extends BaseController implements TokenContro
                                @RequestParam("name") String name,
                                @RequestParam("code") String code,
                                @RequestParam(value = "note", required = false) String note) throws Exception {
-        this.corporationService.addOrUpdCorp(id, name, code, note, getLoginInfo().getUser().getId());
+        this.corporationService.addOrUpdCorp(id, name, code.toUpperCase(), note, getLoginInfo().getUser().getId());
         return success();
     }
 
