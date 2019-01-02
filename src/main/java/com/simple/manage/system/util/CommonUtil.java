@@ -66,6 +66,9 @@ public class CommonUtil {
     //默认树根节点父节点id
     public static final int TREE_ROOT_PARENT_ID = -1;
 
+    //默认树节点排序
+    public static final int TREE_DEFAULT_ORDER = 1;
+
     /**
      * url处理(去掉url参数)
      *
