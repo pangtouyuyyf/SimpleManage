@@ -41,10 +41,11 @@ public interface CorporationService {
     /**
      * 逻辑删除公司信息
      *
-     * @param params
+     * @param corpId
+     * @param userId
      * @return
      */
-    int delCorp(Map<String, Object> params);
+    int delCorp(int corpId, int userId);
 
     /**
      * 删除公司信息

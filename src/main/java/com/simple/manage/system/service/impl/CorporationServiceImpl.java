@@ -7,6 +7,8 @@ import com.simple.manage.system.service.CorporationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,10 +57,16 @@ public class CorporationServiceImpl implements CorporationService {
     /**
      * 逻辑删除公司信息
      *
-     * @param params
+     * @param corpId
+     * @param userId
      * @return
      */
-    public int delCorp(Map<String, Object> params) {
+    public int delCorp(int corpId, int userId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("corp_id", corpId);
+        params.put("update_id", userId);
+        params.put("update_time", LocalDateTime.now());
+        params.put("is_delete", "1");
         return this.corporationDao.delCorp(params);
     }
 
