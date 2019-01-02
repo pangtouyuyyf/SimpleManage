@@ -61,7 +61,7 @@ public class CorporationServiceImpl implements CorporationService {
      * @param userId
      * @return
      */
-    public int delCorp(int corpId, int userId){
+    public int delCorp(int corpId, int userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("corp_id", corpId);
         params.put("update_id", userId);
