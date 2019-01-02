@@ -5,7 +5,6 @@
         org_id,
         org_name,
         parent_id,
-        leader_id,
         org_order,
         org_note,
         exta,
@@ -36,9 +35,6 @@
                 </if>
                 <if test="parent_id != null">
                     parent_id = #{parent_id},
-                </if>
-                <if test="leader_id != null">
-                    leader_id = #{leader_id},
                 </if>
                 <if test="org_order != null">
                     org_order = #{org_order},
@@ -73,9 +69,6 @@
                 <if test="parent_id != null">
                     parent_id,
                 </if>
-                <if test="leader_id != null">
-                    leader_id,
-                </if>
                 <if test="org_order != null">
                     org_order,
                 </if>
@@ -101,9 +94,6 @@
                 </if>
                 <if test="parent_id != null">
                     #{parent_id},
-                </if>
-                <if test="leader_id != null">
-                    #{leader_id},
                 </if>
                 <if test="org_order != null">
                     #{org_order},
@@ -132,11 +122,9 @@
             t1.org_id AS id,
             t1.org_name AS "name",
             t1.parent_id AS "parentId",
-            t1.leader_id AS leader,
             t1.org_order AS "order",
             t1.org_note AS note,
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta,
-            (SELECT t3.user_name FROM t_usermst t3 WHERE t3.is_delete = '0' AND t3.valid_sta ='0' AND t3.user_id = t1.leader_id) AS extb
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta
         FROM t_orgmst t1
         WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
         AND t1.org_id = #{orgId}
@@ -158,11 +146,9 @@
             t1.org_id AS id,
             t1.org_name AS "name",
             t1.parent_id AS "parentId",
-            t1.leader_id AS leader,
             t1.org_order AS "order",
             t1.org_note AS note,
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta,
-            (SELECT t3.user_name FROM t_usermst t3 WHERE t3.is_delete = '0' AND t3.valid_sta ='0' AND t3.user_id = t1.leader_id) AS extb
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta
         FROM t_orgmst t1
         WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
         <if test="org_name != null and org_name != ''">

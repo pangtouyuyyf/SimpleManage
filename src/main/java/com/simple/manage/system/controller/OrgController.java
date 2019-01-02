@@ -30,7 +30,6 @@ public class OrgController extends BaseController implements TokenController {
      * @param id       主键
      * @param name     组织名称
      * @param parentId 父节点id
-     * @param leader   组织领导id
      * @param order    排序
      * @param note     备注
      * @return
@@ -40,7 +39,6 @@ public class OrgController extends BaseController implements TokenController {
     public Result addOrUpdOrg(@RequestParam(value = "id", required = false) Integer id,
                                @RequestParam("name") String name,
                                @RequestParam(value = "parentId", required = false) Integer parentId,
-                               @RequestParam(value = "leader", required = false) Integer leader,
                                @RequestParam("order") Integer order,
                                @RequestParam(value = "note", required = false) String note) throws Exception {
         Map<String, Object> org = new HashMap<>();
@@ -50,7 +48,6 @@ public class OrgController extends BaseController implements TokenController {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
         org.put("parent_id", parentId);
-        org.put("leader_id", leader);
         org.put("org_order", order);
         org.put("org_note", note);
         org.put("create_id", getLoginInfo().getUser().getId());
