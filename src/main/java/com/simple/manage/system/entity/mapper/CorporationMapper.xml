@@ -98,7 +98,6 @@
         SELECT
             corp_id AS id,
             corp_name AS "name",
-            corp_order AS "order",
             corp_note AS note
         FROM t_corporationmst
         WHERE 1 = 1
@@ -109,9 +108,9 @@
 
     <select id="queryCorpList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-        corp_id AS id,
-        corp_name AS "name",
-        corp_note AS note,
+            corp_id AS id,
+            corp_name AS "name",
+            corp_note AS note
         FROM t_corporationmst
         WHERE 1 = 1
         AND is_delete = '0' AND valid_sta ='0'
