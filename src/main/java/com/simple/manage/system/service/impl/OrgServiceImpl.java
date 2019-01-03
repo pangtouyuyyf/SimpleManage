@@ -29,7 +29,18 @@ public class OrgServiceImpl implements OrgService {
      * @return
      */
     public int addOrUpdOrg(Map<String, Object> org) {
-        return this.orgDao.addOrUpdOrg(org);
+        int result = 0;
+        Integer id = org.get("org_id") == null ? null : Integer.valueOf(org.get("org_id").toString());
+        int count = this.orgDao.checkOrg(id);
+        if (count == 0) {
+            //新增
+            result = this.orgDao.addOrg(org);
+        } else if (count == 1) {
+            //修改
+            result = this.orgDao.updOrg(org);
+        } else {
+        }
+        return result;
     }
 
 
