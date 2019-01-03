@@ -99,8 +99,8 @@ public class CorporationServiceImpl implements CorporationService {
 
             //添加公司管理员
             Map<String, Object> user = new HashMap<>();
-            user.put("user_name", code);
-            user.put("login_name", code.toLowerCase());
+            user.put("user_name", name);
+            user.put("login_name", code);
             user.put("create_id", userId);
             user.put("create_time", LocalDateTime.now());
             user.put("password", sysConfig.getPassword());
