@@ -14,7 +14,8 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
     <resultMap id="orgMap" type="com.simple.manage.system.entity.Org">
@@ -58,6 +59,9 @@
             <if test="create_time != null">
                 create_time,
             </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="org_name != null and org_name != ''">
@@ -83,6 +87,9 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
             </if>
         </trim>
     </insert>
