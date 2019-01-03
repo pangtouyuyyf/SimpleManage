@@ -17,7 +17,7 @@
     </sql>
 
     <select id="checkCorp" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT count(corp_id)
+        SELECT COUNT(corp_id)
         FROM t_corporationmst
         WHERE is_delete = '0'
         AND valid_sta ='0'
@@ -25,7 +25,7 @@
     </select>
 
     <insert id="addCorp" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="corp_id">
-        insert into t_corporationmst
+        INSERT INTO t_corporationmst
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="corp_name != null and corp_name != ''">
                 corp_name,
