@@ -17,7 +17,7 @@
     </sql>
 
     <insert id="addOrUpdCorp" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="corp_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+        <selectKey keyProperty="count" resultType="java.lang.Integer" order="BEFORE">
             select count(corp_id) from t_corporationmst where is_delete = '0' AND valid_sta ='0' AND corp_id = #{corp_id}
         </selectKey>
         <if test="count > 0">
@@ -81,9 +81,6 @@
                 </if>
                 <if test="corp_code != null and corp_code != ''">
                     #{corp_code},
-                </if>
-                <if test="Corp_url != null and Corp_url != ''">
-                    #{Corp_url},
                 </if>
                 <if test="corp_note != null and corp_note != ''">
                     #{corp_note},
