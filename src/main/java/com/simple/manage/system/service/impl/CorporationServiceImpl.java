@@ -2,8 +2,13 @@ package com.simple.manage.system.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.simple.manage.system.config.SysConfig;
 import com.simple.manage.system.dao.CorporationDao;
+import com.simple.manage.system.dao.OrgDao;
+import com.simple.manage.system.dao.UserDao;
+import com.simple.manage.system.dao.UserRoleDao;
 import com.simple.manage.system.service.CorporationService;
+import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +24,91 @@ import java.util.Map;
 @Service
 public class CorporationServiceImpl implements CorporationService {
     @Autowired
+    private SysConfig sysConfig;
+
+    @Autowired
     private CorporationDao corporationDao;
+
+    @Autowired
+    private OrgDao orgDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private UserRoleDao userRoleDao;
 
     /**
      * 添加或更新公司信息
      *
-     * @param corp
+     * @param id
+     * @param name
+     * @param code
+     * @param note
+     * @param userId
      * @return
      */
-    public int addOrUpdCorp(Map<String, Object> corp) {
-        return this.corporationDao.addOrUpdCorp(corp);
+    public int addOrUpdCorp(Integer id, String name, String code, String note, int userId) {
+        int result = 0;
+        Map<String, Object> corp = new HashMap<>();
+        corp.put("corp_id", id);
+        corp.put("corp_name", name);
+        corp.put("corp_code", code);
+        corp.put("count", null);
+        corp.put("corp_note", note);
+        corp.put("create_id", userId);
+        corp.put("create_time", LocalDateTime.now());
+        corp.put("update_id", userId);
+        corp.put("update_time", LocalDateTime.now());
+        int count = this.corporationDao.checkCorp(id);
+        if (count == 0) {
+            //新增
+            result = this.corporationDao.addCorp(corp);
+        } else if (count == 1) {
+            //修改
+            result = this.corporationDao.updCorp(corp);
+        } else {
+        }
+
+        //新增公司的同时新增一系列数据
+        if (id == null) {
+            id = Integer.valueOf(corp.get("corp_id").toString());
+            //新增情况同时增加组织树节点以及管理员并附带相应权限
+            //添加组织树根节点
+            Map<String, Object> root = new HashMap<>();
+            root.put("org_name", name);
+            root.put("parent_id", CommonUtil.TREE_ROOT_PARENT_ID);
+            root.put("org_order", CommonUtil.TREE_DEFAULT_ORDER);
+            root.put("org_note", note);
+            root.put("create_id", userId);
+            root.put("create_time", LocalDateTime.now());
+            root.put("corp_id", id);
+            this.orgDao.addOrg(root);
+
+            //添加默认组织节点
+            int rootId = Integer.valueOf(root.get("org_id").toString());
+            Map<String, Object> org = new HashMap<>();
+            org.put("org_name", name);
+            org.put("parent_id", rootId);
+            org.put("org_order", CommonUtil.TREE_DEFAULT_ORDER);
+            org.put("org_note", note);
+            org.put("create_id", userId);
+            org.put("create_time", LocalDateTime.now());
+            org.put("corp_id", id);
+            this.orgDao.addOrg(org);
+
+            //添加公司管理员
+            Map<String, Object> user = new HashMap<>();
+            user.put("user_name", code);
+            user.put("login_name", code);
+            user.put("create_id", userId);
+            user.put("create_time", LocalDateTime.now());
+            user.put("password", sysConfig.getPassword());
+            this.userDao.addOrUpdUser(user);
+
+            //添加默认权限
+        }
+        return result;
     }
 
     /**
