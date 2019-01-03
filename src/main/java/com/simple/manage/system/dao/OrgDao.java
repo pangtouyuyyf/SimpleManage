@@ -15,12 +15,28 @@ import java.util.Map;
 @Mapper
 public interface OrgDao {
     /**
-     * 添加或更新组织
+     * 检查数据是否存在
+     *
+     * @param corpId
+     * @return
+     */
+    int checkOrg(Integer corpId);
+
+    /**
+     * 添加组织
      *
      * @param org
      * @return
      */
-    int addOrUpdOrg(Map<String, Object> org);
+    int addOrg(Map<String, Object> org);
+
+    /**
+     * 更新组织
+     *
+     * @param org
+     * @return
+     */
+    int updOrg(Map<String, Object> org);
 
     /**
      * 查询信息
