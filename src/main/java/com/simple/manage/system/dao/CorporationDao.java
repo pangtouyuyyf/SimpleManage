@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface CorporationDao {
     /**
-     * 添加或更新公司信息
+     * 检查数据是否存在
+     *
+     * @param corpId
+     * @return
+     */
+    int checkCorp(Integer corpId);
+
+    /**
+     * 添加公司信息
      *
      * @param corp
      * @return
      */
-    int addOrUpdCorp(Map<String, Object> corp);
+    int addCorp(Map<String, Object> corp);
+
+    /**
+     * 更新公司信息
+     *
+     * @param corp
+     * @return
+     */
+    int updCorp(Map<String, Object> corp);
 
     /**
      * 查询公司信息

@@ -16,90 +16,94 @@
         valid_sta
     </sql>
 
-    <insert id="addOrUpdCorp" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="corp_id">
-        <selectKey keyProperty="count" resultType="java.lang.Integer" order="BEFORE">
-            select count(corp_id) from t_corporationmst where is_delete = '0' AND valid_sta ='0' AND corp_id = #{corp_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_corporationmst
-            <set>
-                <if test="corp_name != null and corp_name != ''">
-                    corp_name = #{corp_name},
-                </if>
-                <if test="corp_code != null and corp_code != ''">
-                    corp_code = #{corp_code},
-                </if>
-                <if test="corp_note != null and corp_note != ''">
-                    corp_note = #{corp_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where corp_id = #{corp_id}
-        </if>
-        <if test="count == 0">
-            insert into t_corporationmst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="corp_name != null and corp_name != ''">
-                    corp_name,
-                </if>
-                <if test="corp_code != null and corp_code != ''">
-                    corp_code,
-                </if>
-                <if test="corp_note != null and corp_note != ''">
-                    corp_note,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
+    <select id="checkCorp" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(corp_id)
+        FROM t_corporationmst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND corp_id = #{corp_id}
+    </select>
+
+    <insert id="addCorp" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="corp_id">
+        insert into t_corporationmst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="corp_name != null and corp_name != ''">
+                corp_name,
+            </if>
+            <if test="corp_code != null and corp_code != ''">
+                corp_code,
+            </if>
+            <if test="corp_note != null and corp_note != ''">
+                corp_note,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
             </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="corp_name != null and corp_name != ''">
-                    #{corp_name},
-                </if>
-                <if test="corp_code != null and corp_code != ''">
-                    #{corp_code},
-                </if>
-                <if test="corp_note != null and corp_note != ''">
-                    #{corp_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="corp_name != null and corp_name != ''">
+                  #{corp_name},
+            </if>
+            <if test="corp_code != null and corp_code != ''">
+                  #{corp_code},
+            </if>
+            <if test="corp_note != null and corp_note != ''">
+                  #{corp_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                  #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                  #{extb},
+            </if>
+            <if test="create_id != null">
+                  #{create_id},
+            </if>
+            <if test="create_time != null">
+                  #{create_time},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updCorp" parameterType="java.util.Map">
+        UPDATE t_corporationmst
+        <set>
+            <if test="corp_name != null and corp_name != ''">
+                corp_name = #{corp_name},
+            </if>
+            <if test="corp_code != null and corp_code != ''">
+                corp_code = #{corp_code},
+            </if>
+            <if test="corp_note != null and corp_note != ''">
+                corp_note = #{corp_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE corp_id = #{corp_id}
+    </update>
 
     <select id="queryCorp" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
