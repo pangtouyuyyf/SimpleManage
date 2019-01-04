@@ -17,10 +17,10 @@ public interface OrgDao {
     /**
      * 检查数据是否存在
      *
-     * @param corpId
+     * @param orgId
      * @return
      */
-    int checkOrg(Integer corpId);
+    int checkOrg(Integer orgId);
 
     /**
      * 添加组织
