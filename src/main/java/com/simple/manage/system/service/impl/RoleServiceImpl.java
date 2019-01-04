@@ -42,7 +42,18 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     public int addOrUpdRole(Map<String, Object> role) {
-        return this.roleDao.addOrUpdRole(role);
+        int result = 0;
+        Integer id = role.get("role_id") == null ? null : Integer.valueOf(role.get("role_id").toString());
+        int count = this.roleDao.checkRole(id);
+        if (count == 0) {
+            //新增
+            result = this.roleDao.addRole(role);
+        } else if (count == 1) {
+            //修改
+            result = this.roleDao.updRole(role);
+        } else {
+        }
+        return result;
     }
 
     /**

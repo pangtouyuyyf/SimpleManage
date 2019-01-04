@@ -14,12 +14,28 @@ import java.util.Map;
 @Mapper
 public interface RoleDao {
     /**
-     * 添加或更新角色
+     * 检查数据是否存在
+     *
+     * @param roleId
+     * @return
+     */
+    int checkRole(Integer roleId);
+
+    /**
+     * 添加角色
      *
      * @param role
      * @return
      */
-    int addOrUpdRole(Map<String, Object> role);
+    int addRole(Map<String, Object> role);
+
+    /**
+     * 更新角色
+     *
+     * @param role
+     * @return
+     */
+    int updRole(Map<String, Object> role);
 
     /**
      * 查询角色
