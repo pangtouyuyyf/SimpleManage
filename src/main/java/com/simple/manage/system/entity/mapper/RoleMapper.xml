@@ -7,7 +7,6 @@
         role_name,
         role_order,
         role_note,
-        org_id,
         exta,
         extb,
         create_id,
@@ -15,132 +14,141 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
     <resultMap id="roleMap" type="com.simple.manage.system.entity.Role">
         <id property="id" column="role_id" javaType="java.lang.Integer"/>
         <result property="code" column="role_code" javaType="java.lang.String"/>
         <result property="name" column="role_name" javaType="java.lang.String"/>
-        <result property="orgId" column="org_id" javaType="java.lang.Integer"/>
+        <result property="orgId" column="corp_id" javaType="java.lang.Integer"/>
     </resultMap>
 
-    <insert id="addOrUpdRole" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="role_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(role_id) from t_rolemst where is_delete = '0' AND valid_sta ='0' AND role_id = #{role_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_rolemst
-            <set>
-                <if test="role_code != null and role_code !=''">
-                    role_code = #{role_code},
-                </if>
-                <if test="role_name != null and role_name != ''">
-                    role_name = #{role_name},
-                </if>
-                <if test="role_order != null">
-                    role_order = #{role_order},
-                </if>
-                <if test="role_note != null and role_note != ''">
-                    role_note = #{role_note},
-                </if>
-                <if test="org_id != null">
-                    org_id = #{org_id},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where role_id = #{role_id}
-        </if>
-        <if test="count == 0">
-            insert into t_rolemst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="role_code != null and role_code !=''">
-                    role_code,
-                </if>
-                <if test="role_name != null and role_name != ''">
-                    role_name,
-                </if>
-                <if test="role_order != null">
-                    role_order,
-                </if>
-                <if test="role_note != null and role_note != ''">
-                    role_note,
-                </if>
-                <if test="org_id != null">
-                    org_id,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="role_code != null and role_code !=''">
-                    #{role_code},
-                </if>
-                <if test="role_name != null and role_name != ''">
-                    #{role_name},
-                </if>
-                <if test="role_order != null">
-                    #{role_order},
-                </if>
-                <if test="role_note != null and role_note != ''">
-                    #{role_note},
-                </if>
-                <if test="org_id != null">
-                     #{org_id},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkRole" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(role_id)
+        FROM t_rolemst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND role_id = #{roleId}
+    </select>
+
+    <insert id="addRole" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="role_id">
+        INSERT into t_rolemst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="role_code != null and role_code !=''">
+                role_code,
+            </if>
+            <if test="role_name != null and role_name != ''">
+                role_name,
+            </if>
+            <if test="role_order != null">
+                role_order,
+            </if>
+            <if test="role_note != null and role_note != ''">
+                role_note,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="role_code != null and role_code !=''">
+                #{role_code},
+            </if>
+            <if test="role_name != null and role_name != ''">
+                #{role_name},
+            </if>
+            <if test="role_order != null">
+                #{role_order},
+            </if>
+            <if test="role_note != null and role_note != ''">
+                #{role_note},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updRole" parameterType="java.util.Map">
+        UPDATE t_rolemst
+        <set>
+            <if test="role_code != null and role_code !=''">
+                role_code = #{role_code},
+            </if>
+            <if test="role_name != null and role_name != ''">
+                role_name = #{role_name},
+            </if>
+            <if test="role_order != null">
+                role_order = #{role_order},
+            </if>
+            <if test="role_note != null and role_note != ''">
+                role_note = #{role_note},
+            </if>
+            <if test="corp_id != null">
+                corp_id = #{corp_id},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE role_id = #{role_id}
+    </update>
 
     <select id="queryRole" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
-            t1.role_id AS id,
-            t1.role_code AS "code",
-            t1.role_name AS "name",
-            t1.role_order AS "order",
-            t1.role_note AS note,
-            org_id AS "orgId",
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.org_id) as exta
-        FROM t_rolemst t1
+            role_id AS id,
+            role_code AS "code",
+            role_name AS "name",
+            role_order AS "order",
+            role_note AS note
+        FROM t_rolemst
         WHERE 1 = 1
-        AND t1.is_delete = '0' AND t1.valid_sta ='0'
-        AND t1.role_id = #{roleId}
+        AND is_delete = '0' AND valid_sta ='0'
+        AND role_id = #{roleId}
     </select>
 
     <select id="queryRoleEntity" parameterType="java.lang.Integer" resultMap="roleMap">
@@ -148,7 +156,7 @@
             role_id,
             role_code,
             role_name,
-            org_id
+            corp_id
         FROM t_rolemst
         WHERE 1 = 1
         AND is_delete = '0' AND valid_sta ='0'
@@ -160,14 +168,14 @@
             r.role_id,
             r.role_code,
             r.role_name,
-            org_id
+            r.corp_id
         FROM
         t_userrolelin ur,t_rolemst r
         WHERE 1 = 1
         AND r.is_delete = '0' AND r.valid_sta ='0'
         AND ur.role_id = r.role_id
-        AND user_id = #{user_id}
-        AND org_id = #{org_id}
+        AND r.user_id = #{user_id}
+        AND r.corp_id = #{corp_id}
     </select>
 
     <select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
@@ -177,8 +185,8 @@
             t1.role_name AS "name",
             t1.role_order AS "order",
             t1.role_note AS note,
-            t1.org_id AS "orgId",
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.org_id) as exta
+            t1.corp_id AS "corpId",
+            (SELECT t2.corp_name FROM t_corporationmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.corp_id = t1.corp_id) as exta
         FROM t_rolemst t1
         WHERE 1 = 1
         AND t1.is_delete = '0' AND t1.valid_sta ='0'
@@ -191,8 +199,8 @@
         <if test="role_name != null and role_name != ''">
             AND t1.role_name LIKE CONCAT('%', #{role_name}, '%')
         </if>
-        <if test="org_id != null">
-            AND t1.org_id = #{org_id}
+        <if test="corp_id != null">
+            AND t1.corp_id = #{corp_id}
         </if>
         ORDER BY t1.role_order ASC
     </select>
