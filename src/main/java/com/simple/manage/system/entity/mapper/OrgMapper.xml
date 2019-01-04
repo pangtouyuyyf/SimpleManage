@@ -29,7 +29,7 @@
         FROM t_orgmst
         WHERE is_delete = '0'
         AND valid_sta ='0'
-        AND org_id = #{org_id}
+        AND org_id = #{orgId}
     </select>
 
     <insert id="addOrg" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="org_id">

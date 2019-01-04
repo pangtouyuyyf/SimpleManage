@@ -21,7 +21,7 @@
         FROM t_corporationmst
         WHERE is_delete = '0'
         AND valid_sta ='0'
-        AND corp_id = #{corp_id}
+        AND corp_id = #{corpId}
     </select>
 
     <insert id="addCorp" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="corp_id">
