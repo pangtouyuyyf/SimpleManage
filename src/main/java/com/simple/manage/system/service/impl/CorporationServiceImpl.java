@@ -3,10 +3,7 @@ package com.simple.manage.system.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.config.SysConfig;
-import com.simple.manage.system.dao.CorporationDao;
-import com.simple.manage.system.dao.OrgDao;
-import com.simple.manage.system.dao.UserDao;
-import com.simple.manage.system.dao.UserRoleDao;
+import com.simple.manage.system.dao.*;
 import com.simple.manage.system.service.CorporationService;
 import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +32,9 @@ public class CorporationServiceImpl implements CorporationService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     private UserRoleDao userRoleDao;
@@ -106,7 +107,18 @@ public class CorporationServiceImpl implements CorporationService {
             user.put("password", sysConfig.getPassword());
             this.userDao.addOrUpdUser(user);
 
-            //添加默认权限
+            //添加默认角色
+            Map<String, Object> role = new HashMap<>();
+            role.put("role_code", code);
+            role.put("role_name", name);
+            role.put("role_order", CommonUtil.TREE_DEFAULT_ORDER);
+            role.put("role_note", note);
+            role.put("create_id", userId);
+            role.put("create_time", LocalDateTime.now());
+            role.put("corp_id", id);
+            this.roleDao.addRole(role);
+
+            //关联默认权限
         }
         return result;
     }
@@ -157,5 +169,15 @@ public class CorporationServiceImpl implements CorporationService {
      */
     public int delCorpForReal(int corpId) {
         return this.corporationDao.delCorpForReal(corpId);
+    }
+
+    /**
+     * 根据登录用户查询公司列表
+     *
+     * @param loginName
+     * @return
+     */
+    public List<Map<String, Object>> queryCorpListByLoginName(String loginName) {
+        return this.corporationDao.queryCorpListByLoginName(loginName);
     }
 }

@@ -58,4 +58,12 @@ public interface CorporationService {
      * @return
      */
     int delCorpForReal(int corpId);
+
+    /**
+     * 根据登录用户查询公司列表
+     *
+     * @param loginName
+     * @return
+     */
+    List<Map<String, Object>> queryCorpListByLoginName(String loginName);
 }
