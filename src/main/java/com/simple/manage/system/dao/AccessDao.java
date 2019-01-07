@@ -15,10 +15,10 @@ public interface AccessDao {
     /**
      * 检查数据是否存在
      *
-     * @param userId
+     * @param accessId
      * @return
      */
-    int checkAccess(Integer userId);
+    int checkAccess(Integer accessId);
 
     /**
      * 添加链接
