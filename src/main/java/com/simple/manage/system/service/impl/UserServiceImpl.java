@@ -34,7 +34,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public int addOrUpdUser(Map<String, Object> user) {
-        return this.userDao.addOrUpdUser(user);
+        int result = 0;
+        Integer id = user.get("user_id") == null ? null : Integer.valueOf(user.get("user_id").toString());
+        int count = this.userDao.checkUser(id);
+        if (count == 0) {
+            //新增
+            result = this.userDao.addUser(user);
+        } else if (count == 1) {
+            //修改
+            result = this.userDao.updUser(user);
+        } else {
+        }
+        return result;
     }
 
     /**

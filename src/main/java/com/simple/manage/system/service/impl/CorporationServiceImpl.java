@@ -105,7 +105,7 @@ public class CorporationServiceImpl implements CorporationService {
             user.put("create_id", userId);
             user.put("create_time", LocalDateTime.now());
             user.put("password", sysConfig.getPassword());
-            this.userDao.addOrUpdUser(user);
+            this.userDao.addUser(user);
 
             //添加默认角色
             Map<String, Object> role = new HashMap<>();
