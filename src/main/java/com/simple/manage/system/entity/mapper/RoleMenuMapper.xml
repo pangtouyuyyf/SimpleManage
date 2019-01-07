@@ -159,4 +159,14 @@
             AND #{url} LIKE'%' || tm.menu_url || '%'
             AND tr.role_id = #{roleId}
     </select>
+
+    <select id="queryAllByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            role_id,
+            menu_id,
+            operate_code
+        FROM t_rolemenulin
+        WHERE 1 = 1
+        AND role_id = #{roleId}
+    </select>
 </mapper>
