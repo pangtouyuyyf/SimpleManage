@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface DataDictDao {
     /**
-     * 添加或更新数据字典主表信息
+     * 检查数据是否存在
+     *
+     * @param dictId
+     * @return
+     */
+    int checkDataDict(Integer dictId);
+
+    /**
+     * 添加数据字典主表信息
      *
      * @param dataDict
      * @return
      */
-    int addOrUpdDataDict(Map<String, Object> dataDict);
+    int addDataDict(Map<String, Object> dataDict);
+
+    /**
+     * 更新数据字典主表信息
+     *
+     * @param dataDict
+     * @return
+     */
+    int updDataDict(Map<String, Object> dataDict);
 
     /**
      * 数据字典主表查询

@@ -30,7 +30,18 @@ public class DataDictServiceImpl implements DataDictService {
      * @return
      */
     public int addOrUpdDataDict(Map<String, Object> dataDict) {
-        return this.dataDictDao.addOrUpdDataDict(dataDict);
+        int result = 0;
+        Integer id = dataDict.get("dict_id") == null ? null : Integer.valueOf(dataDict.get("dict_id").toString());
+        int count = this.dataDictDao.checkDataDict(id);
+        if (count == 0) {
+            //新增
+            result = this.dataDictDao.addDataDict(dataDict);
+        } else if (count == 1) {
+            //修改
+            result = this.dataDictDao.updDataDict(dataDict);
+        } else {
+        }
+        return result;
     }
 
     /**

@@ -11,75 +11,86 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
-    <insert id="addOrUpdDataDict" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="dict_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(dict_id) from t_datadictmst where is_delete = '0' AND valid_sta ='0' AND dict_id = #{dict_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_datadictmst
-            <set>
-                <if test="dict_name != null and dict_name != ''">
-                    dict_name = #{dict_name},
-                </if>
-                <if test="dict_note != null and dict_note != ''">
-                    dict_note = #{dict_note},
-                </if>
-                <if test="dict_order != null">
-                    dict_order = #{dict_order},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where dict_id = #{dict_id}
-        </if>
-        <if test="count == 0">
-            insert into t_datadictmst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="dict_name != null and dict_name != ''">
-                    dict_name,
-                </if>
-                <if test="dict_note != null and dict_note != ''">
-                    dict_note,
-                </if>
-                <if test="dict_order != null">
-                    dict_order,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="dict_name != null and dict_name != ''">
-                    #{dict_name},
-                </if>
-                <if test="dict_note != null and dict_note != ''">
-                    #{dict_note},
-                </if>
-                <if test="dict_order != null">
-                    #{dict_order},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkDataDict" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(dict_id)
+        FROM t_datadictmst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND dict_id = #{dict_id}
+    </select>
+
+    <insert id="addDataDict" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="dict_id">
+        INSERT INTO t_datadictmst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dict_name != null and dict_name != ''">
+                dict_name,
+            </if>
+            <if test="dict_note != null and dict_note != ''">
+                dict_note,
+            </if>
+            <if test="dict_order != null">
+                dict_order,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dict_name != null and dict_name != ''">
+                #{dict_name},
+            </if>
+            <if test="dict_note != null and dict_note != ''">
+                #{dict_note},
+            </if>
+            <if test="dict_order != null">
+                #{dict_order},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updDataDict" parameterType="java.util.Map">
+        UPDATE t_datadictmst
+        <set>
+            <if test="dict_name != null and dict_name != ''">
+                dict_name = #{dict_name},
+            </if>
+            <if test="dict_note != null and dict_note != ''">
+                dict_note = #{dict_note},
+            </if>
+            <if test="dict_order != null">
+                dict_order = #{dict_order},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE dict_id = #{dict_id}
+    </update>
 
     <select id="queryDataDict" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
