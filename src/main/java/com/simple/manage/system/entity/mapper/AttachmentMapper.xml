@@ -17,7 +17,8 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
     <insert id="addAttachment" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="attach_id">
@@ -56,6 +57,9 @@
             <if test="create_time != null">
                 create_time,
             </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="attach_name != null and attach_name != ''">
@@ -90,6 +94,9 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
             </if>
         </trim>
     </insert>
