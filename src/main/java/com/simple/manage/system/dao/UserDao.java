@@ -14,12 +14,28 @@ import java.util.Map;
 @Mapper
 public interface UserDao {
     /**
-     * 添加或更新用户
+     * 检查数据是否存在
+     *
+     * @param userId
+     * @return
+     */
+    int checkUser(Integer userId);
+
+    /**
+     * 添加用户
      *
      * @param user
      * @return
      */
-    int addOrUpdUser(Map<String, Object> user);
+    int addUser(Map<String, Object> user);
+
+    /**
+     * 更新用户
+     *
+     * @param user
+     * @return
+     */
+    int updUser(Map<String, Object> user);
 
     /**
      * 查询用户对象

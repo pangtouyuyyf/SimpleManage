@@ -27,108 +27,112 @@
         <result property="email" column="email" javaType="java.lang.String"/>
     </resultMap>
 
-    <insert id="addOrUpdUser" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="user_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(user_id) from t_usermst where is_delete = '0' AND valid_sta ='0' AND user_id = #{user_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_usermst
-            <set>
-                <if test="user_name != null and user_name != ''">
-                    user_name = #{user_name},
-                </if>
-                <if test="login_name != null and login_name != ''">
-                    login_name = #{login_name},
-                </if>
-                <if test="password != null and password != ''">
-                    password = #{password},
-                </if>
-                <if test="phone != null and phone != ''">
-                    phone = #{phone},
-                </if>
-                <if test="email != null and email != ''">
-                    email = #{email},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where user_id = #{user_id}
-        </if>
-        <if test="count == 0">
-            insert into t_usermst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="user_name != null and user_name != ''">
-                    user_name,
-                </if>
-                <if test="login_name != null and login_name != ''">
-                    login_name,
-                </if>
-                <if test="password != null and password != ''">
-                    password,
-                </if>
-                <if test="phone != null and phone != ''">
-                    phone,
-                </if>
-                <if test="email != null and email != ''">
-                    email,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="user_name != null and user_name != ''">
-                    #{user_name},
-                </if>
-                <if test="login_name != null and login_name != ''">
-                    #{login_name},
-                </if>
-                <if test="password != null and password != ''">
-                    #{password},
-                </if>
-                <if test="phone != null and phone != ''">
-                    #{phone},
-                </if>
-                <if test="email != null and email != ''">
-                    #{email},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(user_id)
+        FROM t_usermst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND user_id = #{user_id}
+    </select>
+
+    <insert id="addUser" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="user_id">
+        INSERT INTO t_usermst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user_name != null and user_name != ''">
+                user_name,
+            </if>
+            <if test="login_name != null and login_name != ''">
+                login_name,
+            </if>
+            <if test="password != null and password != ''">
+                password,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="user_name != null and user_name != ''">
+                #{user_name},
+            </if>
+            <if test="login_name != null and login_name != ''">
+                #{login_name},
+            </if>
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updUser" parameterType="java.util.Map">
+        UPDATE t_usermst
+        <set>
+            <if test="user_name != null and user_name != ''">
+                user_name = #{user_name},
+            </if>
+            <if test="login_name != null and login_name != ''">
+                login_name = #{login_name},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE user_id = #{user_id}
+    </update>
 
     <select id="queryUserEntity" parameterType="java.util.Map" resultMap="userMap">
         SELECT
