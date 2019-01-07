@@ -168,4 +168,29 @@
         t_corporationmst
         WHERE corp_id = #{corpId}
     </delete>
+
+    <select id="queryCorpListByLoginName" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            t4.corp_id AS "value",
+            t4.corp_name AS label
+        FROM
+            t_usermst t1,
+            t_userrolelin t2,
+            t_rolemst t3,
+            t_corporationmst t4
+        WHERE
+            1 = 1
+            AND t1.is_delete = '0'
+            AND t1.valid_sta = '0'
+            AND t3.is_delete = '0'
+            AND t3.valid_sta = '0'
+            AND t4.is_delete = '0'
+            AND t4.valid_sta = '0'
+            AND t1.user_id = t2.user_id
+            AND t2.role_id = t3.role_id
+            AND t3.corp_id = t4.corp_id
+            AND t1.login_name = #{loginName}
+        ORDER BY
+            t4.corp_id ASC
+    </select>
 </mapper>

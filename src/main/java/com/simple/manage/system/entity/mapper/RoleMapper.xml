@@ -174,7 +174,7 @@
         WHERE 1 = 1
         AND r.is_delete = '0' AND r.valid_sta ='0'
         AND ur.role_id = r.role_id
-        AND r.user_id = #{user_id}
+        AND ur.user_id = #{user_id}
         AND r.corp_id = #{corp_id}
     </select>
 
