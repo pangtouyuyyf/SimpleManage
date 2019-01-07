@@ -97,4 +97,13 @@
         AND tra.role_id = #{role_id}
         AND EXISTS(SELECT ta.access_id FROM t_accessmst ta WHERE ta.is_delete = '0' AND ta.valid_sta = '0' AND ta.access_id = tra.access_id AND ta.access_url = #{access_url})
     </select>
+
+    <select id="queryAllByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            role_id,
+            access_id
+        FROM t_roleaccesslin
+        WHERE 1 = 1
+        AND role_id = #{roleId}
+    </select>
 </mapper>

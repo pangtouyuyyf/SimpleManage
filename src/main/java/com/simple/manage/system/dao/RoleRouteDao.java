@@ -59,4 +59,12 @@ public interface RoleRouteDao {
      * @return
      */
     int countRoleRoute(Map<String, Object> params);
+
+    /**
+     * 根据角色主键查询所有
+     *
+     * @param roleId
+     * @return
+     */
+    List<Map<String, Object>> queryAllByRoleId(int roleId);
 }

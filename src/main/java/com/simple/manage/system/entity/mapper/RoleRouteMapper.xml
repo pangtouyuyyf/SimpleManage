@@ -100,4 +100,13 @@
         AND t1.role_id = #{roleId}
         AND t2.route_url = #{url}
     </select>
+
+    <select id="queryAllByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            role_id,
+            route_id
+        FROM t_roleroutelin
+        WHERE 1 = 1
+        AND role_id = #{roleId}
+    </select>
 </mapper>
