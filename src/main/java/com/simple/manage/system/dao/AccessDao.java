@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface AccessDao {
     /**
-     * 添加或更新链接
+     * 检查数据是否存在
+     *
+     * @param userId
+     * @return
+     */
+    int checkAccess(Integer userId);
+
+    /**
+     * 添加链接
      *
      * @param access
      * @return
      */
-    int addOrUpdAccess(Map<String, Object> access);
+    int addAccess(Map<String, Object> access);
+
+    /**
+     * 更新链接
+     *
+     * @param access
+     * @return
+     */
+    int updAccess(Map<String, Object> access);
 
     /**
      * 查询链接

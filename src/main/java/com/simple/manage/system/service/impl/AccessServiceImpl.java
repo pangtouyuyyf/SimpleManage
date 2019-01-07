@@ -33,7 +33,18 @@ public class AccessServiceImpl implements AccessService {
      * @return
      */
     public int addOrUpdAccess(Map<String, Object> access) {
-        return this.accessDao.addOrUpdAccess(access);
+        int result = 0;
+        Integer id = access.get("access_id") == null ? null : Integer.valueOf(access.get("access_id").toString());
+        int count = this.accessDao.checkAccess(id);
+        if (count == 0) {
+            //新增
+            result = this.accessDao.addAccess(access);
+        } else if (count == 1) {
+            //修改
+            result = this.accessDao.updAccess(access);
+        } else {
+        }
+        return result;
     }
 
     /**

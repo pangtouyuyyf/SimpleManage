@@ -15,111 +15,122 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
-    <insert id="addOrUpdAccess" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="access_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(access_id) from t_accessmst where is_delete = '0' AND valid_sta ='0' AND access_id = #{access_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_accessmst
-            <set>
-                <if test="module_id != null">
-                    module_id = #{module_id},
-                </if>
-                <if test="access_name != null and access_name != ''">
-                    access_name = #{access_name},
-                </if>
-                <if test="access_url != null and access_url != ''">
-                    access_url = #{access_url},
-                </if>
-                <if test="access_order != null">
-                    access_order = #{access_order},
-                </if>
-                <if test="access_note != null and access_note != ''">
-                    access_note = #{access_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where access_id = #{access_id}
-        </if>
-        <if test="count == 0">
-            insert into t_accessmst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    module_id,
-                </if>
-                <if test="access_name != null and access_name != ''">
-                    access_name,
-                </if>
-                <if test="access_url != null and access_url != ''">
-                    access_url,
-                </if>
-                <if test="access_order != null">
-                    access_order,
-                </if>
-                <if test="access_note != null and access_note != ''">
-                    access_note,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    #{module_id},
-                </if>
-                <if test="access_name != null and access_name != ''">
-                    #{access_name},
-                </if>
-                <if test="access_url != null and access_url != ''">
-                    #{access_url},
-                </if>
-                <if test="access_order != null">
-                    #{access_order},
-                </if>
-                <if test="access_note != null and access_note != ''">
-                    #{access_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkAccess" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(access_id)
+        FROM t_accessmst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND access_id = #{access_id}
+    </select>
+
+    <insert id="addAccess" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="access_id">
+        INSERT INTO t_accessmst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                module_id,
+            </if>
+            <if test="access_name != null and access_name != ''">
+                access_name,
+            </if>
+            <if test="access_url != null and access_url != ''">
+                access_url,
+            </if>
+            <if test="access_order != null">
+                access_order,
+            </if>
+            <if test="access_note != null and access_note != ''">
+                access_note,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                #{module_id},
+            </if>
+            <if test="access_name != null and access_name != ''">
+                #{access_name},
+            </if>
+            <if test="access_url != null and access_url != ''">
+                #{access_url},
+            </if>
+            <if test="access_order != null">
+                #{access_order},
+            </if>
+            <if test="access_note != null and access_note != ''">
+                #{access_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updAccess" parameterType="java.util.Map">
+        UPDATE t_accessmst
+        <set>
+            <if test="module_id != null">
+                module_id = #{module_id},
+            </if>
+            <if test="access_name != null and access_name != ''">
+                access_name = #{access_name},
+            </if>
+            <if test="access_url != null and access_url != ''">
+                access_url = #{access_url},
+            </if>
+            <if test="access_order != null">
+                access_order = #{access_order},
+            </if>
+            <if test="access_note != null and access_note != ''">
+                access_note = #{access_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE access_id = #{access_id}
+    </update>
 
     <select id="queryAccess" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
