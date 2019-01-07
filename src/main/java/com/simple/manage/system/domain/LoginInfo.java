@@ -4,6 +4,8 @@ import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Description 登录信息
  * Author chen
@@ -13,7 +15,9 @@ import lombok.Data;
 public class LoginInfo {
     private String channel;
 
+    private int corpId;
+
     private User user;
 
-    private Role role;
+    private List<Role> roleList;
 }
