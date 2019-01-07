@@ -15,111 +15,122 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
-    <insert id="addOrUpdRoute" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="route_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(route_id) from t_routemst where is_delete = '0' AND valid_sta ='0' AND route_id = #{route_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_routemst
-            <set>
-                <if test="module_id != null">
-                    module_id = #{module_id},
-                </if>
-                <if test="route_name != null and route_name != ''">
-                    route_name = #{route_name},
-                </if>
-                <if test="route_url != null and route_url != ''">
-                    route_url = #{route_url},
-                </if>
-                <if test="route_order != null">
-                    route_order = #{route_order},
-                </if>
-                <if test="route_note != null and route_note != ''">
-                    route_note = #{route_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where route_id = #{route_id}
-        </if>
-        <if test="count == 0">
-            insert into t_routemst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    module_id,
-                </if>
-                <if test="route_name != null and route_name != ''">
-                    route_name,
-                </if>
-                <if test="route_url != null and route_url != ''">
-                    route_url,
-                </if>
-                <if test="route_order != null">
-                    route_order,
-                </if>
-                <if test="route_note != null and route_note != ''">
-                    route_note,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    #{module_id},
-                </if>
-                <if test="route_name != null and route_name != ''">
-                    #{route_name},
-                </if>
-                <if test="route_url != null and route_url != ''">
-                    #{route_url},
-                </if>
-                <if test="route_order != null">
-                    #{route_order},
-                </if>
-                <if test="route_note != null and route_note != ''">
-                    #{route_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkRoute" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(route_id)
+        FROM t_routemst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND route_id = #{route_id}
+    </select>
+
+    <insert id="addRoute" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="route_id">
+        INSERT INTO t_routemst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                module_id,
+            </if>
+            <if test="route_name != null and route_name != ''">
+                route_name,
+            </if>
+            <if test="route_url != null and route_url != ''">
+                route_url,
+            </if>
+            <if test="route_order != null">
+                route_order,
+            </if>
+            <if test="route_note != null and route_note != ''">
+                route_note,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                #{module_id},
+            </if>
+            <if test="route_name != null and route_name != ''">
+                #{route_name},
+            </if>
+            <if test="route_url != null and route_url != ''">
+                #{route_url},
+            </if>
+            <if test="route_order != null">
+                #{route_order},
+            </if>
+            <if test="route_note != null and route_note != ''">
+                #{route_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updRoute" parameterType="java.util.Map">
+        UPDATE t_routemst
+        <set>
+            <if test="module_id != null">
+                module_id = #{module_id},
+            </if>
+            <if test="route_name != null and route_name != ''">
+                route_name = #{route_name},
+            </if>
+            <if test="route_url != null and route_url != ''">
+                route_url = #{route_url},
+            </if>
+            <if test="route_order != null">
+                route_order = #{route_order},
+            </if>
+            <if test="route_note != null and route_note != ''">
+                route_note = #{route_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE route_id = #{route_id}
+    </update>
 
     <select id="queryRoute" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT

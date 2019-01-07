@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface RouteDao {
     /**
-     * 添加或更新路由
+     * 检查数据是否存在
+     *
+     * @param routeId
+     * @return
+     */
+    int checkRoute(Integer routeId);
+
+    /**
+     * 添加路由
      *
      * @param route
      * @return
      */
-    int addOrUpdRoute(Map<String, Object> route);
+    int addRoute(Map<String, Object> route);
+
+    /**
+     * 更新路由
+     *
+     * @param route
+     * @return
+     */
+    int updRoute(Map<String, Object> route);
 
     /**
      * 查询路由

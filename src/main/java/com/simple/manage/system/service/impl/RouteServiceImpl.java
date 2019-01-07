@@ -33,7 +33,18 @@ public class RouteServiceImpl implements RouteService {
      * @return
      */
     public int addOrUpdRoute(Map<String, Object> route) {
-        return this.routeDao.addOrUpdRoute(route);
+        int result = 0;
+        Integer id = route.get("route_id") == null ? null : Integer.valueOf(route.get("route_id").toString());
+        int count = this.routeDao.checkRoute(id);
+        if (count == 0) {
+            //新增
+            result = this.routeDao.addRoute(route);
+        } else if (count == 1) {
+            //修改
+            result = this.routeDao.updRoute(route);
+        } else {
+        }
+        return result;
     }
 
     /**
