@@ -231,4 +231,13 @@
         t_rolemst
         WHERE role_id = #{roleId}
     </delete>
+
+    <select id="queryRoleIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            role_id
+        FROM t_rolemst
+        WHERE 1 = 1
+        AND is_delete = '0' AND valid_sta ='0'
+        AND role_code = #{roleCode}
+    </select>
 </mapper>
