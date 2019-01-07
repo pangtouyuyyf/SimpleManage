@@ -69,6 +69,15 @@ public class CommonUtil {
     //默认树节点排序
     public static final int TREE_DEFAULT_ORDER = 1;
 
+    //创建二级管理员角色名称后缀
+    public static final String SECOND_LEVEL_ROLE_NAME_SUFFIX = "_管理员";
+
+    //创建二级管理员角色代码前缀
+    public static final String SECOND_LEVEL_ROLE_CODE_PREFIX = "SYS_";
+
+    //默认二级管理员角色代码
+    public static final String SECOND_LEVEL_ROLE_CODE = "COMMON";
+
     /**
      * url处理(去掉url参数)
      *
