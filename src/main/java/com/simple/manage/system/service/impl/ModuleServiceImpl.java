@@ -30,7 +30,18 @@ public class ModuleServiceImpl implements ModuleService {
      * @return
      */
     public int addOrUpdModule(Map<String, Object> module) {
-        return this.moduleDao.addOrUpdModule(module);
+        int result = 0;
+        Integer id = module.get("module_id") == null ? null : Integer.valueOf(module.get("module_id").toString());
+        int count = this.moduleDao.checkModule(id);
+        if (count == 0) {
+            //新增
+            result = this.moduleDao.addModule(module);
+        } else if (count == 1) {
+            //修改
+            result = this.moduleDao.updModule(module);
+        } else {
+        }
+        return result;
     }
 
     /**

@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface ModuleDao {
     /**
-     * 添加或更新模块
+     * 检查数据是否存在
+     *
+     * @param moduleId
+     * @return
+     */
+    int checkModule(Integer moduleId);
+
+    /**
+     * 添加模块
      *
      * @param module
      * @return
      */
-    int addOrUpdModule(Map<String, Object> module);
+    int addModule(Map<String, Object> module);
+
+    /**
+     * 更新模块
+     *
+     * @param module
+     * @return
+     */
+    int updModule(Map<String, Object> module);
 
     /**
      * 查询模块
