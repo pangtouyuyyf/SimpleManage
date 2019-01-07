@@ -13,12 +13,28 @@ import java.util.Map;
 @Mapper
 public interface MenuDao {
     /**
-     * 添加或更新菜单
+     * 检查数据是否存在
+     *
+     * @param menuId
+     * @return
+     */
+    int checkMenu(Integer menuId);
+
+    /**
+     * 添加菜单
      *
      * @param menu
      * @return
      */
-    int addOrUpdMenu(Map<String, Object> menu);
+    int addMenu(Map<String, Object> menu);
+
+    /**
+     * 更新菜单
+     *
+     * @param menu
+     * @return
+     */
+    int updMenu(Map<String, Object> menu);
 
     /**
      * 查询菜单

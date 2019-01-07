@@ -15,111 +15,122 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
-    <insert id="addOrUpdMenu" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="menu_id">
-        <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(menu_id) from t_menumst where is_delete = '0' AND valid_sta ='0' AND menu_id = #{menu_id}
-        </selectKey>
-        <if test="count > 0">
-            update t_menumst
-            <set>
-                <if test="module_id != null">
-                    module_id = #{module_id},
-                </if>
-                <if test="menu_name != null and menu_name != ''">
-                    menu_name = #{menu_name},
-                </if>
-                <if test="menu_url != null and menu_url != ''">
-                    menu_url = #{menu_url},
-                </if>
-                <if test="menu_order != null">
-                    menu_order = #{menu_order},
-                </if>
-                <if test="menu_note != null and menu_note != ''">
-                    menu_note = #{menu_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta = #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb = #{extb},
-                </if>
-                <if test="update_id != null">
-                    update_id = #{update_id},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
-                </if>
-            </set>
-            where menu_id = #{menu_id}
-        </if>
-        <if test="count == 0">
-            insert into t_menumst
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    module_id,
-                </if>
-                <if test="menu_name != null and menu_name != ''">
-                    menu_name,
-                </if>
-                <if test="menu_url != null and menu_url != ''">
-                    menu_url,
-                </if>
-                <if test="menu_order != null">
-                    menu_order,
-                </if>
-                <if test="menu_note != null and menu_note != ''">
-                    menu_note,
-                </if>
-                <if test="exta != null and exta != ''">
-                    exta,
-                </if>
-                <if test="extb != null and extb != ''">
-                    extb,
-                </if>
-                <if test="create_id != null">
-                    create_id,
-                </if>
-                <if test="create_time != null">
-                    create_time,
-                </if>
-            </trim>
-            <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="module_id != null">
-                    #{module_id},
-                </if>
-                <if test="menu_name != null and menu_name != ''">
-                    #{menu_name},
-                </if>
-                <if test="menu_url != null and menu_url != ''">
-                    #{menu_url},
-                </if>
-                <if test="menu_order != null">
-                    #{menu_order},
-                </if>
-                <if test="menu_note != null and menu_note != ''">
-                    #{menu_note},
-                </if>
-                <if test="exta != null and exta != ''">
-                    #{exta},
-                </if>
-                <if test="extb != null and extb != ''">
-                    #{extb},
-                </if>
-                <if test="create_id != null">
-                    #{create_id},
-                </if>
-                <if test="create_time != null">
-                    #{create_time},
-                </if>
-            </trim>
-        </if>
+    <select id="checkMenu" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(menu_id)
+        FROM t_menumst
+        WHERE is_delete = '0'
+        AND valid_sta ='0'
+        AND menu_id = #{menu_id}
+    </select>
+
+    <insert id="addMenu" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="menu_id">
+        INSERT INTO t_menumst
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                module_id,
+            </if>
+            <if test="menu_name != null and menu_name != ''">
+                menu_name,
+            </if>
+            <if test="menu_url != null and menu_url != ''">
+                menu_url,
+            </if>
+            <if test="menu_order != null">
+                menu_order,
+            </if>
+            <if test="menu_note != null and menu_note != ''">
+                menu_note,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="module_id != null">
+                #{module_id},
+            </if>
+            <if test="menu_name != null and menu_name != ''">
+                #{menu_name},
+            </if>
+            <if test="menu_url != null and menu_url != ''">
+                #{menu_url},
+            </if>
+            <if test="menu_order != null">
+                #{menu_order},
+            </if>
+            <if test="menu_note != null and menu_note != ''">
+                #{menu_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
+            </if>
+        </trim>
     </insert>
+
+    <update id="updMenu" parameterType="java.util.Map">
+        UPDATE t_menumst
+        <set>
+            <if test="module_id != null">
+                module_id = #{module_id},
+            </if>
+            <if test="menu_name != null and menu_name != ''">
+                menu_name = #{menu_name},
+            </if>
+            <if test="menu_url != null and menu_url != ''">
+                menu_url = #{menu_url},
+            </if>
+            <if test="menu_order != null">
+                menu_order = #{menu_order},
+            </if>
+            <if test="menu_note != null and menu_note != ''">
+                menu_note = #{menu_note},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="valid_sta != null and valid_sta != ''">
+                valid_sta = #{valid_sta},
+            </if>
+        </set>
+        WHERE menu_id = #{menu_id}
+    </update>
 
     <select id="queryMenu" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT

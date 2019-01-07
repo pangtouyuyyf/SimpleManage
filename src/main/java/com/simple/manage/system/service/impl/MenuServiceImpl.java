@@ -33,7 +33,18 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     public int addOrUpdMenu(Map<String, Object> menu) {
-        return this.menuDao.addOrUpdMenu(menu);
+        int result = 0;
+        Integer id = menu.get("menu_id") == null ? null : Integer.valueOf(menu.get("menu_id").toString());
+        int count = this.menuDao.checkMenu(id);
+        if (count == 0) {
+            //新增
+            result = this.menuDao.addMenu(menu);
+        } else if (count == 1) {
+            //修改
+            result = this.menuDao.updMenu(menu);
+        } else {
+        }
+        return result;
     }
 
     /**
