@@ -52,6 +52,9 @@ public class LoginController extends BaseController {
     private OrgService orgService;
 
     @Autowired
+    private CorporationService corporationService;
+
+    @Autowired
     private CommonService commonService;
 
     /**
@@ -59,14 +62,14 @@ public class LoginController extends BaseController {
      *
      * @param loginName 登录名
      * @param password  密码
-     * @param orgId     组织主键
+     * @param corpId    公司主键
      * @param channel   客户端渠道(app/web)
      * @return
      */
     @GetMapping(value = "/login")
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("password") String password,
-                        @RequestParam("orgId") Integer orgId,
+                        @RequestParam("corpId") Integer corpId,
                         @RequestParam("channel") String channel) throws Exception {
         if (!CommonUtil.CHANNEL_WEB.equals(channel) && !CommonUtil.CHANNEL_APP.equals(channel)) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 登录参数有误");
@@ -87,7 +90,7 @@ public class LoginController extends BaseController {
         //查询当前登录用户角色
         params.clear();
         params.put("user_id", user.getId());
-        params.put("org_id", orgId);
+        params.put("corp_id", corpId);
         Role role = this.roleService.queryCurUserRole(params);
         if (role == null) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户:" + user.getId() + " 角色查询失败");
@@ -126,14 +129,14 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * 获取登录用户所在组织
+     * 获取登录用户所在公司
      *
      * @param loginName 登录名
      * @return
      */
-    @GetMapping(value = "/logOrg")
+    @GetMapping(value = "/logCorp")
     public Result logOrg(@RequestParam("loginName") String loginName) throws Exception {
-        return success(this.orgService.queryOrgListByLoginName(loginName));
+        return success(this.corporationService.queryCorpListByLoginName(loginName));
     }
 
     /**
