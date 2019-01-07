@@ -13,11 +13,11 @@ public interface JwtService {
      * 创建令牌
      *
      * @param userId
-     * @param roleId
+     * @param corpId
      * @param type
      * @return
      */
-    String createJWT(String userId, String roleId, String type);
+    String createJWT(String userId, String corpId, String type);
 
     /**
      * 解析令牌

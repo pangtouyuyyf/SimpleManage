@@ -36,12 +36,12 @@ public class JwtServiceImpl implements JwtService {
     /**
      * 创建令牌
      *
-     * @param userId  用户Id
-     * @param roleId  角色id
+     * @param userId  用户主键
+     * @param corpId  公司主键
      * @param channel 客户端渠道(app/web)
      * @return
      */
-    public String createJWT(String userId, String roleId, String channel) {
+    public String createJWT(String userId, String corpId, String channel) {
         String result = null;
         Date now = new Date();  //当前时间
         try {
@@ -50,7 +50,7 @@ public class JwtServiceImpl implements JwtService {
             result = JWT.create()
                     .withIssuer(jwtConfig.getIssuer())      //设置发行者
                     .withClaim(CommonUtil.USER_ID, userId)       //设置参数
-                    .withClaim(CommonUtil.ROLE_ID, roleId)       //设置参数
+                    .withClaim(CommonUtil.CORP_ID, corpId)       //设置参数
                     .withClaim(CommonUtil.CHANNEL, channel)    //设置参数
                     .withNotBefore(now)    //设置最早时间
                     .sign(algorithm);      //签名
@@ -101,7 +101,7 @@ public class JwtServiceImpl implements JwtService {
 
         /** 获取令牌中的用户、角色和登录渠道 **/
         String userId = jwt.getClaim(CommonUtil.USER_ID).asString();
-        String roleId = jwt.getClaim(CommonUtil.ROLE_ID).asString();
+        String roleId = jwt.getClaim(CommonUtil.CORP_ID).asString();
         String channel = jwt.getClaim(CommonUtil.CHANNEL).asString();
 
         /** 验证令牌参数 **/
