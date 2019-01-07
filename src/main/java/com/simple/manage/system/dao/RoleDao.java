@@ -83,7 +83,7 @@ public interface RoleDao {
      * @param param
      * @return
      */
-    Role queryCurUserRole(Map<String, Object> param);
+    List<Role> queryCurUserRole(Map<String, Object> param);
 
     /**
      * 根据角色编码查询角色主键

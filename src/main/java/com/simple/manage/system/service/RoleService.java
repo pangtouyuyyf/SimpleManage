@@ -3,6 +3,7 @@ package com.simple.manage.system.service;
 import com.github.pagehelper.PageInfo;
 import com.simple.manage.system.entity.Role;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,5 +70,5 @@ public interface RoleService {
      * @param param
      * @return
      */
-    Role queryCurUserRole(Map<String, Object> param);
+    List<Role> queryCurUserRole(Map<String, Object> param);
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -139,7 +140,7 @@ public class RoleServiceImpl implements RoleService {
      * @param param
      * @return
      */
-    public Role queryCurUserRole(Map<String, Object> param) {
+    public List<Role> queryCurUserRole(Map<String, Object> param) {
         return this.roleDao.queryCurUserRole(param);
     }
 }
