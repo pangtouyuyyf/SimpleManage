@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Description 公司服务接口实现
@@ -39,17 +41,26 @@ public class CorporationServiceImpl implements CorporationService {
     @Autowired
     private UserRoleDao userRoleDao;
 
+    @Autowired
+    private RoleAccessDao roleAccessDao;
+
+    @Autowired
+    private RoleMenuDao roleMenuDao;
+
+    @Autowired
+    private RoleRouteDao roleRouteDao;
+
     /**
      * 添加或更新公司信息
      *
-     * @param id
-     * @param name
-     * @param code
-     * @param note
-     * @param userId
+     * @param id        主键
+     * @param name      名称
+     * @param code      编码
+     * @param note      备注
+     * @param curUserId 当前登录人员
      * @return
      */
-    public int addOrUpdCorp(Integer id, String name, String code, String note, int userId) {
+    public int addOrUpdCorp(Integer id, String name, String code, String note, int curUserId) {
         int result = 0;
         Map<String, Object> corp = new HashMap<>();
         corp.put("corp_id", id);
@@ -57,9 +68,9 @@ public class CorporationServiceImpl implements CorporationService {
         corp.put("corp_code", code);
         corp.put("count", null);
         corp.put("corp_note", note);
-        corp.put("create_id", userId);
+        corp.put("create_id", curUserId);
         corp.put("create_time", LocalDateTime.now());
-        corp.put("update_id", userId);
+        corp.put("update_id", curUserId);
         corp.put("update_time", LocalDateTime.now());
         int count = this.corporationDao.checkCorp(id);
         if (count == 0) {
@@ -81,10 +92,10 @@ public class CorporationServiceImpl implements CorporationService {
             root.put("parent_id", CommonUtil.TREE_ROOT_PARENT_ID);
             root.put("org_order", CommonUtil.TREE_DEFAULT_ORDER);
             root.put("org_note", note);
-            root.put("create_id", userId);
+            root.put("create_id", curUserId);
             root.put("create_time", LocalDateTime.now());
             root.put("corp_id", id);
-            this.orgDao.addOrg(root);
+            result = result + this.orgDao.addOrg(root);
 
             //添加默认组织节点
             int rootId = Integer.valueOf(root.get("org_id").toString());
@@ -93,32 +104,87 @@ public class CorporationServiceImpl implements CorporationService {
             org.put("parent_id", rootId);
             org.put("org_order", CommonUtil.TREE_DEFAULT_ORDER);
             org.put("org_note", note);
-            org.put("create_id", userId);
+            org.put("create_id", curUserId);
             org.put("create_time", LocalDateTime.now());
             org.put("corp_id", id);
-            this.orgDao.addOrg(org);
+            result = result + this.orgDao.addOrg(org);
 
             //添加公司管理员
             Map<String, Object> user = new HashMap<>();
             user.put("user_name", name);
             user.put("login_name", code);
-            user.put("create_id", userId);
+            user.put("create_id", curUserId);
             user.put("create_time", LocalDateTime.now());
             user.put("password", sysConfig.getPassword());
-            this.userDao.addUser(user);
+            result = result + this.userDao.addUser(user);
 
             //添加默认角色
             Map<String, Object> role = new HashMap<>();
-            role.put("role_code", code);
-            role.put("role_name", name);
+            role.put("role_code", CommonUtil.SECOND_LEVEL_ROLE_CODE_PREFIX + code);
+            role.put("role_name", name + CommonUtil.SECOND_LEVEL_ROLE_NAME_SUFFIX);
             role.put("role_order", CommonUtil.TREE_DEFAULT_ORDER);
             role.put("role_note", note);
-            role.put("create_id", userId);
+            role.put("create_id", curUserId);
             role.put("create_time", LocalDateTime.now());
             role.put("corp_id", id);
-            this.roleDao.addRole(role);
+            result = result + this.roleDao.addRole(role);
 
             //关联默认权限
+            Integer templetRoleId = this.roleDao.queryRoleIdByCode(CommonUtil.SECOND_LEVEL_ROLE_CODE);
+            if (templetRoleId != null) {
+                int userId = Integer.valueOf(user.get("user_id").toString());
+                int roleId = Integer.valueOf(role.get("role_id").toString());
+
+                //添加中间关联表数据
+                //1.用户角色
+                List<Map<String, Object>> userRoles = new ArrayList<>();
+                Map<String, Object> userRole = new HashMap<>();
+                userRole.put("user_id", userId);
+                userRole.put("role_id", templetRoleId);
+                userRole.put("create_id", curUserId);
+                userRole.put("create_time", LocalDateTime.now());
+                userRoles.add(userRole);
+                result = result + this.userRoleDao.addUserRole(userRoles);
+
+                //2.角色菜单
+                //2.1查询角色菜单
+                List<Map<String, Object>> roleMenu = this.roleMenuDao.queryAllByRoleId(templetRoleId);
+                if (roleMenu != null && !roleMenu.isEmpty()) {
+                    roleMenu = roleMenu.stream().peek(node -> {
+                        node.put("role_id", roleId);
+                        node.put("create_id", curUserId);
+                        node.put("create_time", LocalDateTime.now());
+                    }).collect(Collectors.toList());
+                    //2.2保存复制出的角色菜单
+                    result = result + this.roleMenuDao.addRoleMenu(roleMenu);
+                }
+
+                //3.角色路由
+                //3.1查询角色路由
+                List<Map<String, Object>> roleRoute = this.roleRouteDao.queryAllByRoleId(templetRoleId);
+                if (roleRoute != null && !roleRoute.isEmpty()) {
+                    roleRoute = roleRoute.stream().peek(node -> {
+                        node.put("role_id", roleId);
+                        node.put("create_id", curUserId);
+                        node.put("create_time", LocalDateTime.now());
+                    }).collect(Collectors.toList());
+                    //3.2保存复制出的角色路由
+                    result = result + this.roleRouteDao.addRoleRoute(roleRoute);
+                }
+
+                //4.角色请求
+                //4.1查询角色请求
+                List<Map<String, Object>> roleAccess = this.roleAccessDao.queryAllByRoleId(templetRoleId);
+                if (roleAccess != null && !roleAccess.isEmpty()) {
+                    roleAccess = roleAccess.stream().peek(node -> {
+                        node.put("role_id", roleId);
+                        node.put("create_id", curUserId);
+                        node.put("create_time", LocalDateTime.now());
+                    }).collect(Collectors.toList());
+                    //4.2保存复制出的角色请求
+                    result = result + this.roleAccessDao.addRoleAccess(roleAccess);
+                }
+            }
         }
         return result;
     }
