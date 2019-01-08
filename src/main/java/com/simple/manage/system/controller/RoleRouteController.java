@@ -64,9 +64,9 @@ public class RoleRouteController extends BaseController implements TokenControll
     @PostMapping(value = "/check")
     public Result checkRoleRoute(@RequestParam("url") String url) throws Exception {
         Result result = success();
-        int currentRoleId = getLoginInfo().getRole().getId();
+        List<Integer> rIdList = getLoginInfo().getRList();
         Map<String, Object> param = new HashMap<>();
-        param.put("roleId", currentRoleId);
+        param.put("roleIds", rIdList);
         param.put("url", CommonUtil.urlHandler(url));
         int count = this.roleRouteService.countRoleRoute(param);
         if (count == 0) {
