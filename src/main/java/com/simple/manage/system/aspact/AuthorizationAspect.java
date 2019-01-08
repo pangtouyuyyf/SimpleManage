@@ -2,7 +2,6 @@ package com.simple.manage.system.aspact;
 
 import com.simple.manage.system.config.SysConfig;
 import com.simple.manage.system.enums.SysExpEnum;
-import com.simple.manage.system.service.RoleAccessService;
 import com.simple.manage.system.util.CommonUtil;
 import com.simple.manage.system.util.LogUtil;
 import com.simple.manage.system.util.ResultUtil;
@@ -20,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,7 +59,7 @@ public class AuthorizationAspect {
             HttpServletRequest request = attributes.getRequest();
 
             String contextPath = request.getContextPath();
-            int roleId = RequestLoginContextHolder.getRequestLoginInfo().getRole().getId();
+            List<Integer> roleList = RequestLoginContextHolder.getRequestLoginInfo().getRList();
             String access = request.getRequestURI().toString();
 
             if (!StringUtil.isNullOrEmpty(contextPath) && !CommonUtil.BACKSLASH.equals(contextPath)) {
@@ -67,7 +67,7 @@ public class AuthorizationAspect {
             }
 
             Map<String, Object> params = new HashMap<>();
-            params.put("role_id", roleId);
+            params.put("role_id", roleList);
             params.put("access_url", access);
 //            int count = this.roleAccessService.countRoleAccess(params);
 
