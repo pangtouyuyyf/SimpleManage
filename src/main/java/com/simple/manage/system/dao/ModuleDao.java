@@ -85,10 +85,10 @@ public interface ModuleDao {
     int delModuleForReal(int moduleId);
 
     /**
-     * 查询角色可用菜单模块
+     * 查询个人可用菜单模块
      *
-     * @param roleId
+     * @param rIdList
      * @return
      */
-    List<Map<String, Object>> queryAvlMenuModuleList(int roleId);
+    List<Map<String, Object>> queryAvlMenuModuleList(List<Integer> rIdList);
 }
