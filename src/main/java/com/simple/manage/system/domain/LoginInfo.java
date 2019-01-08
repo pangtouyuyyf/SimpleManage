@@ -1,6 +1,5 @@
 package com.simple.manage.system.domain;
 
-import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import lombok.Data;
 
@@ -13,11 +12,11 @@ import java.util.List;
  **/
 @Data
 public class LoginInfo {
-    private String channel;
+    private String channel;  //登录渠道(web/app)
 
-    private int corpId;
+    private int corpId;  //公司主键
 
-    private User user;
+    private User user;  //个人信息
 
-    private List<Role> roleList;
+    private List<Integer> rList;  //角色主键集合
 }
