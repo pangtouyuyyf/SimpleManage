@@ -48,9 +48,6 @@ public class LoginController extends BaseController {
     private RoleService roleService;
 
     @Autowired
-    private OrgService orgService;
-
-    @Autowired
     private CorporationService corporationService;
 
     @Autowired
