@@ -78,12 +78,12 @@ public interface RoleDao {
     int delRoleForReal(int roleId);
 
     /**
-     * 查询当前用户登录角色
+     * 查询当前用户登录角色主键集合
      *
      * @param param
      * @return
      */
-    List<Role> queryCurUserRole(Map<String, Object> param);
+    List<Integer> queryCurUserRole(Map<String, Object> param);
 
     /**
      * 根据角色编码查询角色主键

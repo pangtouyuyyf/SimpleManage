@@ -163,12 +163,9 @@
         AND role_id = #{roleId}
     </select>
 
-    <select id="queryCurUserRole" parameterType="java.util.Map" resultMap="roleMap">
+    <select id="queryCurUserRole" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT
-            r.role_id,
-            r.role_code,
-            r.role_name,
-            r.corp_id
+            r.role_id
         FROM
         t_userrolelin ur,t_rolemst r
         WHERE 1 = 1
