@@ -56,14 +56,14 @@ public class RoleMenuController extends BaseController implements TokenControlle
     }
 
     /**
-     * 获取角色可用菜单
+     * 获取当前用户可用菜单
      *
      * @return
      */
     @GetMapping(value = "/queryAvlList")
     public Result queryAvlRoleMenuList() throws Exception {
-        int roleId = getLoginInfo().getRole().getId();
-        return this.success(this.roleMenuService.queryAvlRoleMenuList(roleId));
+        List<Integer> rIdList = getLoginInfo().getRList();
+        return this.success(this.roleMenuService.queryAvlRoleMenuList(rIdList));
     }
 
     /**
@@ -102,10 +102,12 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @PostMapping(value = "/code")
     public Result queryOperateByUrl(@RequestParam("url") String url) throws Exception {
-        int currentRoleId = getLoginInfo().getRole().getId();
+        List<Integer> rIdList = getLoginInfo().getRList();
         Map<String, Object> params = new HashMap<>();
         params.put("url", CommonUtil.urlHandler(url));
-        params.put("roleId", currentRoleId);
+        params.put("roleIds", rIdList);
+
+        //TODO
         return success(this.roleMenuService.queryMenuOperateCode(params));
     }
 }
