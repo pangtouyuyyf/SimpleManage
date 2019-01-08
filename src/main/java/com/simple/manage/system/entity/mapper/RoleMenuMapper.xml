@@ -100,7 +100,12 @@
         WHERE 1 = 1
             AND tr.menu_id = tm.menu_id
             AND tm.module_id = #{module_id}
-            AND tr.role_id = #{role_id}
+            <if test="roleIds != null">
+                <foreach collection="roleIds" item="item" open=" AND tr.role_id IN (" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
         ORDER BY
             tm.menu_order ASC
     </select>
