@@ -97,8 +97,12 @@
         AND t1.route_id = t2.route_id
         AND t2.is_delete = '0'
         AND t2.valid_sta = '0'
-        AND t1.role_id = #{roleId}
         AND t2.route_url = #{url}
+        <if test="roleIds != null">
+            <foreach collection="roleIds" item="item" open=" AND t1.role_id IN (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <select id="queryAllByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
