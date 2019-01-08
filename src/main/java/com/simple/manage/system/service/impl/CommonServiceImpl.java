@@ -1,19 +1,19 @@
 package com.simple.manage.system.service.impl;
 
-import com.simple.manage.system.dao.OrgDao;
 import com.simple.manage.system.dao.RoleDao;
 import com.simple.manage.system.dao.UserDao;
 import com.simple.manage.system.domain.LoginInfo;
 import com.simple.manage.system.domain.LoginInfoResult;
-import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.CommonService;
-import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Description 公共服务接口实现
@@ -31,55 +31,65 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private RoleDao roleDao;
 
-    @Autowired
-    private OrgDao orgDao;
-
     /**
      * 保存更新登录信息
      *
-     * @param userId
-     * @param roleId
-     * @param channel
+     * @param loginInfoKey 用户信息缓存主键
+     * @param userId       用户主键
+     * @param corpId       公司主键
+     * @param channel      登录渠道
      */
-    public LoginInfoResult saveLoginInfo(int userId, int roleId, String channel) {
+    public LoginInfoResult saveLoginInfo(String loginInfoKey, int userId, int corpId, String channel) {
+        LoginInfoResult loginInfoResult = new LoginInfoResult();
+
+        LoginInfo loginInfo = (LoginInfo) this.redisOperation.getObj(loginInfoKey);
+        if (loginInfo != null) {
+            loginInfoResult.setChecked(true);
+            loginInfoResult.setLoginInfo(loginInfo);
+            return loginInfoResult;
+        }
+
         Map<String, Object> param = new HashMap<>();
         param.put("user_id", userId);
         User user = this.userDao.queryUserEntity(param);
-        Role role = this.roleDao.queryRoleEntity(roleId);
-        return this.saveLoginInfo(user, role, channel);
+        param.put("corp_id", corpId);
+        List<Integer> rIdList = this.roleDao.queryCurUserRole(param);
+
+        return this.saveLoginInfo(loginInfoKey, user, rIdList, corpId, channel);
     }
 
     /**
      * 保存更新登录信息
      *
-     * @param user
-     * @param role
-     * @param channel
+     * @param loginInfoKey 用户信息缓存主键
+     * @param user         用户
+     * @param rIdList      角色主键集合
+     * @param corpId       公司主键
+     * @param channel      登录渠道
      */
-    public LoginInfoResult saveLoginInfo(User user, Role role, String channel) {
+    public LoginInfoResult saveLoginInfo(String loginInfoKey, User user, List<Integer> rIdList, int corpId, String channel) {
         LoginInfoResult loginInfoResult = new LoginInfoResult();
         //防止用户信息变更仍可以用原来缓存信息登录系统
-        if (user == null || role == null) {
+        if (user == null || rIdList == null || rIdList.isEmpty()) {
             loginInfoResult.setChecked(false);
             loginInfoResult.setLoginInfo(null);
             return loginInfoResult;
         }
 
-        List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
-        String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
-
         LoginInfo loginInfo = Optional.ofNullable((LoginInfo) this.redisOperation.getObj(loginInfoKey)).orElseGet(() -> {
             //保存当前登录信息
             LoginInfo temp = new LoginInfo();
             temp.setChannel(channel);
+            temp.setCorpId(corpId);
             temp.setUser(user);
-            temp.setRole(role);
+            temp.setRList(rIdList);
             this.redisOperation.setObj(loginInfoKey, temp);
             return temp;
         });
 
         loginInfoResult.setChecked(true);
         loginInfoResult.setLoginInfo(loginInfo);
+
         return loginInfoResult;
     }
 

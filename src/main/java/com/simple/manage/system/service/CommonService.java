@@ -1,8 +1,9 @@
 package com.simple.manage.system.service;
 
 import com.simple.manage.system.domain.LoginInfoResult;
-import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
+
+import java.util.List;
 
 /**
  * Description 公共服务接口
@@ -14,20 +15,23 @@ public interface CommonService {
     /**
      * 保存更新登录信息
      *
+     * @param loginInfoKey
      * @param userId
-     * @param roleId
+     * @param corpId
      * @param channel
      */
-    LoginInfoResult saveLoginInfo(int userId, int roleId, String channel);
+    LoginInfoResult saveLoginInfo(String loginInfoKey, int userId, int corpId, String channel);
 
     /**
      * 保存更新登录信息
      *
+     * @param loginInfoKey
      * @param user
-     * @param role
+     * @param rIdList
+     * @param corpId
      * @param channel
      */
-    LoginInfoResult saveLoginInfo(User user, Role role, String channel);
+    LoginInfoResult saveLoginInfo(String loginInfoKey, User user, List<Integer> rIdList, int corpId, String channel);
 
     /**
      * 批量删除登录信息
