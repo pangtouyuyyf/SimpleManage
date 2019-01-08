@@ -31,12 +31,12 @@ public interface RoleMenuService {
     List<Map<String, Object>> queryRoleMenuList(Map<String, Object> params);
 
     /**
-     * 查询角色可用菜单
+     * 查询当前用户可用菜单
      *
-     * @param roleId
+     * @param rIdList
      * @return
      */
-    List<Map<String, Object>> queryAvlRoleMenuList(int roleId);
+    List<Map<String, Object>> queryAvlRoleMenuList(List<Integer> rIdList);
 
     /**
      * 查询角色菜单操作
