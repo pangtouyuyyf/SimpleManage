@@ -239,11 +239,10 @@
                     AND tme.module_id = tmo.module_id
                     <if test="list != null">
                         <foreach item="item" collection="list" open=" AND tr.role_id IN (" separator="," close=")">
-                            #{roleIds}
+                            #{item}
                         </foreach>
                     </if>
             )
-        ORDER BY
-            tmo.module_order ASC
+        ORDER BY tmo.module_order ASC
     </select>
 </mapper>
