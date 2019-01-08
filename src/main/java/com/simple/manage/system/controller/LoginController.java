@@ -4,7 +4,6 @@ import com.simple.manage.system.annotation.TokenAnnotation;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.config.SysConfig;
 import com.simple.manage.system.domain.Result;
-import com.simple.manage.system.entity.Role;
 import com.simple.manage.system.entity.User;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.*;
@@ -91,13 +90,13 @@ public class LoginController extends BaseController {
         params.clear();
         params.put("user_id", user.getId());
         params.put("corp_id", corpId);
-        Role role = this.roleService.queryCurUserRole(params);
-        if (role == null) {
+        List<Integer> rIdList = this.roleService.queryCurUserRole(params);
+        if (rIdList == null || rIdList.isEmpty()) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户:" + user.getId() + " 角色查询失败");
             return this.fail("该用户没有角色");
         }
 
-        return this.success(loginOperate(user, role, channel), null);
+        return this.success(loginOperate(user, rIdList, corpId, channel), null);
     }
 
     /**
@@ -115,13 +114,13 @@ public class LoginController extends BaseController {
         }
 
         List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, channel,
-                Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getRole().getId()));
+                Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getCorpId()));
         this.redisOperation.deleteStr(String.join(CommonUtil.UNDERLINE, tokenKeyParts));
 
         if (sysConfig.isCleanLoginInfo()) {
             //清除当前登录信息缓存
             List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX,
-                    Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getRole().getId()));
+                    Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getCorpId()));
             this.redisOperation.deleteObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts));
         }
 
@@ -143,18 +142,24 @@ public class LoginController extends BaseController {
      * 登录通用操作
      *
      * @param user    用户信息
-     * @param role    角色信息
+     * @param rIdList 角色主键集合
+     * @param corpId  公司编号
      * @param channel 客户端渠道(app/web)
      * @return
      */
-    private String loginOperate(User user, Role role, String channel) {
+    private String loginOperate(User user, List<Integer> rIdList, int corpId, String channel) {
         //生成令牌
-        String token = this.jwtService.createJWT(Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
+        String token = this.jwtService.createJWT(Integer.toString(user.getId()), Integer.toString(corpId), channel);
 
         //生成令牌缓存主键
         List<String> tokenKeyParts = Arrays.asList(
-                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(role.getId()), channel);
+                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(corpId), channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
+
+        //生成个人信息缓存主键
+        List<String> loginInfoKeyParts = Arrays.asList(
+                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(corpId), channel);
+        String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
         //保存令牌
         if (CommonUtil.CHANNEL_WEB.equals(channel)) {
@@ -164,7 +169,7 @@ public class LoginController extends BaseController {
         }
 
         //保存当前登录信息
-        this.commonService.saveLoginInfo(user, role, channel);
+        this.commonService.saveLoginInfo(loginInfoKey, user, rIdList, corpId, channel);
 
         return token;
     }
