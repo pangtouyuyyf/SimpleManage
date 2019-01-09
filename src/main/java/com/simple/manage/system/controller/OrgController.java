@@ -37,10 +37,10 @@ public class OrgController extends BaseController implements TokenController {
      */
     @PostMapping(value = "/addOrUpd")
     public Result addOrUpdOrg(@RequestParam(value = "id", required = false) Integer id,
-                               @RequestParam("name") String name,
-                               @RequestParam(value = "parentId", required = false) Integer parentId,
-                               @RequestParam("order") Integer order,
-                               @RequestParam(value = "note", required = false) String note) throws Exception {
+                              @RequestParam("name") String name,
+                              @RequestParam(value = "parentId", required = false) Integer parentId,
+                              @RequestParam("order") Integer order,
+                              @RequestParam(value = "note", required = false) String note) throws Exception {
         Map<String, Object> org = new HashMap<>();
         org.put("org_id", id);
         org.put("org_name", name);
@@ -80,12 +80,12 @@ public class OrgController extends BaseController implements TokenController {
      */
     @GetMapping(value = "/queryList")
     public Result queryOrgList(@RequestParam(value = "parentId", required = false) Integer parentId,
-                                @RequestParam(value = "name", required = false) String name,
-                                @RequestParam("page") Integer page,
-                                @RequestParam("size") Integer size) throws Exception {
+                               @RequestParam(value = "name", required = false) String name,
+                               @RequestParam("page") Integer page,
+                               @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("org_name", name);
-        params.put("corp_id",getLoginInfo().getCorpId());
+        params.put("corp_id", getLoginInfo().getCorpId());
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
@@ -105,10 +105,16 @@ public class OrgController extends BaseController implements TokenController {
      */
     @GetMapping(value = "/queryTree")
     public Result queryOrgTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("corp_id", getLoginInfo().getCorpId());
+
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
-        List<Tree> tree = this.orgService.queryOrgRecursion(parentId);
+
+        params.put("org_id", parentId);
+
+        List<Tree> tree = this.orgService.queryOrgRecursion(params);
         return this.success(tree);
     }
 
