@@ -51,10 +51,10 @@ public interface OrgService {
     /**
      * 递归查询组织树
      *
-     * @param orgId
+     * @param param
      * @return
      */
-    List<Tree> queryOrgRecursion(int orgId);
+    List<Tree> queryOrgRecursion(Map<String, Object> param);
 
     /**
      * 查询组织树根主键
