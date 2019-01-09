@@ -108,4 +108,14 @@ public class OrgServiceImpl implements OrgService {
             }
         }
     }
+
+    /**
+     * 查询组织树根主键
+     *
+     * @param param
+     * @return
+     */
+    public int queryRootOrgId(Map<String, Object> param) {
+        return this.orgDao.queryRootOrgId(param);
+    }
 }

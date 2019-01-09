@@ -55,4 +55,12 @@ public interface OrgService {
      * @return
      */
     List<Tree> queryOrgRecursion(int orgId);
+
+    /**
+     * 查询组织树根主键
+     *
+     * @param param
+     * @return
+     */
+    int queryRootOrgId(Map<String, Object> param);
 }
