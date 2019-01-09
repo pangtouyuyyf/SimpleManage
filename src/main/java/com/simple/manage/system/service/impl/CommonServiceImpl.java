@@ -82,7 +82,7 @@ public class CommonServiceImpl implements CommonService {
             temp.setChannel(channel);
             temp.setCorpId(corpId);
             temp.setUser(user);
-            temp.setRolelist(rIdList);
+            temp.setRoleList(rIdList);
             this.redisOperation.setObj(loginInfoKey, temp);
             return temp;
         });

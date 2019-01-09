@@ -18,5 +18,5 @@ public class LoginInfo {
 
     private User user;  //个人信息
 
-    private List<Integer> rolelist;  //角色主键集合
+    private List<Integer> roleList;  //角色主键集合
 }
