@@ -15,7 +15,8 @@
         update_id,
         update_time,
         is_delete,
-        valid_sta
+        valid_sta,
+        corp_id
     </sql>
 
     <resultMap id="userMap" type="com.simple.manage.system.entity.User">
@@ -65,6 +66,9 @@
             <if test="create_time != null">
                 create_time,
             </if>
+            <if test="corp_id != null">
+                corp_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="user_name != null and user_name != ''">
@@ -93,6 +97,9 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
+            </if>
+            <if test="corp_id != null">
+                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -194,6 +201,7 @@
         <if test="email != null and email != ''">
             AND email LIKE CONCAT('%', #{email}, '%')
         </if>
+        AND corp_id = #{corp_id}
         ORDER BY user_id ASC
     </select>
 

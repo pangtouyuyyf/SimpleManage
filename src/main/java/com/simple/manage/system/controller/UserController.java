@@ -66,6 +66,7 @@ public class UserController extends BaseController implements TokenController {
         params.put("login_name", loginName);
         params.put("phone", phone);
         params.put("email", email);
+        params.put("corp_id", getLoginInfo().getCorpId());
         PageInfo pageInfo = this.userService.queryUserList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
