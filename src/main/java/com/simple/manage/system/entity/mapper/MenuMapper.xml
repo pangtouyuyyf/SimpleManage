@@ -175,6 +175,7 @@
         <if test="menu_note != null and menu_note != ''">
             AND t1.menu_note LIKE CONCAT('%', #{menu_note}, '%')
         </if>
+        AND t1.corp_id = #{corp_id}
         ORDER BY t2.module_order ASC,t1.menu_order ASC
     </select>
 
