@@ -59,8 +59,8 @@ public class AuthorizationAspect {
             HttpServletRequest request = attributes.getRequest();
 
             String contextPath = request.getContextPath();
-            List<Integer> roleList = RequestLoginContextHolder.getRequestLoginInfo().getRList();
-            String access = request.getRequestURI().toString();
+            List<Integer> roleList = RequestLoginContextHolder.getRequestLoginInfo().getRolelist();
+            String access = request.getRequestURI();
 
             if (!StringUtil.isNullOrEmpty(contextPath) && !CommonUtil.BACKSLASH.equals(contextPath)) {
                 access = access.substring(access.indexOf(contextPath) + contextPath.length(), access.length());

@@ -62,7 +62,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @GetMapping(value = "/queryAvlList")
     public Result queryAvlRoleMenuList() throws Exception {
-        List<Integer> rIdList = getLoginInfo().getRList();
+        List<Integer> rIdList = getLoginInfo().getRolelist();
         return this.success(this.roleMenuService.queryAvlRoleMenuList(rIdList));
     }
 
@@ -102,7 +102,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @PostMapping(value = "/code")
     public Result queryOperateByUrl(@RequestParam("url") String url) throws Exception {
-        List<Integer> rIdList = getLoginInfo().getRList();
+        List<Integer> rIdList = getLoginInfo().getRolelist();
         Map<String, Object> params = new HashMap<>();
         params.put("url", CommonUtil.urlHandler(url));
         params.put("roleIds", rIdList);
