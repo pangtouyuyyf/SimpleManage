@@ -79,11 +79,11 @@ public class OrgServiceImpl implements OrgService {
     /**
      * 递归查询组织树
      *
-     * @param orgId
+     * @param param
      * @return
      */
-    public List<Tree> queryOrgRecursion(int orgId) {
-        List<Tree> tree = this.orgDao.queryOrgRecursion(orgId);
+    public List<Tree> queryOrgRecursion(Map<String, Object> param) {
+        List<Tree> tree = this.orgDao.queryOrgRecursion(param);
         if (tree != null && !tree.isEmpty()) {
             for (Tree node : tree) {
                 setLeaf(node);
