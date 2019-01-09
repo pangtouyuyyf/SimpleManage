@@ -176,18 +176,22 @@
         <id property="key" column="org_id"></id>
         <result property="title" column="org_name"></result>
         <!--查到的id作为下次的pid-->
-        <collection property="children" select="queryOrgRecursion" column="org_id"></collection>
+        <collection property="children" select="queryOrgRecursion" column="{org_id=org_id}"></collection>
     </resultMap>
 
-    <select id="queryOrgRecursion" parameterType="java.lang.Integer" resultMap="getSelf">
+    <select id="queryOrgRecursion" parameterType="java.util.Map" resultMap="getSelf">
         SELECT
             org_id,
-            org_name
+            org_name,
+            corp_id
         FROM t_orgmst
         WHERE 1 = 1
         AND is_delete = '0'
         AND valid_sta ='0'
-        AND parent_id = #{orgId}
+        AND parent_id = #{org_id}
+        <if test="corp_id != null">
+            AND corp_id = #{corp_id}
+        </if>
         ORDER BY org_order ASC
     </select>
 
@@ -199,6 +203,6 @@
         AND is_delete = '0'
         AND valid_sta ='0'
         AND parent_id = #{parent_id}
-        and corp_id = #{corp_id}
+        AND corp_id = #{corp_id}
     </select>
 </mapper>
