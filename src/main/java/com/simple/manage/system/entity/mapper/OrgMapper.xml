@@ -190,4 +190,15 @@
         AND parent_id = #{orgId}
         ORDER BY org_order ASC
     </select>
+
+    <select id="queryRootOrgId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            org_id
+        FROM t_orgmst
+        WHERE 1 = 1
+        AND is_delete = '0'
+        AND valid_sta ='0'
+        AND parent_id = #{parent_id}
+        and corp_id = #{corp_id}
+    </select>
 </mapper>
