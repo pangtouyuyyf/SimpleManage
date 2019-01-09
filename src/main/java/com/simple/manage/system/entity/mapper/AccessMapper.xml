@@ -171,6 +171,7 @@
         <if test="access_note != null and access_note != ''">
             AND access_note LIKE CONCAT('%', #{access_note}, '%')
         </if>
+        AND corp_id = #{corp_id}
         ORDER BY access_order ASC
     </select>
 

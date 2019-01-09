@@ -173,7 +173,7 @@
         <if test="route_note != null and route_note != ''">
             AND t1.route_note LIKE CONCAT('%', #{route_note}, '%')
         </if>
-        and t1.corp_id = #{corp_id}
+        AND t1.corp_id = #{corp_id}
         ORDER BY t2.module_order ASC,t1.route_order ASC
     </select>
 
