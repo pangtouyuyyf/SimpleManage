@@ -49,7 +49,7 @@ public interface OrgService {
     PageInfo queryOrgList(Map<String, Object> param, int page, int size);
 
     /**
-     * 查询链接
+     * 递归查询组织树
      *
      * @param orgId
      * @return

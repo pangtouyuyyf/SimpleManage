@@ -77,7 +77,7 @@ public class OrgServiceImpl implements OrgService {
     }
 
     /**
-     * 查询链接
+     * 递归查询组织树
      *
      * @param orgId
      * @return
