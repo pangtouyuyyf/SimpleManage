@@ -196,9 +196,7 @@
         <if test="role_name != null and role_name != ''">
             AND t1.role_name LIKE CONCAT('%', #{role_name}, '%')
         </if>
-        <if test="corp_id != null">
-            AND t1.corp_id = #{corp_id}
-        </if>
+        AND t1.corp_id = #{corp_id}
         ORDER BY t1.role_order ASC
     </select>
 
