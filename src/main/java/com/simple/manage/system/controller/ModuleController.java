@@ -49,6 +49,7 @@ public class ModuleController extends BaseController implements TokenController 
         Map<String, Object> params = new HashMap<>();
         params.put("module_name", name);
         params.put("module_type", type);
+        params.put("corp_id", getLoginInfo().getCorpId());
         PageInfo pageInfo = this.moduleService.queryModuleList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());

@@ -167,6 +167,7 @@
         <if test="module_note != null and module_note !=''">
             AND module_note LIKE CONCAT('%', #{module_note}, '%')
         </if>
+        AND corp_id = #{corp_id}
         ORDER BY module_type ASC,module_order ASC
     </select>
 
