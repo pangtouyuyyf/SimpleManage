@@ -86,12 +86,12 @@ public class TokenVerifyAspect {
 
         /** 获取令牌中的用户、角色和登录渠道 **/
         String userId = jwt.getClaim(CommonUtil.USER_ID).asString();
-        String corpId = jwt.getClaim(CommonUtil.CORP_ID).asString();
+        String orgId = jwt.getClaim(CommonUtil.ORG_ID).asString();
         String channel = jwt.getClaim(CommonUtil.CHANNEL).asString();
 
         /** 验证令牌参数 **/
         if (StringUtil.isNullOrEmpty(userId)
-                || StringUtil.isNullOrEmpty(corpId)
+                || StringUtil.isNullOrEmpty(orgId)
                 || StringUtil.isNullOrEmpty(channel)
                 || !(CommonUtil.CHANNEL_WEB.equals(channel) || CommonUtil.CHANNEL_APP.equals(channel))) {
             LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 令牌参数有误");
@@ -99,7 +99,7 @@ public class TokenVerifyAspect {
         }
 
         /** 获取服务器缓存令牌 **/
-        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, corpId, channel);
+        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, orgId, channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
         String tokenRedis = this.redisOperation.getStr(tokenRedisKey);
 
@@ -139,12 +139,12 @@ public class TokenVerifyAspect {
 
         /** 生成个人信息缓存主键 **/
         List<String> loginInfoKeyParts = Arrays.asList(
-                CommonUtil.LOGIN_INFO_PREFIX, userId, corpId, channel);
+                CommonUtil.LOGIN_INFO_PREFIX, userId, orgId, channel);
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
 
         /** 将登录数据写入ThreadLocal **/
-        LoginInfoResult loginInfoResult = this.commonService.saveLoginInfo(loginInfoKey, Integer.valueOf(userId), Integer.valueOf(corpId), channel);
+        LoginInfoResult loginInfoResult = this.commonService.saveLoginInfo(loginInfoKey, Integer.valueOf(userId), Integer.valueOf(orgId), channel);
         if (!loginInfoResult.isChecked()) {
             LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 没有登录信息缓存");
             return ResultUtil.error(SysExpEnum.NO_LOGIN_INFO);
