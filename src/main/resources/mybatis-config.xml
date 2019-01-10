@@ -22,6 +22,7 @@
         <mapper resource="com/simple/manage/system/entity/mapper/UserMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RoleMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/UserRoleMapper.xml"></mapper>
+        <mapper resource="com/simple/manage/system/entity/mapper/UserCorpMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/OrgMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/ModuleMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/MenuMapper.xml"></mapper>
