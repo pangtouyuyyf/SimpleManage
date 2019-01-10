@@ -66,7 +66,7 @@ public class RoleRouteController extends BaseController implements TokenControll
         Result result = success();
         Map<String, Object> param = new HashMap<>();
         param.put("roleIds", getLoginInfo().getRoleList());
-        param.put("corp_id", getLoginInfo().getCorpId());
+        param.put("corp_id", getLoginInfo().getUser().getCorpId());
         param.put("url", CommonUtil.urlHandler(url));
         int count = this.roleRouteService.countRoleRoute(param);
         if (count == 0) {
