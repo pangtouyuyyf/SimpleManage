@@ -48,7 +48,7 @@ public class LoginController extends BaseController {
     private RoleService roleService;
 
     @Autowired
-    private CorporationService corporationService;
+    private OrgService orgService;
 
     @Autowired
     private CommonService commonService;
@@ -132,7 +132,7 @@ public class LoginController extends BaseController {
      */
     @GetMapping(value = "/logCorp")
     public Result logOrg(@RequestParam("loginName") String loginName) throws Exception {
-        return success(this.corporationService.queryCorpListByLoginName(loginName));
+        return success(this.orgService.queryOrgListByLoginName(loginName));
     }
 
     /**
