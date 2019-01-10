@@ -130,7 +130,7 @@ public class LoginController extends BaseController {
      * @param loginName 登录名
      * @return
      */
-    @GetMapping(value = "/logCorp")
+    @GetMapping(value = "/logOrg")
     public Result logOrg(@RequestParam("loginName") String loginName) throws Exception {
         return success(this.orgService.queryOrgListByLoginName(loginName));
     }
