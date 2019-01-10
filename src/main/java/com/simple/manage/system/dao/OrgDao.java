@@ -77,4 +77,12 @@ public interface OrgDao {
      * @return
      */
     int queryRootOrgId(Map<String, Object> param);
+
+    /**
+     * 根据登录用户查询组织列表
+     *
+     * @param loginName
+     * @return
+     */
+    List<Map<String, Object>> queryOrgListByLoginName(String loginName);
 }

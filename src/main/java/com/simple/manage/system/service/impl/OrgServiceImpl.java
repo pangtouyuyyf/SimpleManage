@@ -118,4 +118,14 @@ public class OrgServiceImpl implements OrgService {
     public int queryRootOrgId(Map<String, Object> param) {
         return this.orgDao.queryRootOrgId(param);
     }
+
+    /**
+     * 根据登录用户查询组织列表
+     *
+     * @param loginName
+     * @return
+     */
+    public List<Map<String, Object>> queryOrgListByLoginName(String loginName) {
+        return this.orgDao.queryOrgListByLoginName(loginName);
+    }
 }
