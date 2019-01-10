@@ -14,8 +14,6 @@ import java.util.List;
 public class LoginInfo {
     private String channel;  //登录渠道(web/app)
 
-    private int corpId;  //公司主键
-
     private int orgId;  //当前租户子分公司主键
 
     private User user;  //个人信息
