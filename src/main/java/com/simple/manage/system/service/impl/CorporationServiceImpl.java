@@ -236,14 +236,4 @@ public class CorporationServiceImpl implements CorporationService {
     public int delCorpForReal(int corpId) {
         return this.corporationDao.delCorpForReal(corpId);
     }
-
-    /**
-     * 根据登录用户查询公司列表
-     *
-     * @param loginName
-     * @return
-     */
-    public List<Map<String, Object>> queryCorpListByLoginName(String loginName) {
-        return this.corporationDao.queryCorpListByLoginName(loginName);
-    }
 }
