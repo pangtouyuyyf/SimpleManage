@@ -49,7 +49,7 @@ public class AccessController extends BaseController implements TokenController 
         Map<String, Object> params = new HashMap<>();
         params.put("access_name", name);
         params.put("module_id", moduleId);
-        params.put("corp_id", getLoginInfo().getCorpId());
+        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         PageInfo pageInfo = this.accessService.queryAccessList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());

@@ -85,7 +85,7 @@ public class OrgController extends BaseController implements TokenController {
                                @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("org_name", name);
-        params.put("corp_id", getLoginInfo().getCorpId());
+        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
@@ -106,7 +106,7 @@ public class OrgController extends BaseController implements TokenController {
     @GetMapping(value = "/queryTree")
     public Result queryOrgTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("corp_id", getLoginInfo().getCorpId());
+        params.put("corp_id", getLoginInfo().getUser().getCorpId());
 
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
