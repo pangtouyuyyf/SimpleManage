@@ -56,16 +56,16 @@ public class LoginController extends BaseController {
     /**
      * 系统登录
      *
-     * @param loginName 登录名
+     * @param loginName 登录名(手机号)
      * @param password  密码
-     * @param corpId    公司主键
+     * @param orgId     组织主键
      * @param channel   客户端渠道(app/web)
      * @return
      */
     @GetMapping(value = "/login")
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("password") String password,
-                        @RequestParam("corpId") Integer corpId,
+                        @RequestParam("orgId") Integer orgId,
                         @RequestParam("channel") String channel) throws Exception {
         if (!CommonUtil.CHANNEL_WEB.equals(channel) && !CommonUtil.CHANNEL_APP.equals(channel)) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 登录参数有误");
@@ -73,7 +73,7 @@ public class LoginController extends BaseController {
         }
 
         Map<String, Object> params = new HashMap<>();
-        params.put("login_name", loginName);
+        params.put("phone", loginName);
         params.put("password", password);
 
         //查询用户
@@ -86,14 +86,14 @@ public class LoginController extends BaseController {
         //查询当前登录用户角色
         params.clear();
         params.put("user_id", user.getId());
-        params.put("corp_id", corpId);
+        params.put("org_id", orgId);
         List<Integer> rIdList = this.roleService.queryCurUserRole(params);
         if (rIdList == null || rIdList.isEmpty()) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户:" + user.getId() + " 角色查询失败");
             return this.fail("该用户没有角色");
         }
 
-        return this.success(loginOperate(user, rIdList, corpId, channel), null);
+        return this.success(loginOperate(user, rIdList, orgId, channel), null);
     }
 
     /**
@@ -111,13 +111,13 @@ public class LoginController extends BaseController {
         }
 
         List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, channel,
-                Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getCorpId()));
+                Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getOrgId()));
         this.redisOperation.deleteStr(String.join(CommonUtil.UNDERLINE, tokenKeyParts));
 
         if (sysConfig.isCleanLoginInfo()) {
             //清除当前登录信息缓存
             List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX,
-                    Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getCorpId()));
+                    Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getOrgId()));
             this.redisOperation.deleteObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts));
         }
 
@@ -140,22 +140,22 @@ public class LoginController extends BaseController {
      *
      * @param user    用户信息
      * @param rIdList 角色主键集合
-     * @param corpId  公司编号
+     * @param orgId   公司编号
      * @param channel 客户端渠道(app/web)
      * @return
      */
-    private String loginOperate(User user, List<Integer> rIdList, int corpId, String channel) {
+    private String loginOperate(User user, List<Integer> rIdList, int orgId, String channel) {
         //生成令牌
-        String token = this.jwtService.createJWT(Integer.toString(user.getId()), Integer.toString(corpId), channel);
+        String token = this.jwtService.createJWT(Integer.toString(user.getId()), Integer.toString(orgId), channel);
 
         //生成令牌缓存主键
         List<String> tokenKeyParts = Arrays.asList(
-                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(corpId), channel);
+                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(orgId), channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
 
         //生成个人信息缓存主键
         List<String> loginInfoKeyParts = Arrays.asList(
-                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(corpId), channel);
+                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(orgId), channel);
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
         //保存令牌
@@ -166,7 +166,7 @@ public class LoginController extends BaseController {
         }
 
         //保存当前登录信息
-        this.commonService.saveLoginInfo(loginInfoKey, user, rIdList, corpId, channel);
+        this.commonService.saveLoginInfo(loginInfoKey, user, rIdList, orgId, channel);
 
         return token;
     }
