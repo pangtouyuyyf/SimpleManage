@@ -45,8 +45,8 @@ public class CommonUtil {
     //用户ID标识字段
     public static final String USER_ID = "id";
 
-    //公司ID标识字段
-    public static final String CORP_ID = "cId";
+    //组织ID标识字段
+    public static final String ORG_ID = "oId";
 
     //令牌命名前缀
     public static final String TOKEN_PREFIX = "token";
