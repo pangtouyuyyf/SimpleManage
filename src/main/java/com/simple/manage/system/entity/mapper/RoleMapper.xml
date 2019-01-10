@@ -7,6 +7,7 @@
         role_name,
         role_order,
         role_note,
+        org_id,
         exta,
         extb,
         create_id,
@@ -22,7 +23,7 @@
         <id property="id" column="role_id" javaType="java.lang.Integer"/>
         <result property="code" column="role_code" javaType="java.lang.String"/>
         <result property="name" column="role_name" javaType="java.lang.String"/>
-        <result property="orgId" column="corp_id" javaType="java.lang.Integer"/>
+        <result property="orgId" column="org_id" javaType="java.lang.Integer"/>
     </resultMap>
 
     <select id="checkRole" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -48,8 +49,8 @@
             <if test="role_note != null and role_note != ''">
                 role_note,
             </if>
-            <if test="corp_id != null">
-                corp_id,
+            <if test="org_id != null">
+                org_id,
             </if>
             <if test="exta != null and exta != ''">
                 exta,
@@ -80,8 +81,8 @@
             <if test="role_note != null and role_note != ''">
                 #{role_note},
             </if>
-            <if test="corp_id != null">
-                #{corp_id},
+            <if test="org_id != null">
+                #{org_id},
             </if>
             <if test="exta != null and exta != ''">
                 #{exta},
@@ -116,8 +117,8 @@
             <if test="role_note != null and role_note != ''">
                 role_note = #{role_note},
             </if>
-            <if test="corp_id != null">
-                corp_id = #{corp_id},
+            <if test="org_id != null">
+                org_id = #{org_id},
             </if>
             <if test="exta != null and exta != ''">
                 exta = #{exta},
@@ -172,7 +173,7 @@
         AND r.is_delete = '0' AND r.valid_sta ='0'
         AND ur.role_id = r.role_id
         AND ur.user_id = #{user_id}
-        AND r.corp_id = #{corp_id}
+        AND r.org_id = #{org_id}
     </select>
 
     <select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
