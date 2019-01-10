@@ -36,10 +36,10 @@ public class CommonServiceImpl implements CommonService {
      *
      * @param loginInfoKey 用户信息缓存主键
      * @param userId       用户主键
-     * @param corpId       公司主键
+     * @param orgId        公司主键
      * @param channel      登录渠道
      */
-    public LoginInfoResult saveLoginInfo(String loginInfoKey, int userId, int corpId, String channel) {
+    public LoginInfoResult saveLoginInfo(String loginInfoKey, int userId, int orgId, String channel) {
         LoginInfoResult loginInfoResult = new LoginInfoResult();
 
         LoginInfo loginInfo = (LoginInfo) this.redisOperation.getObj(loginInfoKey);
@@ -52,10 +52,10 @@ public class CommonServiceImpl implements CommonService {
         Map<String, Object> param = new HashMap<>();
         param.put("user_id", userId);
         User user = this.userDao.queryUserEntity(param);
-        param.put("corp_id", corpId);
+        param.put("org_id", orgId);
         List<Integer> rIdList = this.roleDao.queryCurUserRole(param);
 
-        return this.saveLoginInfo(loginInfoKey, user, rIdList, corpId, channel);
+        return this.saveLoginInfo(loginInfoKey, user, rIdList, orgId, channel);
     }
 
     /**
@@ -64,10 +64,10 @@ public class CommonServiceImpl implements CommonService {
      * @param loginInfoKey 用户信息缓存主键
      * @param user         用户
      * @param rIdList      角色主键集合
-     * @param corpId       公司主键
+     * @param orgId        公司主键
      * @param channel      登录渠道
      */
-    public LoginInfoResult saveLoginInfo(String loginInfoKey, User user, List<Integer> rIdList, int corpId, String channel) {
+    public LoginInfoResult saveLoginInfo(String loginInfoKey, User user, List<Integer> rIdList, int orgId, String channel) {
         LoginInfoResult loginInfoResult = new LoginInfoResult();
         //防止用户信息变更仍可以用原来缓存信息登录系统
         if (user == null || rIdList == null || rIdList.isEmpty()) {
@@ -80,7 +80,7 @@ public class CommonServiceImpl implements CommonService {
             //保存当前登录信息
             LoginInfo temp = new LoginInfo();
             temp.setChannel(channel);
-            temp.setCorpId(corpId);
+            temp.setOrgId(orgId);
             temp.setUser(user);
             temp.setRoleList(rIdList);
             this.redisOperation.setObj(loginInfoKey, temp);
