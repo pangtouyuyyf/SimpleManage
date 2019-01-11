@@ -1,5 +1,7 @@
 package com.simple.manage.system.service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,42 +13,19 @@ import java.util.Map;
 
 public interface UserOrgService {
     /**
-     * 批量添加用户组织关系
-     *
-     * @param userOrg
-     * @return
-     */
-    int addUserOrg(List<Map<String, Object>> userOrg);
-
-    /**
-     * 查询用户组织关系
-     *
-     * @param params
-     * @return
-     */
-    List<Map<String, Integer>> queryAll(Map<String, Object> params);
-
-    /**
-     * 批量删除用户组织关系
-     *
-     * @param userOrg
-     * @return
-     */
-    int delUserOrgBatch(List<Map<String, Integer>> userOrg);
-
-    /**
-     * 删除用户组织关系
-     *
-     * @param params
-     * @return
-     */
-    int delUserOrg(Map<String, Object> params);
-
-    /**
      * 查询用户组织关联
      *
      * @param params
      * @return
      */
     List<Map<String, Integer>> queryUserOrgList(Map<String, Object> params);
+
+    /**
+     * 保存用户组织信息
+     *
+     * @param currentUserId
+     * @param obj
+     * @return
+     */
+    int saveUserOrg(int currentUserId, JSONObject obj);
 }
