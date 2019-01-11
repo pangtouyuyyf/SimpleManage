@@ -13,7 +13,7 @@ import java.util.Map;
 @Mapper
 public interface UserOrgDao {
     /**
-     * 批量添加用户公司关系
+     * 批量添加用户组织关系
      *
      * @param userOrg
      * @return
@@ -21,7 +21,7 @@ public interface UserOrgDao {
     int addUserOrg(List<Map<String, Object>> userOrg);
 
     /**
-     * 查询用户公司关系
+     * 查询用户组织关系
      *
      * @param params
      * @return
@@ -29,7 +29,7 @@ public interface UserOrgDao {
     List<Map<String, Integer>> queryAll(Map<String, Object> params);
 
     /**
-     * 批量删除用户公司关系
+     * 批量删除用户组织关系
      *
      * @param userOrg
      * @return
@@ -37,10 +37,18 @@ public interface UserOrgDao {
     int delUserOrgBatch(List<Map<String, Integer>> userOrg);
 
     /**
-     * 删除用户公司关系
+     * 删除用户组织关系
      *
      * @param params
      * @return
      */
     int delUserOrg(Map<String, Object> params);
+
+    /**
+     * 查询用户组织关联
+     *
+     * @param params
+     * @return
+     */
+    List<Map<String, Integer>> queryUserOrgList(Map<String, Object> params);
 }

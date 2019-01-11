@@ -19,7 +19,7 @@ public class UserOrgServiceImpl implements UserOrgService {
     private UserOrgDao userOrgDao;
 
     /**
-     * 批量添加用户公司关系
+     * 批量添加用户组织关系
      *
      * @param userOrg
      * @return
@@ -29,7 +29,7 @@ public class UserOrgServiceImpl implements UserOrgService {
     }
 
     /**
-     * 查询用户公司关系
+     * 查询用户组织关系
      *
      * @param params
      * @return
@@ -39,7 +39,7 @@ public class UserOrgServiceImpl implements UserOrgService {
     }
 
     /**
-     * 批量删除用户公司关系
+     * 批量删除用户组织关系
      *
      * @param userOrg
      * @return
@@ -49,12 +49,22 @@ public class UserOrgServiceImpl implements UserOrgService {
     }
 
     /**
-     * 删除用户公司关系
+     * 删除用户组织关系
      *
      * @param params
      * @return
      */
     public int delUserOrg(Map<String, Object> params) {
         return this.userOrgDao.delUserOrg(params);
+    }
+
+    /**
+     * 查询用户组织关联
+     *
+     * @param params
+     * @return
+     */
+    public List<Map<String, Integer>> queryUserOrgList(Map<String, Object> params) {
+        return this.userOrgDao.queryUserOrgList(params);
     }
 }
