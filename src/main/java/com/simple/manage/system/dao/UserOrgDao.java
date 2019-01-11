@@ -15,10 +15,10 @@ public interface UserOrgDao {
     /**
      * 批量添加用户公司关系
      *
-     * @param userCorp
+     * @param userOrg
      * @return
      */
-    int addUserCorp(List<Map<String, Object>> userCorp);
+    int addUserOrg(List<Map<String, Object>> userOrg);
 
     /**
      * 查询用户公司关系

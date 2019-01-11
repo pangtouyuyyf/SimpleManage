@@ -4,53 +4,53 @@
     <sql id="baseColumnList">
         id,
         user_id,
-        corp_id,
+        org_id,
         create_id,
         create_time
     </sql>
 
-    <insert id="addUserCorp" parameterType="java.util.List">
-        INSERT INTO t_usercorplin
-        (user_id,corp_id,create_id,create_time)
+    <insert id="addUserOrg" parameterType="java.util.List">
+        INSERT INTO t_userorglin
+        (user_id,org_id,create_id,create_time)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.user_id},#{item.corp_id},#{item.create_id},#{item.create_time})
+            (#{item.user_id},#{item.org_id},#{item.create_id},#{item.create_time})
         </foreach>
     </insert>
 
     <select id="queryAll" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
             user_id,
-            corp_id
-        FROM t_usercorplin
+            org_id
+        FROM t_userorglin
         WHERE 1 = 1
         <if test="user_id != null">
             AND user_id = #{user_id}
         </if>
-        <if test="corp_id != null">
-            AND corp_id = #{corp_id}
+        <if test="org_id != null">
+            AND org_id = #{org_id}
         </if>
     </select>
 
-    <delete id="delUserCorpBatch" parameterType="java.util.List">
+    <delete id="delUserOrgBatch" parameterType="java.util.List">
         DELETE FROM
-        t_usercorplin
-        WHERE 1 = 1 AND (user_id,corp_id) IN
+        t_userorglin
+        WHERE 1 = 1 AND (user_id,org_id) IN
         <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
-            (#{item.user_id},#{item.corp_id})
+            (#{item.user_id},#{item.org_id})
         </foreach>
     </delete>
 
-    <delete id="delUserCorp" parameterType="java.util.Map">
+    <delete id="delUserOrg" parameterType="java.util.Map">
         DELETE
         FROM
-        t_usercorplin
+        t_userorglin
         WHERE 1 = 1
         <if test="user_id != null">
             AND user_id = #{user_id}
         </if>
-        <if test="corp_id != null">
-            AND corp_id = #{corp_id}
+        <if test="org_id != null">
+            AND org_id = #{org_id}
         </if>
     </delete>
 </mapper>
