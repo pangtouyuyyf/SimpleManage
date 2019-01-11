@@ -78,5 +78,5 @@ public interface OrgService {
      * @param param
      * @return
      */
-    List<Tree> querySelectedOrg(Map<String, Object> param);
+    List<Map<String, Object>> querySelectedOrg(Map<String, Object> param);
 }

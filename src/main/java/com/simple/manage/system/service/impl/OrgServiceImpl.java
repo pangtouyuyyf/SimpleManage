@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Description 组织数据服务接口实现
@@ -135,7 +136,10 @@ public class OrgServiceImpl implements OrgService {
      * @param param
      * @return
      */
-    public List<Tree> querySelectedOrg(Map<String, Object> param) {
-        return this.orgDao.querySelectedOrg(param);
+    public List<Map<String, Object>> querySelectedOrg(Map<String, Object> param) {
+        List<Map<String, Object>> list = this.orgDao.querySelectedOrg(param);
+        return list.stream().peek(temp -> {
+            temp.put("isLeaf", true);
+        }).collect(Collectors.toList());
     }
 }
