@@ -226,4 +226,15 @@
         ORDER BY
             t3.org_order ASC
     </select>
+
+    <select id="querySelectedOrg" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            t1.org_id AS "key",
+            t1.org_name AS "title"
+        FROM t_orgmst t1
+        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        AND t1.parent_id = #{parent_id}
+        AND EXISTS(SELECT id FROM t_userorglin t2 WHERE t1.org_id = t2.org_id AND t2.user_id = #{user_id})
+        ORDER BY t1.org_order ASC
+    </select>
 </mapper>

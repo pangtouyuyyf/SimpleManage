@@ -128,4 +128,24 @@ public class OrgController extends BaseController implements TokenController {
     public Result delOrg(@RequestParam("id") Integer id) throws Exception {
         return success();
     }
+
+    /**
+     * 查询一选择的
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/querySelectTree")
+    public Result querySelectedOrg(@RequestParam("userId") Integer userId){
+        Map<String, Object> param = new HashMap<>();
+        param.put("parent_id", CommonUtil.TREE_ROOT_PARENT_ID);
+        param.put("corp_id", getLoginInfo().getUser().getCorpId());
+
+        int rootId = this.orgService.queryRootOrgId(param);
+
+        param.clear();
+        param.put("user_id", userId);
+        param.put("parent_id", rootId);
+
+        return success(this.orgService.querySelectedOrg(param));
+    }
 }

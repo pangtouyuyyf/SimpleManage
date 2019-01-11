@@ -71,4 +71,12 @@ public interface OrgService {
      * @return
      */
     List<Map<String, Object>> queryOrgListByLoginName(String loginName);
+
+    /**
+     * 查询已选择的组织
+     *
+     * @param param
+     * @return
+     */
+    List<Tree> querySelectedOrg(Map<String, Object> param);
 }
