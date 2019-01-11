@@ -11,7 +11,7 @@ import java.util.Map;
  * CreateTime 2019-01-10 9:10
  **/
 @Mapper
-public interface UserCorpDao {
+public interface UserOrgDao {
     /**
      * 批量添加用户公司关系
      *
