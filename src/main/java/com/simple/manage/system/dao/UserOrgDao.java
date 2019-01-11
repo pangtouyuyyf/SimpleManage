@@ -31,10 +31,10 @@ public interface UserOrgDao {
     /**
      * 批量删除用户公司关系
      *
-     * @param roleAccess
+     * @param userOrg
      * @return
      */
-    int delUserCorpBatch(List<Map<String, Integer>> roleAccess);
+    int delUserOrgBatch(List<Map<String, Integer>> userOrg);
 
     /**
      * 删除用户公司关系
@@ -42,5 +42,5 @@ public interface UserOrgDao {
      * @param params
      * @return
      */
-    int delUserCorp(Map<String, Object> params);
+    int delUserOrg(Map<String, Object> params);
 }
