@@ -99,6 +99,7 @@ public class UserController extends BaseController implements TokenController {
         user.put("create_time", LocalDateTime.now());
         user.put("update_id", getLoginInfo().getUser().getId());
         user.put("update_time", LocalDateTime.now());
+        user.put("corp_id", getLoginInfo().getUser().getCorpId());
         if (id == null) {
             //新增用户默认密码
             user.put("password", sysConfig.getPassword());

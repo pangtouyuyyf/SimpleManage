@@ -85,6 +85,7 @@ public class AccessController extends BaseController implements TokenController 
         access.put("create_time", LocalDateTime.now());
         access.put("update_id", getLoginInfo().getUser().getId());
         access.put("update_time", LocalDateTime.now());
+        access.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.accessService.addOrUpdAccess(access);
         return success();
     }

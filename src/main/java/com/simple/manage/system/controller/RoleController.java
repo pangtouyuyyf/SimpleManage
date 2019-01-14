@@ -87,7 +87,7 @@ public class RoleController extends BaseController implements TokenController {
         role.put("create_time", LocalDateTime.now());
         role.put("update_id", getLoginInfo().getUser().getId());
         role.put("update_time", LocalDateTime.now());
-
+        role.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.roleService.addOrUpdRole(role);
         return success();
     }

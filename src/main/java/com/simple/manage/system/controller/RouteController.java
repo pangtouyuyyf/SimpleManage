@@ -74,18 +74,19 @@ public class RouteController extends BaseController implements TokenController {
                                 @RequestParam("url") String url,
                                 @RequestParam("order") Integer order,
                                 @RequestParam(value = "note", required = false) String note) throws Exception {
-        Map<String, Object> Route = new HashMap<>();
-        Route.put("route_id", id);
-        Route.put("module_id", moduleId);
-        Route.put("route_name", name);
-        Route.put("route_url", url.trim());
-        Route.put("route_order", order);
-        Route.put("route_note", note);
-        Route.put("create_id", getLoginInfo().getUser().getId());
-        Route.put("create_time", LocalDateTime.now());
-        Route.put("update_id", getLoginInfo().getUser().getId());
-        Route.put("update_time", LocalDateTime.now());
-        this.routeService.addOrUpdRoute(Route);
+        Map<String, Object> route = new HashMap<>();
+        route.put("route_id", id);
+        route.put("module_id", moduleId);
+        route.put("route_name", name);
+        route.put("route_url", url.trim());
+        route.put("route_order", order);
+        route.put("route_note", note);
+        route.put("create_id", getLoginInfo().getUser().getId());
+        route.put("create_time", LocalDateTime.now());
+        route.put("update_id", getLoginInfo().getUser().getId());
+        route.put("update_time", LocalDateTime.now());
+        route.put("corp_id", getLoginInfo().getUser().getCorpId());
+        this.routeService.addOrUpdRoute(route);
         return success();
     }
 

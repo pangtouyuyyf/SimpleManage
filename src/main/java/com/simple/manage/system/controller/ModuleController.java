@@ -85,6 +85,7 @@ public class ModuleController extends BaseController implements TokenController 
         module.put("create_time", LocalDateTime.now());
         module.put("update_id", getLoginInfo().getUser().getId());
         module.put("update_time", LocalDateTime.now());
+        module.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.moduleService.addOrUpdModule(module);
         return success();
     }
@@ -109,6 +110,7 @@ public class ModuleController extends BaseController implements TokenController 
      */
     @GetMapping(value = "/queryDictByType")
     public Result queryModuleDataDictByType(@RequestParam("type") String type) throws Exception {
+        //TODO
         return success(this.moduleService.queryModuleDataDictByType(type));
     }
 
@@ -120,6 +122,7 @@ public class ModuleController extends BaseController implements TokenController 
      */
     @GetMapping(value = "/queryTreeByType")
     public Result queryModuleTreeByType(@RequestParam("type") String type) throws Exception {
+        //TODO
         return success(this.moduleService.queryModuleTreeByType(type));
     }
 }

@@ -85,6 +85,7 @@ public class MenuController extends BaseController implements TokenController {
         menu.put("create_time", LocalDateTime.now());
         menu.put("update_id", getLoginInfo().getUser().getId());
         menu.put("update_time", LocalDateTime.now());
+        menu.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.menuService.addOrUpdMenu(menu);
         return success();
     }
