@@ -26,7 +26,7 @@ public class RoleAccessController extends BaseController implements TokenControl
     private RoleAccessService roleAccessService;
 
     /**
-     * 查询请求菜单
+     * 查询请求列表
      *
      * @param body 参数
      * @return
@@ -41,6 +41,7 @@ public class RoleAccessController extends BaseController implements TokenControl
         param.put("roleId", roleId);
         param.put("moduleIds", moduleIdList);
 
+        //todo
         return this.success(this.roleAccessService.queryRoleAccessList(param));
     }
 
@@ -53,6 +54,7 @@ public class RoleAccessController extends BaseController implements TokenControl
     @PostMapping(value = "/add")
     public Result addRoleAccess(@RequestBody JSONObject body) throws Exception {
         int currentUserId = getLoginInfo().getUser().getId();
+        //todo
         return success(this.roleAccessService.saveRoleAccess(currentUserId, body));
     }
 }
