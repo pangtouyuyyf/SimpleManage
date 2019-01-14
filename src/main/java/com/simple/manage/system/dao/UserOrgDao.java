@@ -51,4 +51,12 @@ public interface UserOrgDao {
      * @return
      */
     List<Map<String, Integer>> queryUserOrgList(Map<String, Object> params);
+
+    /**
+     * 根据用户查询组织关联主键列表
+     *
+     * @param userId
+     * @return
+     */
+    List<Integer> queryUserOrgIdList(int userId);
 }

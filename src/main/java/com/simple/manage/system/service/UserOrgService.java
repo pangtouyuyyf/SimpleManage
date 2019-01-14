@@ -28,4 +28,12 @@ public interface UserOrgService {
      * @return
      */
     int saveUserOrg(int currentUserId, JSONObject obj);
+
+    /**
+     * 根据用户查询组织关联主键列表
+     *
+     * @param userId
+     * @return
+     */
+    List<Integer> queryUserOrgIdList(int userId);
 }

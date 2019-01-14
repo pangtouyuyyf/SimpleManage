@@ -72,4 +72,14 @@ public class UserOrgServiceImpl implements UserOrgService {
 
         return result;
     }
+
+    /**
+     * 根据用户查询组织关联主键列表
+     *
+     * @param userId
+     * @return
+     */
+    public List<Integer> queryUserOrgIdList(int userId) {
+        return this.userOrgDao.queryUserOrgIdList(userId);
+    }
 }

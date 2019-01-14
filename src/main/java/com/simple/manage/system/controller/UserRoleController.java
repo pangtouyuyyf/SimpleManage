@@ -3,6 +3,7 @@ package com.simple.manage.system.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simple.manage.system.domain.Result;
+import com.simple.manage.system.service.UserOrgService;
 import com.simple.manage.system.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class UserRoleController extends BaseController implements TokenControlle
     @Autowired
     private UserRoleService userRoleService;
 
+    @Autowired
+    private UserOrgService userOrgService;
+
     /**
      * 查询用户角色
      *
@@ -34,8 +38,13 @@ public class UserRoleController extends BaseController implements TokenControlle
         JSONArray orgIdArr = body.getJSONArray("orgIds");
         List<Integer> orgIdList = JSONArray.parseArray(JSONObject.toJSONString(orgIdArr), Integer.class);
 
+        if (orgIdList == null || orgIdList.isEmpty()) {
+            orgIdList = this.userOrgService.queryUserOrgIdList(userId);
+        }
+
         Map<String, Object> param = new HashMap<>();
         param.put("userId", userId);
+        param.put("corp_id", getLoginInfo().getUser().getCorpId());
         param.put("orgIds", orgIdList);
 
         return this.success(this.userRoleService.queryUserRoleList(param));
