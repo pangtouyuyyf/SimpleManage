@@ -76,7 +76,7 @@ public class CommonUtil {
     public static final String SECOND_LEVEL_ROLE_CODE_PREFIX = "SYS_";
 
     //默认二级管理员角色代码
-    public static final String SECOND_LEVEL_ROLE_CODE = "COMMON";
+    public static final String SECOND_LEVEL_ROLE_CODE = "ADMIN";
 
     /**
      * url处理(去掉url参数)
