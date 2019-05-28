@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -37,8 +36,7 @@ public class RedisOperation {
      */
     private String getRealKey(String key) {
         if (!StringUtil.isNullOrEmpty(sysConfig.getCode())) {
-            List<String> keyParts = Arrays.asList(sysConfig.getCode(), key);
-            key = String.join(CommonUtil.UNDERLINE, keyParts);
+            key = String.join(CommonUtil.UNDERLINE, Arrays.asList(sysConfig.getCode(), key));
         }
 
         return key;
@@ -51,8 +49,7 @@ public class RedisOperation {
      * @return
      */
     public String getStr(String key) {
-        String realKey = getRealKey(key);
-        return stringRedisTemplate.opsForValue().get(realKey);
+        return stringRedisTemplate.opsForValue().get(getRealKey(key));
     }
 
     /**
@@ -62,8 +59,7 @@ public class RedisOperation {
      * @param value
      */
     public void setStr(String key, String value) {
-        String realKey = getRealKey(key);
-        stringRedisTemplate.opsForValue().set(realKey, value);
+        stringRedisTemplate.opsForValue().set(getRealKey(key), value);
     }
 
     /**
@@ -85,9 +81,8 @@ public class RedisOperation {
      * @return
      */
     public boolean expireStr(String key, long time) {
-        String realKey = getRealKey(key);
         if (time > 0) {
-            stringRedisTemplate.expire(realKey, time, TimeUnit.SECONDS);
+            stringRedisTemplate.expire(getRealKey(key), time, TimeUnit.SECONDS);
             return true;
         } else {
             return false;
@@ -101,8 +96,7 @@ public class RedisOperation {
      * @return
      */
     public long getStrExpire(String key) {
-        String realKey = getRealKey(key);
-        return stringRedisTemplate.getExpire(realKey, TimeUnit.SECONDS);
+        return stringRedisTemplate.getExpire(getRealKey(key), TimeUnit.SECONDS);
     }
 
     /**
@@ -112,8 +106,7 @@ public class RedisOperation {
      * @return
      */
     public Object getObj(String key) {
-        String realKey = getRealKey(key);
-        return redisTemplate.opsForValue().get(realKey);
+        return redisTemplate.opsForValue().get(getRealKey(key));
     }
 
     /**
@@ -123,8 +116,7 @@ public class RedisOperation {
      * @param obj
      */
     public void setObj(String key, Object obj) {
-        String realKey = getRealKey(key);
-        redisTemplate.opsForValue().set(realKey, obj);
+        redisTemplate.opsForValue().set(getRealKey(key), obj);
     }
 
     /**
@@ -147,9 +139,8 @@ public class RedisOperation {
      * @return
      */
     public boolean expireObj(String key, long time) {
-        String realKey = getRealKey(key);
         if (time > 0) {
-            redisTemplate.expire(realKey, time, TimeUnit.SECONDS);
+            redisTemplate.expire(getRealKey(key), time, TimeUnit.SECONDS);
             return true;
         } else {
             return false;
@@ -163,8 +154,7 @@ public class RedisOperation {
      * @return
      */
     public long getObjExpire(String key) {
-        String realKey = getRealKey(key);
-        return redisTemplate.getExpire(realKey, TimeUnit.SECONDS);
+        return redisTemplate.getExpire(getRealKey(key), TimeUnit.SECONDS);
     }
 
     /**
@@ -173,8 +163,7 @@ public class RedisOperation {
      * @param key
      */
     public void deleteStr(String key) {
-        String realKey = getRealKey(key);
-        stringRedisTemplate.delete(realKey);
+        stringRedisTemplate.delete(getRealKey(key));
     }
 
     /**
@@ -183,8 +172,7 @@ public class RedisOperation {
      * @param key
      */
     public void deleteObj(String key) {
-        String realKey = getRealKey(key);
-        redisTemplate.delete(realKey);
+        redisTemplate.delete(getRealKey(key));
     }
 
     /**
