@@ -1,6 +1,6 @@
 package com.simple.manage.system.controller;
 
-import com.simple.manage.system.aspact.RequestLoginContextHolder;
+import com.simple.manage.system.aspect.RequestLoginContextHolder;
 import com.simple.manage.system.domain.PageResult;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.domain.LoginInfo;
