@@ -1,4 +1,4 @@
-package com.simple.manage.system.aspact;
+package com.simple.manage.system.aspect;
 
 import com.simple.manage.system.config.SysConfig;
 import com.simple.manage.system.util.LogUtil;

@@ -1,4 +1,4 @@
-package com.simple.manage.system.aspact;
+package com.simple.manage.system.aspect;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.manage.system.config.JwtConfig;
