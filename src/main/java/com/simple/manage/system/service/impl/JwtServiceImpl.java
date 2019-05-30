@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.simple.manage.system.aspact.TokenVerifyAspect;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.JwtService;
@@ -95,7 +94,7 @@ public class JwtServiceImpl implements JwtService {
 
         /** 验证令牌合法性 **/
         if (jwt == null) {
-            LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " Websocket令牌验证失败");
+            LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌验证失败");
             return false;
         }
 
@@ -109,7 +108,7 @@ public class JwtServiceImpl implements JwtService {
                 || StringUtil.isNullOrEmpty(orgId)
                 || StringUtil.isNullOrEmpty(channel)
                 || !(CommonUtil.CHANNEL_WEB.equals(channel) || CommonUtil.CHANNEL_APP.equals(channel))) {
-            LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " Websocket令牌参数有误");
+            LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌参数有误");
             return false;
         }
 
@@ -120,21 +119,21 @@ public class JwtServiceImpl implements JwtService {
 
         /** 验证令牌缓存情况 **/
         if (StringUtil.isNullOrEmpty(tokenRedis)) {
-            LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " Websocket令牌缓存缺失");
+            LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌缓存缺失");
             return false;
         }
 
         /** 查看剩余有效时间 **/
         long time = this.redisOperation.getStrExpire(tokenRedisKey);
         if (time < 1) {
-            LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " Websocket令牌缓存失效");
+            LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌缓存失效");
             return false;
         }
 
         /** 比对redis内令牌和传入令牌是否一致，防止劫持前一次有效令牌做操作 **/
         if (jwtConfig.isAntiHijack()) {
             if (tokenRedis.compareTo(token) != 0) {
-                LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " Websocket令牌比对失败");
+                LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌比对失败");
                 return false;
             }
         }
