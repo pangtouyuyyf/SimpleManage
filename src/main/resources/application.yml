@@ -12,9 +12,9 @@ spring:
   # datasource
   datasource:
     # 驱动配置信息
-    url: jdbc:postgresql://192.168.0.33:5432/cmm_test
-    username: cmm_test
-    password: cmm_test
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1234
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: org.postgresql.Driver
 
