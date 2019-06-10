@@ -47,11 +47,12 @@ public class JwtServiceImpl implements JwtService {
             Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getBase64Secret());  //秘钥算法
 
             result = JWT.create()
-                    .withIssuer(jwtConfig.getIssuer())      //设置发行者
-                    .withClaim(CommonUtil.USER_ID, userId)       //设置参数
-                    .withClaim(CommonUtil.ORG_ID, orgId)       //设置参数
-                    .withClaim(CommonUtil.CHANNEL, channel)    //设置参数
-                    .withNotBefore(now)    //设置最早时间
+                    .withIssuer(jwtConfig.getIssuer())                  //设置发行者
+                    .withClaim(CommonUtil.USER_ID, userId)              //设置参数
+                    .withClaim(CommonUtil.ORG_ID, orgId)                //设置参数
+                    .withClaim(CommonUtil.CHANNEL, channel)             //设置参数
+                    .withNotBefore(now)                                 //设置最早时间
+                    .withJWTId(Long.toString(1L))                     //jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
                     .sign(algorithm);      //签名
         } catch (Exception e) {
             LogUtil.error(JwtServiceImpl.class, e.toString());
