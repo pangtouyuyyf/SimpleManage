@@ -93,6 +93,9 @@ public class LoginController extends BaseController {
             return this.fail("该用户没有角色");
         }
 
+        //登录成功后删除短信验证码防止频繁登录
+        //TODO
+
         return this.success(loginOperate(user, rIdList, orgId, channel), null);
     }
 
