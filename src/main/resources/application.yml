@@ -120,3 +120,11 @@ alipay:
   signType: RSA2
   notifyUrl:
   qrCodeImgUrl:
+
+#短信配置参数(阿里云)
+sms:
+  verifyTimeOut: 60  #短信验证码时效:秒
+  timeOut: 10000  #短信系统超时时间
+  accessKeyId:   #开发者自己的AK(在阿里云访问控制台寻找)
+  accessKeySecret:   #开发者自己的秘钥
+  signName: celebration  #签名
