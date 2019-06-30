@@ -118,17 +118,6 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * 获取登录用户所在公司
-     *
-     * @param loginName 登录名
-     * @return
-     */
-    @GetMapping(value = "/logOrg")
-    public Result logOrg(@RequestParam("loginName") String loginName) throws Exception {
-        return success(this.orgService.queryOrgListByLoginName(loginName));
-    }
-
-    /**
      * 登录通用操作
      *
      * @param user    用户信息
