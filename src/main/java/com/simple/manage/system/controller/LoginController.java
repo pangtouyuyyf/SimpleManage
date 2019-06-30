@@ -1,7 +1,9 @@
 package com.simple.manage.system.controller;
 
+import com.github.pagehelper.util.StringUtil;
 import com.simple.manage.system.annotation.TokenAnnotation;
 import com.simple.manage.system.config.JwtConfig;
+import com.simple.manage.system.config.SmsConfig;
 import com.simple.manage.system.config.SysConfig;
 import com.simple.manage.system.domain.Result;
 import com.simple.manage.system.entity.User;
@@ -10,16 +12,14 @@ import com.simple.manage.system.service.*;
 import com.simple.manage.system.util.CommonUtil;
 import com.simple.manage.system.util.LogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Description 登录涉及操作
@@ -36,6 +36,9 @@ public class LoginController extends BaseController {
     private SysConfig sysConfig;
 
     @Autowired
+    private SmsConfig smsConfig;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
@@ -45,27 +48,27 @@ public class LoginController extends BaseController {
     private UserService userService;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private OrgService orgService;
 
     @Autowired
     private CommonService commonService;
+
+    @Autowired
+    private SmsService smsService;
+
+    public static final String REGEX_MOBILE = "^1[3|4|5|7|8][0-9]\\\\d{8}$";
 
     /**
      * 系统登录
      *
      * @param loginName 登录名(手机号)
      * @param password  密码
-     * @param orgId     组织主键
      * @param channel   客户端渠道(app/web)
      * @return
      */
     @GetMapping(value = "/login")
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("password") String password,
-                        @RequestParam("orgId") Integer orgId,
                         @RequestParam("channel") String channel) throws Exception {
         if (!CommonUtil.CHANNEL_WEB.equals(channel) && !CommonUtil.CHANNEL_APP.equals(channel)) {
             LogUtil.error(LoginController.class, LocalDateTime.now() + " 登录参数有误");
@@ -83,20 +86,7 @@ public class LoginController extends BaseController {
             return this.fail("用户名密码错误");
         }
 
-        //查询当前登录用户角色
-        params.clear();
-        params.put("user_id", user.getId());
-        params.put("org_id", orgId);
-        List<Integer> rIdList = this.roleService.queryCurUserRole(params);
-        if (rIdList == null || rIdList.isEmpty()) {
-            LogUtil.error(LoginController.class, LocalDateTime.now() + " 用户:" + user.getId() + " 角色查询失败");
-            return this.fail("该用户没有角色");
-        }
-
-        //登录成功后删除短信验证码防止频繁登录
-        //TODO
-
-        return this.success(loginOperate(user, rIdList, orgId, channel), null);
+        return this.success(loginOperate(user, channel), null);
     }
 
     /**
@@ -142,23 +132,21 @@ public class LoginController extends BaseController {
      * 登录通用操作
      *
      * @param user    用户信息
-     * @param rIdList 角色主键集合
-     * @param orgId   公司编号
      * @param channel 客户端渠道(app/web)
      * @return
      */
-    private String loginOperate(User user, List<Integer> rIdList, int orgId, String channel) {
+    private String loginOperate(User user, String channel) {
         //生成令牌
-        String token = this.jwtService.createJWT(Integer.toString(user.getId()), Integer.toString(orgId), channel);
+        String token = this.jwtService.createJWT(Integer.toString(user.getId()), channel);
 
         //生成令牌缓存主键
         List<String> tokenKeyParts = Arrays.asList(
-                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), Integer.toString(orgId), channel);
+                CommonUtil.TOKEN_PREFIX, Integer.toString(user.getId()), channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
 
         //生成个人信息缓存主键
         List<String> loginInfoKeyParts = Arrays.asList(
-                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), Integer.toString(orgId), channel);
+                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), channel);
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
         //保存令牌
@@ -169,8 +157,44 @@ public class LoginController extends BaseController {
         }
 
         //保存当前登录信息
-        this.commonService.saveLoginInfo(loginInfoKey, user, rIdList, orgId, channel);
+        this.commonService.saveLoginInfo(loginInfoKey, user.getId(), channel);
 
         return token;
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param mobile 手机号码
+     * @return
+     */
+    @PostMapping(value = "/sendVerifySms")
+    public Result<Object> sendVerifySms(@RequestParam("mobile") String mobile) throws Exception {
+        Result result = null;
+        String verifyCode = null;
+
+        if (!Pattern.matches(REGEX_MOBILE, mobile.trim())) {
+            return fail("手机号码格式不对!");
+        }
+
+        String redisKey = CommonUtil.SMS_VERIFY_CODE_PREFIX + mobile;
+        verifyCode = redisOperation.getStr(redisKey);
+
+        if (StringUtil.isEmpty(verifyCode)) {
+            return fail("验证码已发送，请稍后重试");
+        }
+
+        //发送短信验证码
+        verifyCode = smsService.sendVerifySms(mobile.trim());
+
+        if (StringUtil.isNotEmpty(verifyCode)) {
+            //保存短信验证码至redis并设置失效时间
+            redisOperation.setStr(redisKey, verifyCode, smsConfig.getVerifyTimeOut());
+            result = success("验证码已发送，请及时查收");
+        } else {
+            result = fail("验证码发送失败，稍后重试");
+        }
+
+        return result;
     }
 }
