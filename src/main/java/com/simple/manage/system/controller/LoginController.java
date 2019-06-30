@@ -48,9 +48,6 @@ public class LoginController extends BaseController {
     private UserService userService;
 
     @Autowired
-    private OrgService orgService;
-
-    @Autowired
     private CommonService commonService;
 
     @Autowired
@@ -76,7 +73,7 @@ public class LoginController extends BaseController {
         }
 
         Map<String, Object> params = new HashMap<>();
-        params.put("phone", loginName);
+        params.put("login_name", loginName);
         params.put("password", password);
 
         //查询用户
