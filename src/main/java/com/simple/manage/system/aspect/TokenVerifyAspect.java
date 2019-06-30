@@ -1,6 +1,5 @@
 package com.simple.manage.system.aspect;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.domain.LoginInfoResult;
 import com.simple.manage.system.enums.SysExpEnum;
@@ -26,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description token验证
@@ -76,22 +76,20 @@ public class TokenVerifyAspect {
 
         String token = request.getHeader(CommonUtil.TOKEN);
 
-        DecodedJWT jwt = jwtService.parseJWT(token);
+        Map<String, String> jwtMap = jwtService.parseJWT(token);
 
         /** 验证令牌合法性 **/
-        if (jwt == null) {
+        if (jwtMap == null) {
             LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 令牌验证失败");
             return ResultUtil.error(SysExpEnum.NEED_LOGIN);
         }
 
         /** 获取令牌中的用户、角色和登录渠道 **/
-        String userId = jwt.getClaim(CommonUtil.USER_ID).asString();
-        String orgId = jwt.getClaim(CommonUtil.ORG_ID).asString();
-        String channel = jwt.getClaim(CommonUtil.CHANNEL).asString();
+        String userId = jwtMap.get(CommonUtil.USER_ID);
+        String channel = jwtMap.get(CommonUtil.CHANNEL);
 
         /** 验证令牌参数 **/
         if (StringUtil.isNullOrEmpty(userId)
-                || StringUtil.isNullOrEmpty(orgId)
                 || StringUtil.isNullOrEmpty(channel)
                 || !(CommonUtil.CHANNEL_WEB.equals(channel) || CommonUtil.CHANNEL_APP.equals(channel))) {
             LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 令牌参数有误");
@@ -99,7 +97,7 @@ public class TokenVerifyAspect {
         }
 
         /** 获取服务器缓存令牌 **/
-        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, orgId, channel);
+        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
         String tokenRedis = this.redisOperation.getStr(tokenRedisKey);
 
@@ -139,12 +137,11 @@ public class TokenVerifyAspect {
 
         /** 生成个人信息缓存主键 **/
         List<String> loginInfoKeyParts = Arrays.asList(
-                CommonUtil.LOGIN_INFO_PREFIX, userId, orgId, channel);
+                CommonUtil.LOGIN_INFO_PREFIX, userId, channel);
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
-
         /** 将登录数据写入ThreadLocal **/
-        LoginInfoResult loginInfoResult = this.commonService.saveLoginInfo(loginInfoKey, Integer.valueOf(userId), Integer.valueOf(orgId), channel);
+        LoginInfoResult loginInfoResult = this.commonService.saveLoginInfo(loginInfoKey, Integer.valueOf(userId), channel);
         if (!loginInfoResult.isChecked()) {
             LogUtil.error(TokenVerifyAspect.class, LocalDateTime.now() + " 没有登录信息缓存");
             return ResultUtil.error(SysExpEnum.NO_LOGIN_INFO);
