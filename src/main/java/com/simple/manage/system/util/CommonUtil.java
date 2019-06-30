@@ -78,6 +78,9 @@ public class CommonUtil {
     //默认二级管理员角色代码
     public static final String SECOND_LEVEL_ROLE_CODE = "ADMIN";
 
+    //短信验证码redis主键前缀
+    public static final String SMS_VERIFY_CODE_PREFIX ="verifyCode_";
+
     /**
      * url处理(去掉url参数)
      *
