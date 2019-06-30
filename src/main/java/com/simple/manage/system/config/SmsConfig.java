@@ -24,4 +24,6 @@ public class SmsConfig {
     private String accessKeySecret;
 
     private String signName;
+
+    private String tempCode;
 }
