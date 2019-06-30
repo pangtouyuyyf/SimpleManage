@@ -1,6 +1,6 @@
 package com.simple.manage.system.service;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
+import java.util.Map;
 
 /**
  * Description jwt接口
@@ -13,11 +13,10 @@ public interface JwtService {
      * 创建令牌
      *
      * @param userId
-     * @param orgId
      * @param type
      * @return
      */
-    String createJWT(String userId, String orgId, String type);
+    String createJWT(String userId, String type);
 
     /**
      * 解析令牌
@@ -25,7 +24,7 @@ public interface JwtService {
      * @param token
      * @return
      */
-    DecodedJWT parseJWT(String token);
+    Map<String, String> parseJWT(String token);
 
     /**
      * 判断令牌

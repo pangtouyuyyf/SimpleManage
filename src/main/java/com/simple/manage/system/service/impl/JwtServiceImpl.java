@@ -3,7 +3,7 @@ package com.simple.manage.system.service.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.Claim;
 import com.simple.manage.system.config.JwtConfig;
 import com.simple.manage.system.redis.RedisOperation;
 import com.simple.manage.system.service.JwtService;
@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Description jwt接口实现
@@ -36,11 +33,10 @@ public class JwtServiceImpl implements JwtService {
      * 创建令牌
      *
      * @param userId  用户主键
-     * @param orgId   组织主键
      * @param channel 客户端渠道(app/web)
      * @return
      */
-    public String createJWT(String userId, String orgId, String channel) {
+    public String createJWT(String userId, String channel) {
         String result = null;
         Date now = new Date();  //当前时间
         try {
@@ -49,11 +45,9 @@ public class JwtServiceImpl implements JwtService {
             result = JWT.create()
                     .withIssuer(jwtConfig.getIssuer())                  //设置发行者
                     .withClaim(CommonUtil.USER_ID, userId)              //设置参数
-                    .withClaim(CommonUtil.ORG_ID, orgId)                //设置参数
                     .withClaim(CommonUtil.CHANNEL, channel)             //设置参数
                     .withNotBefore(now)                                 //设置最早时间
-                    .withJWTId(Long.toString(1L))                     //jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
-                    .sign(algorithm);      //签名
+                    .sign(algorithm);                                   //签名加密
         } catch (Exception e) {
             LogUtil.error(JwtServiceImpl.class, e.toString());
         }
@@ -66,14 +60,17 @@ public class JwtServiceImpl implements JwtService {
      * @param token 令牌
      * @return
      */
-    public DecodedJWT parseJWT(String token) {
+    public Map<String, String> parseJWT(String token) {
         return Optional.ofNullable(token).map(
                 t -> {
                     try {
                         // 判断token是否合法
                         Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getBase64Secret());
                         JWTVerifier verifier = JWT.require(algorithm).withIssuer(jwtConfig.getIssuer()).build();
-                        return verifier.verify(t);
+                        Map<String, Claim> map = verifier.verify(t).getClaims();
+                        Map<String, String> resultMap = new HashMap<>();
+                        map.forEach((k, v) -> resultMap.put(k, v.asString()));
+                        return resultMap;
                     } catch (Exception e) {
                         LogUtil.error(JwtServiceImpl.class, e.toString());
                         return null;
@@ -91,22 +88,20 @@ public class JwtServiceImpl implements JwtService {
     public boolean judgeJWT(String token) {
         boolean result = true;
 
-        DecodedJWT jwt = this.parseJWT(token);
+        Map<String, String> jwtMap = this.parseJWT(token);
 
         /** 验证令牌合法性 **/
-        if (jwt == null) {
+        if (jwtMap == null) {
             LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌验证失败");
             return false;
         }
 
         /** 获取令牌中的用户、角色和登录渠道 **/
-        String userId = jwt.getClaim(CommonUtil.USER_ID).asString();
-        String orgId = jwt.getClaim(CommonUtil.ORG_ID).asString();
-        String channel = jwt.getClaim(CommonUtil.CHANNEL).asString();
+        String userId = jwtMap.get(CommonUtil.USER_ID);
+        String channel = jwtMap.get(CommonUtil.CHANNEL);
 
         /** 验证令牌参数 **/
         if (StringUtil.isNullOrEmpty(userId)
-                || StringUtil.isNullOrEmpty(orgId)
                 || StringUtil.isNullOrEmpty(channel)
                 || !(CommonUtil.CHANNEL_WEB.equals(channel) || CommonUtil.CHANNEL_APP.equals(channel))) {
             LogUtil.error(JwtServiceImpl.class, LocalDateTime.now() + " Websocket令牌参数有误");
@@ -114,7 +109,7 @@ public class JwtServiceImpl implements JwtService {
         }
 
         /** 获取服务器缓存令牌 **/
-        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, orgId, channel);
+        List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, userId, channel);
         String tokenRedisKey = String.join(CommonUtil.UNDERLINE, tokenKeyParts);
         String tokenRedis = this.redisOperation.getStr(tokenRedisKey);
 
