@@ -56,7 +56,7 @@ public class LoginController extends BaseController {
     @Autowired
     private SmsService smsService;
 
-    public static final String REGEX_MOBILE = "^1[3|4|5|7|8][0-9]\\\\d{8}$";
+    public static final String REGEX_MOBILE = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 
     /**
      * 系统登录
@@ -180,7 +180,7 @@ public class LoginController extends BaseController {
         String redisKey = CommonUtil.SMS_VERIFY_CODE_PREFIX + mobile;
         verifyCode = redisOperation.getStr(redisKey);
 
-        if (StringUtil.isEmpty(verifyCode)) {
+        if (!StringUtil.isEmpty(verifyCode)) {
             return fail("验证码已发送，请稍后重试");
         }
 
