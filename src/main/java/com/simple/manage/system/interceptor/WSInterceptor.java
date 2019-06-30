@@ -31,7 +31,7 @@ public class WSInterceptor extends TextWebSocketHandler implements HandshakeInte
         boolean canConnect = this.jwtService.judgeJWT(token);
         if (canConnect) {
             // 鉴权通过后，设置当前uid
-            map.put(CommonUtil.USER_ID, this.jwtService.parseJWT(token).getClaim(CommonUtil.USER_ID).asString());
+            map.put(CommonUtil.USER_ID, this.jwtService.parseJWT(token).get(CommonUtil.USER_ID));
         }
         return canConnect;
     }
