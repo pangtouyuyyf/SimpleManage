@@ -24,18 +24,14 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class SmsServiceImpl implements SmsService {
-    //产品名称:云通信短信API产品,开发者无需替换
-    private static final String PRODUCT = "Dysmsapi";
-
     //产品域名,开发者无需替换
     private static final String SYS_DOMAIN = "dysmsapi.aliyuncs.com";
 
+    //短信系统版本
     private static final String SYS_VERSION = "2017-05-25";
 
+    //短信系统action
     private static final String SYS_ACTION = "SendSms";
-
-    //outId为提供给业务方扩展字段
-    private static final String OUT_ID = "10086";
 
     //节点
     private static final String REGION_ID = "cn-hangzhou";
@@ -49,12 +45,12 @@ public class SmsServiceImpl implements SmsService {
     /**
      * 发送短信服务
      *
-     * @param phoneNums    手机号码
-     * @param signName     签名
-     * @param templateCode 模板ID
-     * @param template     模板替换内容(json)
+     * @param phoneNums     手机号码
+     * @param signName      签名
+     * @param templateCode  模板ID
+     * @param templateParam 模板替换内容(json)
      */
-    public CommonResponse sendSms(String phoneNums, String signName, String templateCode, String template) {
+    public CommonResponse sendSms(String phoneNums, String signName, String templateCode, String templateParam) {
         //可自助调整超时时间
 //        System.setProperty("sun.net.client.defaultConnectTimeout", this.smsConfig.getTimeOut());
 //        System.setProperty("sun.net.client.defaultReadTimeout", this.smsConfig.getTimeOut());
@@ -92,15 +88,8 @@ public class SmsServiceImpl implements SmsService {
 
             //String message = "{system:\"" + system + "\", task:\"" + task + "\",tasktype:\"" + taskType + "\",action:\"" + action + "\"}";
             //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-            request.putQueryParameter("TemplateParam", template);
+            request.putQueryParameter("TemplateParam", templateParam);
 
-            //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
-//            request.setSmsUpExtendCode("90997");
-
-            //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-//            request.setOutId(OUT_ID);
-
-            //hint 此处可能会抛出异常，注意catch
             response = acsClient.getCommonResponse(request);
         } catch (ServerException e) {
             LogUtil.error(SmsServiceImpl.class, e.toString());
@@ -118,7 +107,7 @@ public class SmsServiceImpl implements SmsService {
      */
     public String sendVerifySms(String phoneNum) {
         //获取验证码
-        String verifyCode = RandomNumUtil.getRandNum(5);
+        String verifyCode = RandomNumUtil.getRandNum(6);
 
         //您正在登录验证，验证码${verify}，请在1分钟内按规范提交验证码，切勿将验证码泄露于他人。
         //String message = "{verify:\"" + verifyCode + "\", limit:\"" + Integer.toString(this.smsConfig.getVerifyTimeOut() / 60) + "\",notice:\"" + "提示" + "\"}";
@@ -127,13 +116,15 @@ public class SmsServiceImpl implements SmsService {
         message.put("verify", verifyCode);
 
         //发送短信
-        CommonResponse response = sendSms(phoneNum, this.smsConfig.getSignName(), "SMS_119077853", message.toString());
+        CommonResponse response = sendSms(phoneNum, this.smsConfig.getSignName(), this.smsConfig.getTempCode(), message.toString());
+
+        JSONObject resObj = JSONObject.parseObject(response.getData());
 
         //检测response
-        if (!MSG_CODE.equals(response.getData())) {
+        if (!MSG_CODE.equals(resObj.getString("Code"))) {
             //发送失败
             verifyCode = null;
-            String errMsg = "号码为" + phoneNum + "的手机短信发送异常:" + response.getData();
+            String errMsg = "号码:" + phoneNum + "的手机短信发送异常:" + response.getData();
             LogUtil.error(SmsServiceImpl.class, errMsg);
         }
 
