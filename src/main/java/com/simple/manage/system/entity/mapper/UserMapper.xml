@@ -14,9 +14,7 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <resultMap id="userMap" type="com.simple.manage.system.entity.User">
@@ -33,7 +31,6 @@
         SELECT COUNT(user_id)
         FROM t_usermst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND user_id = #{user_id}
     </select>
 
@@ -67,9 +64,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="user_name != null and user_name != ''">
@@ -98,9 +92,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -135,9 +126,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE user_id = #{user_id}
     </update>
@@ -145,7 +133,7 @@
     <select id="queryUserEntity" parameterType="java.util.Map" resultMap="userMap">
         SELECT
         <include refid="baseColumnList"/>
-        FROM t_usermst WHERE 1 = 1 AND is_delete = '0' AND valid_sta ='0'
+        FROM t_usermst WHERE 1 = 1 AND is_delete = '0'
         <if test="user_id != null">
             AND user_id = #{user_id}
         </if>
@@ -173,7 +161,6 @@
         FROM t_usermst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND user_id = #{userId}
     </select>
 
@@ -186,7 +173,7 @@
             email
         FROM t_usermst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         <if test="user_id != null">
             AND user_id = #{user_id}
         </if>
@@ -202,7 +189,6 @@
         <if test="email != null and email != ''">
             AND email LIKE CONCAT('%', #{email}, '%')
         </if>
-        AND corp_id = #{corp_id}
         ORDER BY user_id ASC
     </select>
 
@@ -222,7 +208,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND user_id = #{user_id}
     </delete>
 
