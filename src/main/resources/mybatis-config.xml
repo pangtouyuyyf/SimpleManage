@@ -18,7 +18,6 @@
     <!-- 数据库查询映射 -->
     <mappers>
         <mapper resource="com/simple/manage/system/entity/mapper/DataDictMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/CorporationMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/UserMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/RoleMapper.xml"></mapper>
         <mapper resource="com/simple/manage/system/entity/mapper/UserRoleMapper.xml"></mapper>
