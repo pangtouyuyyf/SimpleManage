@@ -14,16 +14,13 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <select id="checkMenu" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(menu_id)
         FROM t_menumst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND menu_id = #{menu_id}
     </select>
 
@@ -57,9 +54,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="module_id != null">
@@ -88,9 +82,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -125,9 +116,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE menu_id = #{menu_id}
     </update>
@@ -143,7 +131,6 @@
         FROM t_menumst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND menu_id = #{menuId}
     </select>
 
@@ -160,9 +147,7 @@
         WHERE 1 = 1
         AND t1.module_id = t2.module_id
         AND t1.is_delete = '0'
-        AND t1.valid_sta ='0'
         AND t2.is_delete = '0'
-        AND t2.valid_sta ='0'
         <if test="menu_id != null">
             AND t1.menu_id = #{menu_id}
         </if>
@@ -175,7 +160,6 @@
         <if test="menu_note != null and menu_note != ''">
             AND t1.menu_note LIKE CONCAT('%', #{menu_note}, '%')
         </if>
-        AND t1.corp_id = #{corp_id}
         ORDER BY t2.module_order ASC,t1.menu_order ASC
     </select>
 
@@ -195,7 +179,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND menu_id = #{menu_id}
     </delete>
 

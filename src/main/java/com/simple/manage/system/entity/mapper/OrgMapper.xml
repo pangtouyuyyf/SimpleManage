@@ -13,9 +13,7 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <resultMap id="orgMap" type="com.simple.manage.system.entity.Org">
@@ -28,7 +26,6 @@
         SELECT COUNT(org_id)
         FROM t_orgmst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND org_id = #{orgId}
     </select>
 
@@ -59,9 +56,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="org_name != null and org_name != ''">
@@ -87,9 +81,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -121,9 +112,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE org_id = #{org_id}
     </update>
@@ -135,9 +123,9 @@
             t1.parent_id AS "parentId",
             t1.org_order AS "order",
             t1.org_note AS note,
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.org_id = t1.parent_id) AS exta
         FROM t_orgmst t1
-        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        WHERE 1 = 1 AND t1.is_delete = '0'
         AND t1.org_id = #{orgId}
     </select>
 
@@ -148,7 +136,7 @@
             parent_id
         FROM t_orgmst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         AND org_id = #{org_id}
     </select>
 
@@ -159,16 +147,15 @@
             t1.parent_id AS "parentId",
             t1.org_order AS "order",
             t1.org_note AS note,
-            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.org_id = t1.parent_id) AS exta
+            (SELECT t2.org_name FROM t_orgmst t2 WHERE t2.is_delete = '0' AND t2.org_id = t1.parent_id) AS exta
         FROM t_orgmst t1
-        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        WHERE 1 = 1 AND t1.is_delete = '0'
         <if test="org_name != null and org_name != ''">
             AND org_name LIKE CONCAT('%', #{org_name}, '%')
         </if>
         <if test="parent_id != null">
             AND parent_id = #{parent_id}
         </if>
-        AND corp_id = #{corp_id}
         ORDER BY org_order ASC
     </select>
 
@@ -187,11 +174,7 @@
         FROM t_orgmst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND parent_id = #{org_id}
-        <if test="corp_id != null">
-            AND corp_id = #{corp_id}
-        </if>
         ORDER BY org_order ASC
     </select>
 
@@ -201,9 +184,7 @@
         FROM t_orgmst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND parent_id = #{parent_id}
-        AND corp_id = #{corp_id}
     </select>
 
     <select id="queryOrgListByLoginName" parameterType="java.lang.String" resultType="java.util.Map">
@@ -217,9 +198,7 @@
         WHERE
             1 = 1
             AND t1.is_delete = '0'
-            AND t1.valid_sta = '0'
             AND t3.is_delete = '0'
-            AND t3.valid_sta = '0'
             AND t1.user_id = t2.user_id
             AND t2.org_id = t3.org_id
             AND t1.phone = #{loginName}
@@ -232,7 +211,7 @@
             t1.org_id AS "key",
             t1.org_name AS "title"
         FROM t_orgmst t1
-        WHERE 1 = 1 AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        WHERE 1 = 1 AND t1.is_delete = '0'
         AND t1.parent_id = #{parent_id}
         AND EXISTS(SELECT id FROM t_userorglin t2 WHERE t1.org_id = t2.org_id AND t2.user_id = #{user_id})
         ORDER BY t1.org_order ASC

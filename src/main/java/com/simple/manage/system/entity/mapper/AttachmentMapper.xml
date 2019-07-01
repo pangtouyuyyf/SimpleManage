@@ -16,9 +16,7 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <insert id="addAttachment" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="attach_id">
@@ -57,9 +55,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="attach_name != null and attach_name != ''">
@@ -95,9 +90,6 @@
             <if test="create_time != null">
                 #{create_time},
             </if>
-            <if test="corp_id != null">
-                #{corp_id},
-            </if>
         </trim>
     </insert>
 
@@ -114,7 +106,6 @@
         FROM t_attachmentmst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND attach_id = #{attachId}
     </select>
 
@@ -124,7 +115,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND attach_id = #{attachId}
     </delete>
 
@@ -133,7 +123,6 @@
         SET is_delete = '1'
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND attach_id IN
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{attachIds}
@@ -145,7 +134,6 @@
         SET is_display = (CASE WHEN is_display = '0' THEN '1' ELSE '0' END), update_id = #{update_id}, update_time = #{update_time}
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND attach_id = #{attach_id}
     </update>
 </mapper>

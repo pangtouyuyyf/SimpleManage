@@ -41,7 +41,6 @@
         WHERE
             1 = 1
             AND r.is_delete = '0'
-            AND r.valid_sta = '0'
             AND r.corp_id = #{corp_id}
             <if test="orgIds != null">
                 <foreach collection="orgIds" item="item" open=" AND r.org_id IN (" separator="," close=")">

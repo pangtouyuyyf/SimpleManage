@@ -14,9 +14,7 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <resultMap id="roleMap" type="com.simple.manage.system.entity.Role">
@@ -30,7 +28,6 @@
         SELECT COUNT(role_id)
         FROM t_rolemst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND role_id = #{roleId}
     </select>
 
@@ -64,9 +61,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="role_code != null and role_code !=''">
@@ -95,9 +89,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -132,9 +123,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE role_id = #{role_id}
     </update>
@@ -148,7 +136,7 @@
             role_note AS note
         FROM t_rolemst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         AND role_id = #{roleId}
     </select>
 
@@ -156,11 +144,10 @@
         SELECT
             role_id,
             role_code,
-            role_name,
-            corp_id
+            role_name
         FROM t_rolemst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         AND role_id = #{roleId}
     </select>
 
@@ -170,7 +157,7 @@
         FROM
         t_userrolelin ur,t_rolemst r
         WHERE 1 = 1
-        AND r.is_delete = '0' AND r.valid_sta ='0'
+        AND r.is_delete = '0'
         AND ur.role_id = r.role_id
         AND ur.user_id = #{user_id}
         AND r.org_id = #{org_id}
@@ -183,11 +170,10 @@
             t1.role_name AS "name",
             t1.role_order AS "order",
             t1.role_note AS note,
-            t1.corp_id AS "corpId",
-            (SELECT t2.corp_name FROM t_corporationmst t2 WHERE t2.is_delete = '0' AND t2.valid_sta ='0' AND t2.corp_id = t1.corp_id) as exta
+            (SELECT t2.corp_name FROM t_corporationmst t2 WHERE t2.is_delete = '0') as exta
         FROM t_rolemst t1
         WHERE 1 = 1
-        AND t1.is_delete = '0' AND t1.valid_sta ='0'
+        AND t1.is_delete = '0'
         <if test="role_id != null">
             AND t1.role_id = #{role_id}
         </if>
@@ -197,7 +183,6 @@
         <if test="role_name != null and role_name != ''">
             AND t1.role_name LIKE CONCAT('%', #{role_name}, '%')
         </if>
-        AND t1.corp_id = #{corp_id}
         ORDER BY t1.role_order ASC
     </select>
 
@@ -217,7 +202,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND role_id = #{role_id}
     </delete>
 
@@ -233,7 +217,7 @@
             role_id
         FROM t_rolemst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         AND role_code = #{roleCode}
     </select>
 </mapper>

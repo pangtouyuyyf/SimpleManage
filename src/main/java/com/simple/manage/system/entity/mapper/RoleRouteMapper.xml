@@ -73,7 +73,6 @@
             AND ro.is_delete = '0'
             AND ro.is_delete = '0'
             AND mo.is_delete = '0'
-            AND mo.valid_sta = '0'
             <if test="moduleIds != null">
                 <foreach collection="moduleIds" item="item" open=" AND ro.module_id IN (" separator=","
                          close=")">
@@ -96,8 +95,6 @@
         WHERE 1 = 1
         AND t1.route_id = t2.route_id
         AND t2.is_delete = '0'
-        AND t2.valid_sta = '0'
-        and t2.corp_id = #{corp_id}
         AND t2.route_url = #{url}
         <if test="roleIds != null">
             <foreach collection="roleIds" item="item" open=" AND t1.role_id IN (" separator="," close=")">

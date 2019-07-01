@@ -14,16 +14,13 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <select id="checkRoute" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(route_id)
         FROM t_routemst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND route_id = #{route_id}
     </select>
 
@@ -57,9 +54,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="module_id != null">
@@ -88,9 +82,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -125,9 +116,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE route_id = #{route_id}
     </update>
@@ -143,7 +131,6 @@
         FROM t_routemst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND route_id = #{routeId}
     </select>
 
@@ -159,8 +146,8 @@
         FROM t_routemst t1,t_modulemst t2
         WHERE 1 = 1
         AND t1.module_id = t2.module_id
-        AND t1.is_delete = '0' AND t1.valid_sta ='0'
-        AND t2.is_delete = '0' AND t2.valid_sta ='0'
+        AND t1.is_delete = '0'
+        AND t2.is_delete = '0'
         <if test="route_id != null">
             AND t1.route_id = #{route_id}
         </if>
@@ -173,7 +160,6 @@
         <if test="route_note != null and route_note != ''">
             AND t1.route_note LIKE CONCAT('%', #{route_note}, '%')
         </if>
-        AND t1.corp_id = #{corp_id}
         ORDER BY t2.module_order ASC,t1.route_order ASC
     </select>
 
@@ -193,7 +179,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND route_id = #{route_id}
     </delete>
 

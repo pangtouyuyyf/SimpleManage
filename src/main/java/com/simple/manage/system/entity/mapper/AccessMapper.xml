@@ -14,16 +14,13 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <select id="checkAccess" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(access_id)
         FROM t_accessmst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND access_id = #{access_id}
     </select>
 
@@ -57,9 +54,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="module_id != null">
@@ -88,9 +82,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -125,9 +116,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE access_id = #{access_id}
     </update>
@@ -143,7 +131,6 @@
         FROM t_accessmst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND access_id = #{accessId}
     </select>
 
@@ -155,10 +142,10 @@
             access_url AS url,
             access_order AS "order",
             access_note AS note,
-            (select module_name FROM t_modulemst t2 WHERE is_delete = '0' AND valid_sta ='0' AND t2.module_id = t1.module_id) AS exta
+            (select module_name FROM t_modulemst t2 WHERE is_delete = '0' AND t2.module_id = t1.module_id) AS exta
         FROM t_accessmst t1
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         <if test="access_id != null">
             AND access_id = #{access_id}
         </if>
@@ -171,7 +158,6 @@
         <if test="access_note != null and access_note != ''">
             AND access_note LIKE CONCAT('%', #{access_note}, '%')
         </if>
-        AND corp_id = #{corp_id}
         ORDER BY access_order ASC
     </select>
 
@@ -191,7 +177,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND access_id = #{access_id}
     </delete>
 

@@ -14,16 +14,13 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <select id="checkModule" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(module_id)
         FROM t_modulemst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND module_id = #{module_id}
     </select>
 
@@ -57,9 +54,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="module_name != null and module_name != ''">
@@ -88,9 +82,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -125,9 +116,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE module_id = #{module_id}
     </update>
@@ -143,7 +131,6 @@
         FROM t_modulemst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND module_id = #{moduleId}
     </select>
 
@@ -157,7 +144,7 @@
             module_note AS note
         FROM t_modulemst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         <if test="module_name != null and module_name != ''">
             AND module_name LIKE CONCAT('%', #{module_name}, '%')
         </if>
@@ -167,7 +154,6 @@
         <if test="module_note != null and module_note !=''">
             AND module_note LIKE CONCAT('%', #{module_note}, '%')
         </if>
-        AND corp_id = #{corp_id}
         ORDER BY module_type ASC,module_order ASC
     </select>
 
@@ -188,7 +174,6 @@
         FROM t_modulemst
         WHERE 1 = 1
             AND is_delete = '0'
-            AND valid_sta ='0'
             AND module_type = #{type}
         ORDER BY module_order ASC
     </select>
@@ -209,7 +194,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND module_id = #{module_id}
     </delete>
 
@@ -230,7 +214,6 @@
         WHERE
             1 = 1
             AND tmo.is_delete = '0'
-            AND tmo.valid_sta = '0'
             AND EXISTS (
                 SELECT tme.menu_id
                 FROM t_menumst tme,t_rolemenulin tr

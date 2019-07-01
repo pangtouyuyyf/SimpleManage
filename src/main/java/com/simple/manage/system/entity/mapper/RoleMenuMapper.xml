@@ -71,9 +71,7 @@
             AND me.module_id = mo.module_id
             AND mo.module_type = '0'
             AND me.is_delete = '0'
-            AND me.is_delete = '0'
             AND mo.is_delete = '0'
-            AND mo.valid_sta = '0'
             <if test="moduleIds != null">
                 <foreach collection="moduleIds" item="item" open=" AND me.module_id IN (" separator=","
                          close=")">
@@ -160,8 +158,7 @@
         WHERE 1 = 1
             AND tm.menu_id = tr.menu_id
             AND tm.is_delete = '0'
-            AND tm.valid_sta = '0'
-            AND #{url} LIKE'%' || tm.menu_url || '%'
+            AND #{url} LIKE '%' || tm.menu_url || '%'
             AND tr.role_id = #{roleId}
     </select>
 

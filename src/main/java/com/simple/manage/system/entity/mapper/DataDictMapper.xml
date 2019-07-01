@@ -10,16 +10,13 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta,
-        corp_id
+        is_delete
     </sql>
 
     <select id="checkDataDict" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(dict_id)
         FROM t_datadictmst
         WHERE is_delete = '0'
-        AND valid_sta ='0'
         AND dict_id = #{dict_id}
     </select>
 
@@ -41,9 +38,6 @@
             <if test="create_time != null">
                 create_time,
             </if>
-            <if test="corp_id != null">
-                corp_id,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dict_name != null and dict_name != ''">
@@ -60,9 +54,6 @@
             </if>
             <if test="create_time != null">
                 #{create_time},
-            </if>
-            <if test="corp_id != null">
-                #{corp_id},
             </if>
         </trim>
     </insert>
@@ -85,9 +76,6 @@
             <if test="update_time != null">
                 update_time = #{update_time},
             </if>
-            <if test="valid_sta != null and valid_sta != ''">
-                valid_sta = #{valid_sta},
-            </if>
         </set>
         WHERE dict_id = #{dict_id}
     </update>
@@ -101,7 +89,6 @@
         FROM t_datadictmst
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND dict_id = #{dictId}
     </select>
 
@@ -113,7 +100,7 @@
             dict_order AS "order"
         FROM t_datadictmst
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         <if test="dict_id != null">
             AND dict_id = #{dict_id}
         </if>
@@ -151,7 +138,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         AND dict_id = #{dict_id}
     </delete>
 
@@ -172,13 +158,12 @@
         create_time,
         update_id,
         update_time,
-        is_delete,
-        valid_sta
+        is_delete
     </sql>
 
     <insert id="addOrUpdDataDictLin" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="lin_id">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            select count(lin_id) from t_datadictlin where is_delete = '0' AND valid_sta ='0' AND lin_id = #{lin_id}
+            select count(lin_id) from t_datadictlin where is_delete = '0' AND lin_id = #{lin_id}
         </selectKey>
         <if test="count > 0">
             update t_datadictlin
@@ -197,9 +182,6 @@
                 </if>
                 <if test="update_time != null">
                     update_time = #{update_time},
-                </if>
-                <if test="valid_sta != null and valid_sta != ''">
-                    valid_sta = #{valid_sta},
                 </if>
             </set>
             where lin_id = #{lin_id}
@@ -259,7 +241,6 @@
         FROM t_datadictlin
         WHERE 1 = 1
         AND is_delete = '0'
-        AND valid_sta ='0'
         AND dict_id = #{dictId}
         ORDER BY lin_order ASC
     </select>
@@ -269,7 +250,7 @@
             COUNT(dict_id)
         FROM t_datadictlin
         WHERE 1 = 1
-        AND is_delete = '0' AND valid_sta ='0'
+        AND is_delete = '0'
         <if test="dict_id != null">
             AND dict_id = #{dict_id}
         </if>
@@ -294,7 +275,6 @@
         WHERE
         1 = 1
         AND is_delete = '0'
-        AND valid_sta = '0'
         <if test="dict_id != null">
             AND dict_id = #{dict_id}
         </if>
@@ -323,9 +303,7 @@
             FROM t_datadictlin t1
             LEFT JOIN t_datadictmst t2 ON t1.dict_id = t2.dict_id
             WHERE t1.is_delete = '0'
-            AND t1.valid_sta = '0'
             AND t2.is_delete = '0'
-            AND t2.valid_sta = '0'
             AND t2.dict_name = #{dictName}
             ORDER BY t1.lin_order
         ) t

@@ -71,9 +71,7 @@
             AND ac.module_id = mo.module_id
             AND mo.module_type = '2'
             AND ac.is_delete = '0'
-            AND ac.is_delete = '0'
             AND mo.is_delete = '0'
-            AND mo.valid_sta = '0'
             <if test="moduleIds != null">
                 <foreach collection="moduleIds" item="item" open=" AND ac.module_id IN (" separator=","
                          close=")">
@@ -95,7 +93,7 @@
         FROM t_roleaccesslin tra
         WHERE 1 = 1
         AND tra.role_id = #{role_id}
-        AND EXISTS(SELECT ta.access_id FROM t_accessmst ta WHERE ta.is_delete = '0' AND ta.valid_sta = '0' AND ta.access_id = tra.access_id AND ta.access_url = #{access_url})
+        AND EXISTS(SELECT ta.access_id FROM t_accessmst ta WHERE ta.is_delete = '0' AND ta.access_id = tra.access_id AND ta.access_url = #{access_url})
     </select>
 
     <select id="queryAllByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
