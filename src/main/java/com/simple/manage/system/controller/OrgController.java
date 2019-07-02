@@ -54,7 +54,6 @@ public class OrgController extends BaseController implements TokenController {
         org.put("create_time", LocalDateTime.now());
         org.put("update_id", getLoginInfo().getUser().getId());
         org.put("update_time", LocalDateTime.now());
-        org.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.orgService.addOrUpdOrg(org);
         return success();
     }
@@ -86,7 +85,6 @@ public class OrgController extends BaseController implements TokenController {
                                @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("org_name", name);
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
         }
@@ -107,7 +105,6 @@ public class OrgController extends BaseController implements TokenController {
     @GetMapping(value = "/queryTree")
     public Result queryOrgTree(@RequestParam(value = "parentId", required = false) Integer parentId) throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
 
         if (parentId == null) {
             parentId = CommonUtil.TREE_ROOT_PARENT_ID;
@@ -140,7 +137,6 @@ public class OrgController extends BaseController implements TokenController {
     public Result querySelectedOrg(@RequestParam("userId") Integer userId) {
         Map<String, Object> param = new HashMap<>();
         param.put("parent_id", CommonUtil.TREE_ROOT_PARENT_ID);
-        param.put("corp_id", getLoginInfo().getUser().getCorpId());
 
         int rootId = this.orgService.queryRootOrgId(param);
 

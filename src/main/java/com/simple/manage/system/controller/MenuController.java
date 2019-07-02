@@ -49,7 +49,6 @@ public class MenuController extends BaseController implements TokenController {
         Map<String, Object> params = new HashMap<>();
         params.put("menu_name", name);
         params.put("module_id", moduleId);
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         PageInfo pageInfo = this.menuService.queryMenuList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
@@ -85,7 +84,6 @@ public class MenuController extends BaseController implements TokenController {
         menu.put("create_time", LocalDateTime.now());
         menu.put("update_id", getLoginInfo().getUser().getId());
         menu.put("update_time", LocalDateTime.now());
-        menu.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.menuService.addOrUpdMenu(menu);
         return success();
     }

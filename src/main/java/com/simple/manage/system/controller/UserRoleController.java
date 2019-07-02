@@ -44,7 +44,6 @@ public class UserRoleController extends BaseController implements TokenControlle
 
         Map<String, Object> param = new HashMap<>();
         param.put("userId", userId);
-        param.put("corp_id", getLoginInfo().getUser().getCorpId());
         param.put("orgIds", orgIdList);
 
         return this.success(this.userRoleService.queryUserRoleList(param));

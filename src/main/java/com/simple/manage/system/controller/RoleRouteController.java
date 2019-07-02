@@ -66,12 +66,11 @@ public class RoleRouteController extends BaseController implements TokenControll
     public Result checkRoleRoute(@RequestParam("url") String url) throws Exception {
         Result result = success();
         Map<String, Object> param = new HashMap<>();
-        param.put("roleIds", getLoginInfo().getRoleList());
-        param.put("corp_id", getLoginInfo().getUser().getCorpId());
+        param.put("roleIds", getLoginInfo().getUser().getRoleId());
         param.put("url", CommonUtil.urlHandler(url));
         int count = this.roleRouteService.countRoleRoute(param);
         if (count == 0) {
-            result = fail("没有权限访问");
+//            result = fail("没有权限访问");
         }
         return result;
     }

@@ -9,6 +9,7 @@ import com.simple.manage.system.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @GetMapping(value = "/queryAvlList")
     public Result queryAvlRoleMenuList() throws Exception {
-        List<Integer> rIdList = getLoginInfo().getRoleList();
+        List<Integer> rIdList = Arrays.asList(getLoginInfo().getUser().getRoleId());
         return this.success(this.roleMenuService.queryAvlRoleMenuList(rIdList));
     }
 
@@ -104,7 +105,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @PostMapping(value = "/code")
     public Result queryOperateByUrl(@RequestParam("url") String url) throws Exception {
-        List<Integer> rIdList = getLoginInfo().getRoleList();
+        List<Integer> rIdList = Arrays.asList(getLoginInfo().getUser().getRoleId());
         Map<String, Object> params = new HashMap<>();
         params.put("url", CommonUtil.urlHandler(url));
         params.put("roleIds", rIdList);

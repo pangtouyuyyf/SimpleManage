@@ -66,7 +66,6 @@ public class UserController extends BaseController implements TokenController {
         params.put("login_name", loginName);
         params.put("phone", phone);
         params.put("email", email);
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         PageInfo pageInfo = this.userService.queryUserList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
@@ -99,7 +98,6 @@ public class UserController extends BaseController implements TokenController {
         user.put("create_time", LocalDateTime.now());
         user.put("update_id", getLoginInfo().getUser().getId());
         user.put("update_time", LocalDateTime.now());
-        user.put("corp_id", getLoginInfo().getUser().getCorpId());
         if (id == null) {
             //新增用户默认密码
             user.put("password", sysConfig.getPassword());

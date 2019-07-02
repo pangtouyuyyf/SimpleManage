@@ -34,7 +34,6 @@ public class UserOrgController extends BaseController implements TokenController
     public Result queryUserOrgList(@RequestParam("userId") Integer userId) throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("parent_id", CommonUtil.TREE_ROOT_PARENT_ID);
-        param.put("corp_id", getLoginInfo().getUser().getCorpId());
 
         int rootId = this.orgService.queryRootOrgId(param);
 

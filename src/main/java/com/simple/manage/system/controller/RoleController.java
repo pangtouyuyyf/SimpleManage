@@ -51,7 +51,6 @@ public class RoleController extends BaseController implements TokenController {
         Map<String, Object> params = new HashMap<>();
         params.put("role_code", code);
         params.put("role_name", name);
-        params.put("corp_id", corpId);
         PageInfo pageInfo = this.roleService.queryRoleList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
@@ -87,7 +86,6 @@ public class RoleController extends BaseController implements TokenController {
         role.put("create_time", LocalDateTime.now());
         role.put("update_id", getLoginInfo().getUser().getId());
         role.put("update_time", LocalDateTime.now());
-        role.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.roleService.addOrUpdRole(role);
         return success();
     }

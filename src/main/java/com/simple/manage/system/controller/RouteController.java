@@ -49,7 +49,6 @@ public class RouteController extends BaseController implements TokenController {
         Map<String, Object> params = new HashMap<>();
         params.put("route_name", name);
         params.put("module_id", moduleId);
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         PageInfo pageInfo = this.routeService.queryRouteList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
@@ -85,7 +84,6 @@ public class RouteController extends BaseController implements TokenController {
         route.put("create_time", LocalDateTime.now());
         route.put("update_id", getLoginInfo().getUser().getId());
         route.put("update_time", LocalDateTime.now());
-        route.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.routeService.addOrUpdRoute(route);
         return success();
     }

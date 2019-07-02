@@ -101,13 +101,13 @@ public class LoginController extends BaseController {
         }
 
         List<String> tokenKeyParts = Arrays.asList(CommonUtil.TOKEN_PREFIX, channel,
-                Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getOrgId()));
+                Integer.toString(getLoginInfo().getUser().getId()));
         this.redisOperation.deleteStr(String.join(CommonUtil.UNDERLINE, tokenKeyParts));
 
         if (sysConfig.isCleanLoginInfo()) {
             //清除当前登录信息缓存
             List<String> loginInfoKeyParts = Arrays.asList(CommonUtil.LOGIN_INFO_PREFIX,
-                    Integer.toString(getLoginInfo().getUser().getId()), Integer.toString(getLoginInfo().getOrgId()));
+                    Integer.toString(getLoginInfo().getUser().getId()));
             this.redisOperation.deleteObj(String.join(CommonUtil.UNDERLINE, loginInfoKeyParts));
         }
 

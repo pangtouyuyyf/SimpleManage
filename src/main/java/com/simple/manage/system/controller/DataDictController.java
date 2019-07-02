@@ -53,7 +53,6 @@ public class DataDictController extends BaseController {
         Map<String, Object> params = new HashMap<>();
         params.put("dict_name", name);
         params.put("dict_note", note);
-        params.put("corp_id", getLoginInfo().getUser().getCorpId());
         PageInfo pageInfo = this.dataDictService.queryDataDictList(params, page, size);
         this.pageResult.setList(pageInfo.getList());
         this.pageResult.setTotal(pageInfo.getTotal());
@@ -95,7 +94,6 @@ public class DataDictController extends BaseController {
         dataDict.put("create_time", LocalDateTime.now());
         dataDict.put("update_id", getLoginInfo().getUser().getId());
         dataDict.put("update_time", LocalDateTime.now());
-        dataDict.put("corp_id", getLoginInfo().getUser().getCorpId());
         this.dataDictService.addOrUpdDataDict(dataDict);
         return success();
 
