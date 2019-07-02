@@ -59,7 +59,7 @@ public class AuthorizationAspect {
             HttpServletRequest request = attributes.getRequest();
 
             String contextPath = request.getContextPath();
-            List<Integer> roleList = RequestLoginContextHolder.getRequestLoginInfo().getRoleList();
+            int roleId = RequestLoginContextHolder.getRequestLoginInfo().getUser().getRoleId();
             String access = request.getRequestURI();
 
             if (!StringUtil.isNullOrEmpty(contextPath) && !CommonUtil.BACKSLASH.equals(contextPath)) {
@@ -67,7 +67,7 @@ public class AuthorizationAspect {
             }
 
             Map<String, Object> params = new HashMap<>();
-            params.put("role_id", roleList);
+            params.put("role_id", roleId);
             params.put("access_url", access);
 //            int count = this.roleAccessService.countRoleAccess(params);
 
