@@ -21,5 +21,5 @@ public class User {
 
     private String email;
 
-    private int corpId;
+    private int roleId;
 }
