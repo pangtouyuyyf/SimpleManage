@@ -24,7 +24,7 @@
         <result property="password" column="password" javaType="java.lang.String"/>
         <result property="phone" column="phone" javaType="java.lang.String"/>
         <result property="email" column="email" javaType="java.lang.String"/>
-        <result property="corpId" column="corp_id" javaType="java.lang.Integer"/>
+        <result property="roleId" column="role_id" javaType="java.lang.Integer"/>
     </resultMap>
 
     <select id="checkUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
