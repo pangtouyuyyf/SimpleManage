@@ -119,7 +119,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
                 params = new HashMap<>();
                 int moduleId = Integer.valueOf(temp.get("id").toString());
                 params.put("module_id", moduleId);
-                params.put("roleIds", roleId);
+                params.put("roleId", roleId);
                 temp.put("menus", this.roleMenuDao.queryAvlRoleMenuList(params));
             }
         }
