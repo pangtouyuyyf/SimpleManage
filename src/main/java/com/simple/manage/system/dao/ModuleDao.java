@@ -87,8 +87,8 @@ public interface ModuleDao {
     /**
      * 查询个人可用菜单模块
      *
-     * @param rIdList
+     * @param roleId
      * @return
      */
-    List<Map<String, Object>> queryAvlMenuModuleList(List<Integer> rIdList);
+    List<Map<String, Object>> queryAvlMenuModuleList(int roleId);
 }
