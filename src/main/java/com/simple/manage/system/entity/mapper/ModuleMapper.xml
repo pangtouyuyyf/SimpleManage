@@ -204,7 +204,7 @@
         WHERE module_id = #{moduleId}
     </delete>
 
-    <select id="queryAvlMenuModuleList" parameterType="java.util.List" resultType="java.util.Map">
+    <select id="queryAvlMenuModuleList" parameterType="java.lang.Integer" resultType="java.util.Map">
         SELECT
             tmo.module_id AS id,
             tmo.module_name AS "name",
@@ -221,11 +221,7 @@
                     1 = 1
                     AND tr.menu_id = tme.menu_id
                     AND tme.module_id = tmo.module_id
-                    <if test="list != null">
-                        <foreach item="item" collection="list" open=" AND tr.role_id IN (" separator="," close=")">
-                            #{item}
-                        </foreach>
-                    </if>
+                    AND tr.role_id = #{roleId}
             )
         ORDER BY tmo.module_order ASC
     </select>
