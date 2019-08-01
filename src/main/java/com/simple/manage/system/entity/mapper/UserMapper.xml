@@ -8,6 +8,7 @@
         password,
         phone,
         email,
+        role_id,
         exta,
         extb,
         create_id,
