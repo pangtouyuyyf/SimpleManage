@@ -65,8 +65,7 @@ public class RoleMenuController extends BaseController implements TokenControlle
      */
     @GetMapping(value = "/queryAvlList")
     public Result queryAvlRoleMenuList() throws Exception {
-        List<Integer> rIdList = Arrays.asList(getLoginInfo().getUser().getRoleId());
-        return this.success(this.roleMenuService.queryAvlRoleMenuList(rIdList));
+        return this.success(this.roleMenuService.queryAvlRoleMenuList(getLoginInfo().getUser().getRoleId()));
     }
 
     /**
