@@ -108,18 +108,18 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     /**
      * 查询当前用户可用菜单
      *
-     * @param rIdList
+     * @param roleId
      * @return
      */
-    public List<Map<String, Object>> queryAvlRoleMenuList(List<Integer> rIdList) {
-        List<Map<String, Object>> moduleList = this.moduleDao.queryAvlMenuModuleList(rIdList);
+    public List<Map<String, Object>> queryAvlRoleMenuList(int roleId) {
+        List<Map<String, Object>> moduleList = this.moduleDao.queryAvlMenuModuleList(roleId);
         if (moduleList != null && !moduleList.isEmpty()) {
             Map<String, Object> params = null;
             for (Map<String, Object> temp : moduleList) {
                 params = new HashMap<>();
                 int moduleId = Integer.valueOf(temp.get("id").toString());
                 params.put("module_id", moduleId);
-                params.put("roleIds", rIdList);
+                params.put("roleIds", roleId);
                 temp.put("menus", this.roleMenuDao.queryAvlRoleMenuList(params));
             }
         }
