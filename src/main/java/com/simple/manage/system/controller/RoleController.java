@@ -39,13 +39,11 @@ public class RoleController extends BaseController implements TokenController {
      * @param name   名称
      * @param page   页码
      * @param size   页数
-     * @param corpId 公司编号
      * @return
      */
     @GetMapping(value = "/queryList")
     public Result queryRoleList(@RequestParam(value = "code", required = false) String code,
                                 @RequestParam(value = "name", required = false) String name,
-                                @RequestParam(value = "corpId", required = false) Integer corpId,
                                 @RequestParam("page") Integer page,
                                 @RequestParam("size") Integer size) throws Exception {
         Map<String, Object> params = new HashMap<>();

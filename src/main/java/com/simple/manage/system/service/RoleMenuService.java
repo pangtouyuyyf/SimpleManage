@@ -33,10 +33,10 @@ public interface RoleMenuService {
     /**
      * 查询当前用户可用菜单
      *
-     * @param rIdList
+     * @param roleId
      * @return
      */
-    List<Map<String, Object>> queryAvlRoleMenuList(List<Integer> rIdList);
+    List<Map<String, Object>> queryAvlRoleMenuList(int roleId);
 
     /**
      * 查询角色菜单操作

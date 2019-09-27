@@ -58,12 +58,11 @@
         SELECT
             o.org_id AS "key",
             o.org_name AS "title",
-            CASE WHEN uo.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
-        FROM t_orgmst o LEFT JOIN (select id,org_id from t_userorglin where user_id = #{user_id}) uo ON o.org_id = uo.org_id
+            CASE WHEN uo.user_id IS NULL THEN 'left' ELSE 'right' END AS "direction"
+        FROM t_orgmst o LEFT JOIN (select user_id,org_id from t_usermst where user_id = #{user_id}) uo ON o.org_id = uo.org_id
         WHERE
         1 = 1
         AND o.is_delete = '0'
-        and o.parent_id = #{parent_id}
         ORDER BY o.org_order ASC
     </select>
 

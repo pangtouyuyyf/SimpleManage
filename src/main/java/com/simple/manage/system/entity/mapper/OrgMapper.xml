@@ -169,8 +169,7 @@
     <select id="queryOrgRecursion" parameterType="java.util.Map" resultMap="getSelf">
         SELECT
             org_id,
-            org_name,
-            corp_id
+            org_name
         FROM t_orgmst
         WHERE 1 = 1
         AND is_delete = '0'

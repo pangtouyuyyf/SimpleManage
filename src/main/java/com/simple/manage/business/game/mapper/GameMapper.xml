@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.manage.business.game.dao.GameDao">
+    <sql id="baseColumnList">
+        game_id,
+        game_name,
+        game_img,
+        game_info,
+        game_order,
+        exta,
+        extb,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete
+    </sql>
+
+    <insert id="addGame" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="game_id">
+        INSERT INTO t_game
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="game_name != null and game_name != ''">
+                game_name,
+            </if>
+            <if test="game_img != null and game_img != ''">
+                game_img,
+            </if>
+            <if test="game_info != null and game_info != ''">
+                game_info,
+            </if>
+            <if test="game_order != null">
+                game_order,
+            </if>
+            <if test="exta != null and exta != ''">
+                exta,
+            </if>
+            <if test="extb != null and extb != ''">
+                extb,
+            </if>
+            <if test="create_id != null">
+                create_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="game_name != null and game_name != ''">
+                #{game_name},
+            </if>
+            <if test="game_img != null and game_img != ''">
+                #{game_img},
+            </if>
+            <if test="game_info != null and game_info != ''">
+                #{game_info},
+            </if>
+            <if test="game_order != null">
+                #{game_order},
+            </if>
+            <if test="exta != null and exta != ''">
+                #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                #{extb},
+            </if>
+            <if test="create_id != null">
+                #{create_id},
+            </if>
+            <if test="create_time != null">
+                #{create_time},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updGame" parameterType="java.util.Map">
+        UPDATE t_game
+        <set>
+            <if test="game_name != null and game_name != ''">
+                game_name = #{game_name},
+            </if>
+            <if test="game_img != null and game_img != ''">
+                game_img = #{game_img},
+            </if>
+            <if test="game_info != null and game_info != ''">
+                game_info = #{game_info},
+            </if>
+            <if test="game_order != null">
+                game_order = #{game_order},
+            </if>
+            <if test="exta != null and exta != ''">
+                exta = #{exta},
+            </if>
+            <if test="extb != null and extb != ''">
+                extb = #{extb},
+            </if>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+        </set>
+        WHERE game_id = #{game_id}
+    </update>
+
+    <select id="queryGame" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            game_id AS id,
+            game_name AS name,
+            game_img AS img,
+            game_info AS info,
+            game_order AS "order"
+        FROM t_game
+        WHERE 1 = 1
+          AND is_delete = '0'
+          AND game_id = #{gameId}
+    </select>
+
+    <select id="queryGameList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            game_id AS id,
+            game_name AS name,
+            game_img AS img,
+            game_info AS info,
+            game_order AS "order"
+        FROM t_game
+        WHERE 1 = 1
+        AND is_delete = '0'
+        <if test="game_id != null">
+            AND game_id = #{game_id}
+        </if>
+        <if test="game_name != null and game_name != ''">
+            AND game_name LIKE CONCAT('%', #{game_name}, '%')
+        </if>
+        ORDER BY game_order ASC
+    </select>
+
+    <delete id="delGame" parameterType="java.util.Map">
+        UPDATE t_game
+        <set>
+            <if test="update_id != null">
+                update_id = #{update_id},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time},
+            </if>
+            <if test="is_delete != null and is_delete !=''">
+                is_delete = '1',
+            </if>
+        </set>
+        WHERE
+        1 = 1
+        AND is_delete = '0'
+        AND game_id = #{game_id}
+    </delete>
+
+    <delete id="delGameForReal" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+            t_game
+        WHERE game_id = #{gameId}
+    </delete>
+</mapper>

@@ -35,13 +35,11 @@
         SELECT
             r.role_id AS "key",
             r.role_name AS "title",
-            r.org_id AS "orgId",
-            CASE WHEN ur.id IS NULL THEN 'left' ELSE 'right' END AS "direction"
-        FROM t_rolemst r LEFT JOIN (SELECT id,role_id FROM t_userrolelin WHERE user_id = #{userId}) ur ON r.role_id = ur.role_id
+            CASE WHEN ur.user_id IS NULL THEN 'left' ELSE 'right' END AS "direction"
+        FROM t_rolemst r LEFT JOIN (SELECT user_id,role_id FROM t_usermst WHERE user_id = #{userId}) ur ON r.role_id = ur.role_id
         WHERE
             1 = 1
             AND r.is_delete = '0'
-            AND r.corp_id = #{corp_id}
             <if test="orgIds != null">
                 <foreach collection="orgIds" item="item" open=" AND r.org_id IN (" separator="," close=")">
                     #{item}
