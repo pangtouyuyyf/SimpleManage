@@ -53,8 +53,6 @@ public class LoginController extends BaseController {
     @Autowired
     private SmsService smsService;
 
-    public static final String REGEX_MOBILE = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
-
     /**
      * 系统登录
      *
@@ -115,6 +113,37 @@ public class LoginController extends BaseController {
     }
 
     /**
+     * 发送短信验证码
+     *
+     * @param mobile 手机号码
+     * @return
+     */
+    @PostMapping(value = "/sendVerifySms")
+    public Result<Object> sendVerifySms(@RequestParam("mobile") String mobile) throws Exception {
+        if (!Pattern.matches(CommonUtil.REGEX_MOBILE, mobile.trim())) {
+            return fail("手机号码格式不对!");
+        }
+
+        String redisKey = CommonUtil.SMS_VERIFY_CODE_PREFIX + mobile;
+        String verifyCode = redisOperation.getStr(redisKey);
+
+        if (!StringUtil.isEmpty(verifyCode)) {
+            return fail("验证码已发送，请稍后重试");
+        }
+
+        //发送短信验证码
+        verifyCode = smsService.sendVerifySms(mobile.trim());
+
+        if (StringUtil.isNotEmpty(verifyCode)) {
+            //保存短信验证码至redis并设置失效时间
+            redisOperation.setStr(redisKey, verifyCode, smsConfig.getVerifyTimeOut());
+            return success("验证码已发送，请及时查收");
+        } else {
+            return fail("验证码发送失败，稍后重试");
+        }
+    }
+
+    /**
      * 登录通用操作
      *
      * @param user    用户信息
@@ -132,7 +161,7 @@ public class LoginController extends BaseController {
 
         //生成个人信息缓存主键
         List<String> loginInfoKeyParts = Arrays.asList(
-                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()), channel);
+                CommonUtil.LOGIN_INFO_PREFIX, Integer.toString(user.getId()));
         String loginInfoKey = String.join(CommonUtil.UNDERLINE, loginInfoKeyParts);
 
         //保存令牌
@@ -146,41 +175,5 @@ public class LoginController extends BaseController {
         this.commonService.saveLoginInfo(loginInfoKey, user.getId(), channel);
 
         return token;
-    }
-
-    /**
-     * 发送短信验证码
-     *
-     * @param mobile 手机号码
-     * @return
-     */
-    @PostMapping(value = "/sendVerifySms")
-    public Result<Object> sendVerifySms(@RequestParam("mobile") String mobile) throws Exception {
-        Result result = null;
-        String verifyCode = null;
-
-        if (!Pattern.matches(REGEX_MOBILE, mobile.trim())) {
-            return fail("手机号码格式不对!");
-        }
-
-        String redisKey = CommonUtil.SMS_VERIFY_CODE_PREFIX + mobile;
-        verifyCode = redisOperation.getStr(redisKey);
-
-        if (!StringUtil.isEmpty(verifyCode)) {
-            return fail("验证码已发送，请稍后重试");
-        }
-
-        //发送短信验证码
-        verifyCode = smsService.sendVerifySms(mobile.trim());
-
-        if (StringUtil.isNotEmpty(verifyCode)) {
-            //保存短信验证码至redis并设置失效时间
-            redisOperation.setStr(redisKey, verifyCode, smsConfig.getVerifyTimeOut());
-            result = success("验证码已发送，请及时查收");
-        } else {
-            result = fail("验证码发送失败，稍后重试");
-        }
-
-        return result;
     }
 }
