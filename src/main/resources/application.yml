@@ -109,6 +109,7 @@ logging:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mappers/*.xml
+
 # alipay
 alipay:
   serveUrl: https://openapi.alipay.com/gateway.do
