@@ -81,6 +81,9 @@ public class CommonUtil {
     //短信验证码redis主键前缀
     public static final String SMS_VERIFY_CODE_PREFIX ="verifyCode_";
 
+    //手机号码验证正则表达式
+    public static final String REGEX_MOBILE = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+
     /**
      * url处理(去掉url参数)
      *
