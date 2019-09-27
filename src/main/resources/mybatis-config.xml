@@ -14,22 +14,4 @@
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
         </plugin>
     </plugins>
-
-    <!-- 数据库查询映射 -->
-    <mappers>
-        <mapper resource="com/simple/manage/system/entity/mapper/DataDictMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/UserMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/RoleMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/UserRoleMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/UserOrgMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/OrgMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/ModuleMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/MenuMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/RoleMenuMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/AccessMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/RoleAccessMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/RouteMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/RoleRouteMapper.xml"></mapper>
-        <mapper resource="com/simple/manage/system/entity/mapper/AttachmentMapper.xml"></mapper>
-    </mappers>
 </configuration>
