@@ -124,14 +124,9 @@ public class TokenVerifyAspect {
 
         /** 令牌续权 **/
         if (jwtConfig.isEnableRenew()) {
-            if (CommonUtil.CHANNEL_WEB.equals(channel)) {
-                if (time < jwtConfig.getWebUpdateInterval()) {
-                    this.redisOperation.expireStr(tokenRedisKey, jwtConfig.getWebLifecycle());
-                }
-            } else {
-                if (time < jwtConfig.getAppUpdateInterval()) {
-                    this.redisOperation.expireStr(tokenRedisKey, jwtConfig.getAppLifecycle());
-                }
+            if (time < jwtConfig.getWebUpdateInterval()) {
+                this.redisOperation.expireStr(tokenRedisKey, CommonUtil.CHANNEL_WEB.equals(channel) ?
+                        jwtConfig.getWebLifecycle() : jwtConfig.getAppLifecycle());
             }
         }
 
