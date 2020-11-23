@@ -28,35 +28,43 @@ public class SnowflakeUtil {
      * 从标尺时间开始，2199023255551毫秒(69.73057年)之后此ID生成器将失效
      */
     private static final long twepoch = 1538366400000L;
+
     /**
      * 数据中心在64bits中所占的位数: 10bits
      */
     private static final long DATA_CENTER_ID_BITS = 10L;
+
     /**
      * 序列在64bits中所占的位数: 12bits
      */
     private static final long SEQUENCE_BITS = 12L;
+
     /**
      * 数据中心最大的范围 [0, 1023]
      */
     private static final long MAX_DATA_CENTER_ID = -1L ^ (-1L << DATA_CENTER_ID_BITS);
+
     /**
      * 数据中心左移偏移量: 12bits
      */
     private static final long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS;
+
     /**
      * 时间戳左移偏移量：12+10=22bits
      */
     private static final long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + DATA_CENTER_ID_BITS;
+
     /**
      * 序列mask
      * 00000000 00000000 00000000 0000000 00000000 00000000 00001111 11111111
      */
     private static final long SEQUENCE_MASK = -1L ^ (-1L << SEQUENCE_BITS);
+
     /**
      * 数据中心ID
      */
     private long dataCenterId;
+
     /**
      * 原始算法默认从0开始, 改进方法：初始化时，随机取[0,1]其中一个
      * 毫秒内累计的规则:
@@ -65,6 +73,7 @@ public class SnowflakeUtil {
      * 此字段涉及多线程并发写场景 设置volatile保障happens-before 让写立刻对其他线程可见
      */
     private volatile long sequence = ThreadLocalRandom.current().nextInt(2);
+
     /**
      * 上次生成ID的时间截
      * 此字段涉及多线程并发写场景 设置volatile保障happens-before 让写立刻对其他线程可见
